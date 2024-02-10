@@ -18,6 +18,8 @@ public class EnemyIdleRandomPointInCircle : EnemyIdleStateLogicBaseSO
     [SerializeField] private float minDifferenceInY;
     #endregion
 
+    private bool isFirstFrame = true;
+
     private bool isDoneWandering = false;
     private bool isFirstFrameAfterWanderingComplete = true;
     private float waitTimer;
@@ -43,6 +45,13 @@ public class EnemyIdleRandomPointInCircle : EnemyIdleStateLogicBaseSO
         {
             stateMachine.TransitionToState(stateMachine.ChaseState);
             return;
+        }
+
+        if (isFirstFrame)
+        {
+            enemyWeapon.ChangeWeaponLogic(idleStateAttackLogic, idleStateReloadLogic);
+
+            isFirstFrame = false;
         }
 
         if (isDoneWandering)
@@ -71,7 +80,7 @@ public class EnemyIdleRandomPointInCircle : EnemyIdleStateLogicBaseSO
 
                 if (Mathf.Abs(trans.position.x - agent.destination.x) < minDifferenceInX)
                 {
-                    Utils.Instance.Print("change in x is less than desired amount");
+                    // MonoBehaviour.print("change in x is less than desired amount");
 
                     Vector2 _newMovementVector = _movementVector + new Vector2(1, 0);
                     _newMovementVector.Normalize();
@@ -82,7 +91,7 @@ public class EnemyIdleRandomPointInCircle : EnemyIdleStateLogicBaseSO
 
                     _successfulDestination = IsSuccessfulDestination(_finalPosition);
 
-                    Utils.Instance.Print("Is successful destination set in x: " + _successfulDestination);
+                    // MonoBehaviour.print("Is successful destination set in x: " + _successfulDestination);
 
                     if (!_successfulDestination)
                     {
@@ -99,7 +108,7 @@ public class EnemyIdleRandomPointInCircle : EnemyIdleStateLogicBaseSO
 
                 else if (Mathf.Abs(trans.position.y - agent.destination.y) < minDifferenceInY)
                 {
-                    Utils.Instance.Print("change in y is less than desired amount");
+                    MonoBehaviour.print("change in y is less than desired amount");
 
                     Vector2 _newMovementVector = _movementVector + new Vector2(0, 1);
                     _newMovementVector.Normalize();
@@ -110,7 +119,7 @@ public class EnemyIdleRandomPointInCircle : EnemyIdleStateLogicBaseSO
 
                     _successfulDestination = IsSuccessfulDestination(_finalPosition);
 
-                    Utils.Instance.Print("Is successful destination set in y: " + _successfulDestination);
+                    MonoBehaviour.print("Is successful destination set in y: " + _successfulDestination);
 
                     if (!_successfulDestination)
                     {
@@ -153,6 +162,8 @@ public class EnemyIdleRandomPointInCircle : EnemyIdleStateLogicBaseSO
     {
         isDoneWandering = false;
         isFirstFrameAfterWanderingComplete = true;
+
+        isFirstFrame = true;
     }
 
     private bool IsSuccessfulDestination(Vector2 _finalPosition)

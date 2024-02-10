@@ -50,7 +50,7 @@ MonoBehaviour:
   RELOAD_TIME: 1
   projectile: {fileID: 8252440497980988240, guid: c927d5c59e1b58b4ea1a1a2a37a54f25, type: 3}
   projectileSpeed: 14.5
-  projectileRange: 0
+  projectileRange: 3.75
   maxAmmo: 15
 --- !u!212 &1368183166115280645
 SpriteRenderer:

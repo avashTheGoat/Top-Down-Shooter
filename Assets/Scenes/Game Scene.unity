@@ -798,11 +798,6 @@ Transform:
   m_Father: {fileID: 598885649}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &639728071 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2897679329776139307, guid: afbedaad16e35c6409a9b7fa1518f476, type: 3}
-  m_PrefabInstance: {fileID: 2897679329207846380}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &639728072 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2897679329776139300, guid: afbedaad16e35c6409a9b7fa1518f476, type: 3}
@@ -813,17 +808,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2897679329776139302, guid: afbedaad16e35c6409a9b7fa1518f476, type: 3}
   m_PrefabInstance: {fileID: 2897679329207846380}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 639728071}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1b95474e19b96246916e54f08a48e05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &685164469 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1368183166115280648, guid: d682db0fd5908d147841961961bb118e, type: 3}
-  m_PrefabInstance: {fileID: 1368183165699403965}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &685164470 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1368183166115280651, guid: d682db0fd5908d147841961961bb118e, type: 3}
@@ -834,7 +824,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1368183166115280644, guid: d682db0fd5908d147841961961bb118e, type: 3}
   m_PrefabInstance: {fileID: 1368183165699403965}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 685164469}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f83ea203b2db1af48b1868c9b5eb0975, type: 3}
@@ -1286,6 +1276,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ff8343473d99e94f9bdeabaeea87817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shouldApplyWeaponTransformChanges: 0
+  weaponOffset: {x: 0, y: 0}
+  weaponSizeMultiplier: {x: 0, y: 0}
 --- !u!114 &1059581858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1388,11 +1381,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1176684335 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8893313143333269412, guid: f1731d6b1b9a4b44594e463307e94f1b, type: 3}
-  m_PrefabInstance: {fileID: 8893313142358272139}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1176684336 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8893313143333269435, guid: f1731d6b1b9a4b44594e463307e94f1b, type: 3}
@@ -1403,7 +1391,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8893313143333269434, guid: f1731d6b1b9a4b44594e463307e94f1b, type: 3}
   m_PrefabInstance: {fileID: 8893313142358272139}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1176684335}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7465696f61e7f994e82963725a096a68, type: 3}
@@ -1456,7 +1444,7 @@ GameObject:
   - component: {fileID: 1528305350}
   - component: {fileID: 1528305351}
   m_Layer: 0
-  m_Name: Static Providers
+  m_Name: Static Dependency Providers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2070,20 +2058,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.9930382
-      value: 1.0163269
-      inSlope: -0.028782131
-      outSlope: -0.028782131
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.308153
-    - serializedVersion: 3
-      time: 4.9570217
-      value: 3.9891863
+      time: 0
+      value: 1
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -2116,16 +2104,12 @@ MonoBehaviour:
     m_RotationOrder: 4
   spawnableEnemiesForEachWave:
   - enemySpawningInfos:
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 8abc6237c4a7cfb48a611bacea4b63e1, type: 3}
+      weaponPrefab: {fileID: 3104220439187664240, guid: 0ea675cd863585840bade0478fe067c7, type: 3}
+      spawnChance: 50
     - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
-      weaponPrefab: {fileID: 685164469}
-      spawnChance: 100
-  - enemySpawningInfos:
-    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
-      weaponPrefab: {fileID: 639728071}
-      spawnChance: 70
-    - enemyPrefab: {fileID: 1078090136486234402, guid: 3c855cce488d45d4486922f85941a02f, type: 3}
-      weaponPrefab: {fileID: 1176684335}
-      spawnChance: 30
+      weaponPrefab: {fileID: 1368183166115280648, guid: d682db0fd5908d147841961961bb118e, type: 3}
+      spawnChance: 50
   isEndless: 1
 --- !u!1001 &1368183165699403965
 PrefabInstance:

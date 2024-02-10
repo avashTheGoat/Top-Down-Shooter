@@ -17,11 +17,6 @@ public class Utils : MonoBehaviour
         }
     }
 
-    public void Print(string _printStatement)
-    {
-        Debug.Log(_printStatement);
-    }
-
     public void PrintWarning(string _printStatement)
     {
         Debug.LogWarning(_printStatement);

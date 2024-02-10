@@ -11,9 +11,10 @@ public class EnemyChaseDirectlyWithNavMesh : EnemyChaseStateLogicBaseSO
     [SerializeField] private float timeToWanderAfterDetectionExit;
     #endregion
 
-    private float timeAfterDetectionExit;
+    private bool isFirstFrame = true;
+
+    private float timeAfterDetectionExit = 0f;
     private bool isFirstFrameAfterDetectionExit = true;
-    private bool isPlayerOutOfDetection = false;
 
     public override void DoEnterStateLogic()
     {
@@ -29,9 +30,22 @@ public class EnemyChaseDirectlyWithNavMesh : EnemyChaseStateLogicBaseSO
 
     public override void DoUpdateLogic()
     {
-        isPlayerOutOfDetection = !IsPointInCollider(detectionCollider, player.position);
+        if (ShouldBeInAttackState())
+        {
+            stateMachine.TransitionToState(stateMachine.AttackState);
+            return;
+        }
 
-        if (isPlayerOutOfDetection)
+        if (isFirstFrame)
+        {
+            enemyWeapon.ChangeWeaponLogic(chaseStateAttackLogic, chaseStateReloadLogic);
+            
+            isFirstFrame = false;
+        }
+
+        bool _isPlayerOutOfDetection = !IsPointInCollider(detectionCollider, player.position);
+
+        if (_isPlayerOutOfDetection)
         {
             if (isFirstFrameAfterDetectionExit)
             {
@@ -49,12 +63,6 @@ public class EnemyChaseDirectlyWithNavMesh : EnemyChaseStateLogicBaseSO
             }
         }
 
-        else if (IsPointInCollider(attackCollider, player.position))
-        {
-            stateMachine.TransitionToState(stateMachine.AttackState);
-            return;
-        }
-
         //player is in detection and player is not in attack
         else
         {
@@ -68,6 +76,8 @@ public class EnemyChaseDirectlyWithNavMesh : EnemyChaseStateLogicBaseSO
     protected override void ResetValues()
     {
         isFirstFrameAfterDetectionExit = true;
-        isPlayerOutOfDetection = false;
-    }
+        timeAfterDetectionExit = 0f;
+
+        isFirstFrame = true;
+}
 }

@@ -14,8 +14,6 @@ public class EnemyStateMachine : MonoBehaviour
 
     [Header("Enemy Colliders")]
     [SerializeField] private Collider2D detectionCollider;
-    [SerializeField] private Collider2D attackStartCollider;
-    [SerializeField] private Collider2D attackAOE;
     [Space(15)]
 
     [Header("State Logic")]
@@ -23,6 +21,16 @@ public class EnemyStateMachine : MonoBehaviour
     [SerializeField] private EnemyChaseStateLogicBaseSO chaseStateLogic;
     [SerializeField] private EnemyAttackStateLogicBaseSO attackStateLogic;
     [Space(15)]
+
+    // very iffy to use Component, but i'm doing it so that it is visible in the inspector
+    // just IAttack and IReload will not be visible in the inspector
+    [Header("Attacking Logic")]
+    [SerializeField] private Component idleStateAttack;
+    [SerializeField] private Component? idleStateReload;
+    [SerializeField] private Component chaseStateAttack;
+    [SerializeField] private Component? chaseStateReload;
+    [SerializeField] private Component attackStateAttack;
+    [SerializeField] private Component? attackStateReload;
 
     #region States
     private BaseState currentState;
@@ -32,10 +40,10 @@ public class EnemyStateMachine : MonoBehaviour
     #endregion
 
     private NavMeshAgent agent;
-
     private Transform player;
+    private Weapon weapon;
 
-    private void Awake()
+    private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         player = PlayerProvider.GetPlayer();
@@ -43,9 +51,32 @@ public class EnemyStateMachine : MonoBehaviour
         agent.updateRotation = false;
         agent.updateUpAxis = false;
 
-        IdleState = new EnemyIdleState(Instantiate(idleStateLogic).Initialize(this, transform, agent, player, detectionCollider));
-        ChaseState = new EnemyChaseState(Instantiate(chaseStateLogic).Initialize(this, transform, agent, player, detectionCollider, attackStartCollider));
-        AttackState = new EnemyAttackState(Instantiate(attackStateLogic).Initialize(this, transform, agent, player, attackStartCollider, attackAOE));
+        IdleState = new EnemyIdleState
+        (
+            Instantiate(idleStateLogic).Initialize
+            (
+                this, transform, agent, player, detectionCollider,
+                weapon, (IAttack) idleStateAttack, (IReload) idleStateReload
+            )
+        );
+
+        ChaseState = new EnemyChaseState
+        (
+            Instantiate(chaseStateLogic).Initialize
+            (
+                this, transform, agent, player, detectionCollider,
+                weapon, (IAttack) chaseStateAttack, (IReload) chaseStateReload
+            )
+        );
+
+        AttackState = new EnemyAttackState
+        (
+            Instantiate(attackStateLogic).Initialize
+            (
+                this, transform, agent, player,
+                weapon, (IAttack) attackStateAttack, (IReload) attackStateReload
+            )
+        );
 
         switch (startingState)
         {
@@ -63,10 +94,7 @@ public class EnemyStateMachine : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        currentState.UpdateState();
-    }
+    private void Update() => currentState.UpdateState();
 
     public void TransitionToState(BaseState _newState)
     {
@@ -74,4 +102,6 @@ public class EnemyStateMachine : MonoBehaviour
         currentState = _newState;
         currentState.EnterState();
     }
+
+    public void Init(Weapon _weapon) => weapon = _weapon;
 }

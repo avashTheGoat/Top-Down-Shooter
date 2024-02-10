@@ -8,17 +8,24 @@ public abstract class EnemyChaseStateLogicBaseSO : ScriptableObject
     protected NavMeshAgent agent;
     protected Transform player;
     protected Collider2D detectionCollider;
-    protected Collider2D attackCollider;
 
-    public EnemyChaseStateLogicBaseSO Initialize(EnemyStateMachine _stateMachine, Transform _transform, NavMeshAgent _agent,
-        Transform _player, Collider2D _detectionCollider, Collider2D _attackCollider)
+    protected Weapon enemyWeapon;
+    protected IAttack chaseStateAttackLogic;
+    protected IReload? chaseStateReloadLogic;
+
+    public EnemyChaseStateLogicBaseSO Initialize(EnemyStateMachine _stateMachine, Transform _transform,
+        NavMeshAgent _agent, Transform _player, Collider2D _detectionCollider, Weapon _enemyWeapon,
+        IAttack _chaseStateAttackLogic, IReload? _chaseStateReloadLogic)
     {
         stateMachine = _stateMachine;
         trans = _transform;
         agent = _agent;
         player = _player;
         detectionCollider = _detectionCollider;
-        attackCollider = _attackCollider;
+
+        enemyWeapon = _enemyWeapon;
+        chaseStateAttackLogic = _chaseStateAttackLogic;
+        chaseStateReloadLogic = _chaseStateReloadLogic;
 
         return this;
     }
@@ -48,6 +55,29 @@ public abstract class EnemyChaseStateLogicBaseSO : ScriptableObject
                 return true;
             }
         }
+
+        return false;
+    }
+
+    protected bool ShouldBeInAttackState()
+    {
+        if (enemyWeapon is RangedWeapon)
+        {
+            RangedWeapon _rangedWeapon = enemyWeapon as RangedWeapon;
+
+            if (PlayerProvider.TryGetPlayer(out Transform _player))
+                return Vector2.Distance(_player.position, _rangedWeapon.transform.position) <= _rangedWeapon.Range;
+        }
+
+        else if (enemyWeapon is MeleeWeapon)
+        {
+            MeleeWeapon _meleeWeapon = enemyWeapon as MeleeWeapon;
+
+            if (PlayerProvider.TryGetPlayer(out Transform _player))
+                return _meleeWeapon.GetGameObjectsInAttackAOE().Contains(_player.gameObject);
+        }
+
+        else Debug.LogError("An unidentified weapon has been detected.");
 
         return false;
     }

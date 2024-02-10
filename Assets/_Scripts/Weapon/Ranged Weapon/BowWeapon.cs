@@ -38,7 +38,7 @@ public class BowWeapon : RangedWeapon
         // do a Debug.LogError if Wielder or attackLogic is null
         // Doing this because i'm testing enemies spawning with weapons
         // right now
-        if (Wielder is null || AttackLogic is null)
+        if (Wielder is null || attackLogic is null)
         {
             print("Wielder or attackLogic is null");
             return;
@@ -46,7 +46,7 @@ public class BowWeapon : RangedWeapon
 
         base.Update();
 
-        if (ReloadLogic.ShouldReload(this) && reloadTimer == 0f)
+        if (reloadLogic.ShouldReload(this) && reloadTimer == 0f)
         {
             Reload();
             attackCooldownTimer = GetResetAttackTimer();
@@ -59,7 +59,7 @@ public class BowWeapon : RangedWeapon
 
         if (attackCooldownTimer != 0f) return;
 
-        if (!AttackLogic.ShouldAttack(this))
+        if (!attackLogic.ShouldAttack(this))
         {
             if (hasChargedPreviously && ammo > 0)
             {

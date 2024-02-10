@@ -4,7 +4,7 @@ public class EnemyAttackChasing : MonoBehaviour, IAttack
 {
     private Transform trans;
 
-    private void Awake() => trans = GetComponent<Transform>();
+    private void Awake() => trans = transform;
 
     public float GetWeaponRotationChange(Transform _weapon)
     {

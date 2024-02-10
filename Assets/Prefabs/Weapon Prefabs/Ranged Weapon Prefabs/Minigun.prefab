@@ -50,7 +50,7 @@ MonoBehaviour:
   RELOAD_TIME: 6.5
   projectile: {fileID: 8252440497980988240, guid: 9802881ba44263f46b8930c93848aa5b, type: 3}
   projectileSpeed: 17.5
-  projectileRange: 0
+  projectileRange: 3
   maxAmmo: 70
   minAngleChange: 0
   maxAngleChange: 8.5

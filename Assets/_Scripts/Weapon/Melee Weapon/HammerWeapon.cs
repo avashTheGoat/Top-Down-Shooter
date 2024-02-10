@@ -9,7 +9,7 @@ public class HammerWeapon : MeleeWeapon
         // do a Debug.Log if Wielder or attackLogic is null
         // Doing this because i'm testing enemies spawning with weapons
         // right now
-        if (Wielder is null || AttackLogic is null)
+        if (Wielder is null || attackLogic is null)
         {
             print("Wielder or attackLogic is null");
             return;
@@ -19,7 +19,7 @@ public class HammerWeapon : MeleeWeapon
 
         if (attackCooldownTimer != 0f) return;
 
-        if (!AttackLogic.ShouldAttack(this)) return;
+        if (!attackLogic.ShouldAttack(this)) return;
 
         print("hammer attack");
 

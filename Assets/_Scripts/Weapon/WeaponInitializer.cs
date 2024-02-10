@@ -1,10 +1,14 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class WeaponInitializer : MonoBehaviour
 {
-    private List<MeleeWeapon> meleeWeapons;
-    private List<RangedWeapon> rangedWeapons;
+    [SerializeField] private bool shouldApplyWeaponTransformChanges = false;
+    [SerializeField] private Vector2 weaponOffset;
+    [SerializeField] private Vector2 weaponSizeMultiplier;
+
+    private Component[] meleeWeapons;
+    private Component[] rangedWeapons;
 
     private IAttack attack;
     private IReload reload;
@@ -19,13 +23,37 @@ public class WeaponInitializer : MonoBehaviour
         reload = GetComponent<IReload>();
     }
 
-    private void Start() => TryInitializingAllWeapons();
-
-    public bool TryInitializingAllWeapons()
+    private void Start()
     {
-        GetAllWeapons();
+        TryInitializingAllWeaponAttacksAndReloads();
+        if (shouldApplyWeaponTransformChanges) ApplyWeaponTransformChange();
+    }
 
+    public void ApplyWeaponTransformChange()
+    {
+        foreach (Component _weapon in meleeWeapons)
+        {
+            Transform _weaponTrans = _weapon.transform;
+
+            _weaponTrans.localPosition += (Vector3) weaponOffset;
+            _weaponTrans.localScale = weaponSizeMultiplier;
+        }
+
+        foreach (Component _weapon in rangedWeapons)
+        {
+            Transform _weaponTrans = _weapon.transform;
+
+            _weaponTrans.localPosition += (Vector3) weaponOffset;
+            _weaponTrans.localScale = new Vector2(_weaponTrans.localScale.x * weaponSizeMultiplier.x,
+                                                  _weaponTrans.localScale.y * weaponSizeMultiplier.y);
+        }
+    }
+
+    public bool TryInitializingAllWeaponAttacksAndReloads()
+    {
         if (attack is null || reload is null) return false;
+
+        GetAllWeapons();
 
         foreach (MeleeWeapon _meleeWeapon in meleeWeapons)
             _meleeWeapon.Init(transform, attack);
@@ -44,7 +72,7 @@ public class WeaponInitializer : MonoBehaviour
 
     private void GetAllWeapons()
     {
-        trans.GetComponentsInChildren(meleeWeapons);
-        trans.GetComponentsInChildren(rangedWeapons);
+        meleeWeapons = trans.GetComponentsInChildren<MeleeWeapon>(true);
+        rangedWeapons = trans.GetComponentsInChildren<RangedWeapon>(true);
     }
 }

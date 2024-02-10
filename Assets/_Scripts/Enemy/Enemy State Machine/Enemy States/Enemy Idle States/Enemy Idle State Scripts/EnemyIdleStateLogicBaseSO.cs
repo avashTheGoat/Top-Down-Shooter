@@ -9,14 +9,23 @@ public abstract class EnemyIdleStateLogicBaseSO : ScriptableObject
     protected Transform player;
     protected Collider2D detectionCollider;
 
+    protected Weapon enemyWeapon;
+    protected IAttack idleStateAttackLogic;
+    protected IReload? idleStateReloadLogic;
+
     public EnemyIdleStateLogicBaseSO Initialize(EnemyStateMachine _stateMachine, Transform _transform, NavMeshAgent _agent,
-        Transform _player, Collider2D _detectionCollider)
+        Transform _player, Collider2D _detectionCollider, Weapon _enemyWeapon, IAttack _idleStateAttackLogic,
+        IReload? _idleStateReloadLogic)
     {
         stateMachine = _stateMachine;
         trans = _transform;
         agent = _agent;
         player = _player;
         detectionCollider = _detectionCollider;
+
+        enemyWeapon = _enemyWeapon;
+        idleStateAttackLogic = _idleStateAttackLogic;
+        idleStateReloadLogic = _idleStateReloadLogic;
 
         return this;
     }
