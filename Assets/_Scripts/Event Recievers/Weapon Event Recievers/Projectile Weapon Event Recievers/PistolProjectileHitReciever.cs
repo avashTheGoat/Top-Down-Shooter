@@ -3,44 +3,27 @@ using UnityEngine;
 
 public class PistolProjectileHitReciever : MonoBehaviour
 {
-    [SerializeField] private PistolWeapon pistol;
+    [SerializeField] private List<Component> weaponProviders;
 
     private List<ProjectileHit> pistolBulletHits = new();
     private List<ProjectileHit> subscribedPistolBulletHits = new();
 
-    private void Awake()
-    {
-        pistol.OnWeaponAttack += UpdatePistolBulletHits;
-    }
+    private void Awake() => UpdatePistolBulletHits();
 
     private void Update()
     {
-        subscribedPistolBulletHits.RemoveAll((projectile) => { return projectile == null; });
+        UpdatePistolBulletHits();
+        subscribedPistolBulletHits.RemoveAll(projectile => projectile == null);
 
-        List<ProjectileHit> _pistolBulletHitsToRemove = new();
-
-        for (int i = 0; i < pistolBulletHits.Count; i++)
+        foreach (ProjectileHit _pistolBulletHit in pistolBulletHits)
         {
-            ProjectileHit _pistolBulletHit = pistolBulletHits[i];
-
-            if (_pistolBulletHit == null)
-            {
-                _pistolBulletHitsToRemove.Add(_pistolBulletHit);
-                continue;
-            }
-
             if (subscribedPistolBulletHits.Contains(_pistolBulletHit)) continue;
+            subscribedPistolBulletHits.Add(_pistolBulletHit);
 
             _pistolBulletHit.OnObjectCollision += Debug;
             _pistolBulletHit.OnObjectCollision += DamageIfDamageable;
             _pistolBulletHit.OnObjectCollision += DestroyBullet;
 
-            subscribedPistolBulletHits.Add(_pistolBulletHit);
-        }
-
-        foreach (ProjectileHit _pistolBulletHitToRemove in _pistolBulletHitsToRemove)
-        {
-            pistolBulletHits.Remove(_pistolBulletHitToRemove);
         }
     }
 
@@ -56,5 +39,17 @@ public class PistolProjectileHitReciever : MonoBehaviour
 
     private void DestroyBullet(GameObject bullet, GameObject _, float __) => Destroy(bullet);
 
-    private void UpdatePistolBulletHits() => pistolBulletHits.Add(pistol.ShotProjectiles[^1].GetComponent<ProjectileHit>());
+    private void UpdatePistolBulletHits()
+    {
+        pistolBulletHits.Clear();
+        weaponProviders.RemoveAll(_weaponProvider => _weaponProvider == null);
+
+        foreach (IWeaponProvider _weaponProvider in weaponProviders)
+        {
+            foreach (PistolWeapon _pistol in _weaponProvider.GetWeapons<PistolWeapon>())
+            {
+                _pistol.GetShotProjectiles().ForEach((_projectile) => pistolBulletHits.Add(_projectile.GetComponent<ProjectileHit>()));
+            }
+        }
+    }
 }

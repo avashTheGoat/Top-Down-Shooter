@@ -3,36 +3,26 @@ using UnityEngine;
 
 public class ShotgunProjectileHitReciever : MonoBehaviour
 {
-    [SerializeField] private ShotgunWeapon shotgun;
+    [SerializeField] private List<Component> weaponProviders;
 
     private List<ProjectileHit> shotgunBulletHits = new();
     private List<ProjectileHit> subscribedShotgunBulletHits = new();
 
-    private void Awake()
-    {
-        shotgun.OnWeaponAttack += UpdateShotgunBulletHits;
-    }
+    private void Awake() => UpdateShotgunBulletHits();
 
     private void Update()
     {
-        subscribedShotgunBulletHits.RemoveAll((projectile) => { return projectile == null; });
+        UpdateShotgunBulletHits();
+        subscribedShotgunBulletHits.RemoveAll(projectile => projectile == null);
 
-        for (int i = 0; i < shotgunBulletHits.Count; i++)
+        foreach (ProjectileHit _shotgunBulletHit in shotgunBulletHits)
         {
-            ProjectileHit _shotgunBulletHit = shotgunBulletHits[i];
-
-            if (_shotgunBulletHit == null)
-            {
-                continue;
-            }
-
             if (subscribedShotgunBulletHits.Contains(_shotgunBulletHit)) continue;
+            subscribedShotgunBulletHits.Add(_shotgunBulletHit);
 
             _shotgunBulletHit.OnObjectCollision += Debug;
             _shotgunBulletHit.OnObjectCollision += DamageIfDamageable;
             _shotgunBulletHit.OnObjectCollision += DestroyBullet;
-
-            subscribedShotgunBulletHits.Add(_shotgunBulletHit);
         }
     }
 
@@ -50,8 +40,15 @@ public class ShotgunProjectileHitReciever : MonoBehaviour
 
     private void UpdateShotgunBulletHits()
     {
-        shotgun.ShotProjectiles.RemoveAll((_bullet) => { return _bullet == null; });
         shotgunBulletHits.Clear();
-        shotgun.ShotProjectiles.ForEach((_bulletHit) => { shotgunBulletHits.Add(_bulletHit.GetComponent<ProjectileHit>()); });
+        weaponProviders.RemoveAll(_weaponProvider => _weaponProvider == null);
+
+        foreach (IWeaponProvider _weaponProvider in weaponProviders)
+        {
+            foreach (ShotgunWeapon _pistol in _weaponProvider.GetWeapons<ShotgunWeapon>())
+            {
+                _pistol.GetShotProjectiles().ForEach((_projectile) => shotgunBulletHits.Add(_projectile.GetComponent<ProjectileHit>()));
+            }
+        }
     }
 }

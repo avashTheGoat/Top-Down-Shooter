@@ -51,7 +51,7 @@ public class WeaponInitializer : MonoBehaviour
 
     public bool TryInitializingAllWeaponAttacksAndReloads()
     {
-        if (attack is null || reload is null) return false;
+        if (attack == null || reload == null) return false;
 
         GetAllWeapons();
 

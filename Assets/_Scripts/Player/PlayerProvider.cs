@@ -6,13 +6,13 @@ public class PlayerProvider : MonoBehaviour
 
     private static Transform playerTrans;
 
-    private void Awake() => playerTrans = GameObject.FindGameObjectWithTag(playerTag).transform;
+    private void Start() => playerTrans = GameObject.FindGameObjectWithTag(playerTag).transform;
 
     public static bool TryGetPlayer(out Transform _player)
     {
         _player = null;
 
-        if (playerTrans is null) return false;
+        if (playerTrans == null) return false;
 
         _player = playerTrans;
         return true;

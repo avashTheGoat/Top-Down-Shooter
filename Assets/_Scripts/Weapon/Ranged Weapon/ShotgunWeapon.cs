@@ -11,12 +11,12 @@ public class ShotgunWeapon : RangedWeapon
     {
         // TODO
         // remove these logical conditions later and
-        // do a Debug.Log if Wielder or AttackLogic is null
+        // do a Debug.Log if Wielder or AttackLogic == null
         // Doing this because i'm testing enemies spawning with weapons
         // right now
-        if (Wielder is null || attackLogic is null)
+        if (Wielder == null || attackLogic == null)
         {
-            print("Wielder or AttackLogic is null");
+            print("Wielder or AttackLogic == null");
             return;
         }
 
@@ -62,7 +62,7 @@ public class ShotgunWeapon : RangedWeapon
         for (int i = 0; i < numBullets; i++)
         {
             Projectile _bullet = Instantiate(projectile);
-            ShotProjectiles.Add(_bullet);
+            shotProjectiles.Add(_bullet);
             _bullet.Init(weaponDamage, projectileSpeed, trans.position, trans.localEulerAngles.z + _deltaAngle, projectileRange);
 
             _deltaAngle -= totalDeltaAngle / (numBullets - 1);

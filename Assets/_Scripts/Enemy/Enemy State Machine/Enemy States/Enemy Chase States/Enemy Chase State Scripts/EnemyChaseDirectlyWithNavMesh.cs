@@ -43,7 +43,10 @@ public class EnemyChaseDirectlyWithNavMesh : EnemyChaseStateLogicBaseSO
             isFirstFrame = false;
         }
 
-        bool _isPlayerOutOfDetection = !IsPointInCollider(detectionCollider, player.position);
+        Vector2 _playerPosition = new();
+        if (player != null) _playerPosition = player.position;
+
+        bool _isPlayerOutOfDetection = !IsPointInCollider(detectionCollider, _playerPosition);
 
         if (_isPlayerOutOfDetection)
         {
@@ -70,7 +73,7 @@ public class EnemyChaseDirectlyWithNavMesh : EnemyChaseStateLogicBaseSO
             isFirstFrameAfterDetectionExit = true;
         }
 
-        agent.SetDestination(player.position);
+        agent.SetDestination(_playerPosition);
     }
 
     protected override void ResetValues()

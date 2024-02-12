@@ -6,6 +6,7 @@ public class EnemyWavesController : MonoBehaviour
 {
     public event Action<int> OnWaveComplete;
     public event Action OnAllWavesComplete;
+    public event Action OnEnemySpawn;
 
     public List<GameObject> SpawnedEnemies
     {
@@ -63,6 +64,8 @@ public class EnemyWavesController : MonoBehaviour
             enemySpawnTimer = 0f;
             spawnedEnemies.AddRange(spawner.SpawnEnemies(spawnableEnemiesForEachWave[Math.Clamp(wave - 1, 0, spawnableEnemiesForEachWave.Length - 1)].enemySpawningInfos, 1));
             numSpawnedEnemies++;
+
+            OnEnemySpawn?.Invoke();
         }
 
         if (SpawnedEnemies.Count == 0 && numSpawnedEnemies >= numEnemiesAtWaveCount.Evaluate(wave))

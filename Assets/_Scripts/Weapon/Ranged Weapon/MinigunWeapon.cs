@@ -14,12 +14,12 @@ public class MinigunWeapon : RangedWeapon
     {
         // TODO
         // remove these logical conditions later and
-        // do a Debug.Log if Wielder or attackLogic is null
+        // do a Debug.Log if Wielder or attackLogic == null
         // Doing this because i'm testing enemies spawning with weapons
         // right now
-        if (Wielder is null || attackLogic is null)
+        if (Wielder == null || attackLogic == null)
         {
-            print("Wielder or attackLogic is null");
+            print("Wielder or attackLogic == null");
             return;
         }
 
@@ -62,7 +62,7 @@ public class MinigunWeapon : RangedWeapon
         _randAngleChange = Random.Range(0, 1 + 1) == 1 ? -_randAngleChange : _randAngleChange;
 
         Projectile _bullet = Instantiate(projectile);
-        ShotProjectiles.Add(_bullet);
+        shotProjectiles.Add(_bullet);
         _bullet.Init(weaponDamage, projectileSpeed, trans.position, trans.localEulerAngles.z + _randAngleChange, projectileRange);
     }
 }

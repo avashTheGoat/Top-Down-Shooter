@@ -647,7 +647,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a278765779ecce249b056140e7e0d515, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bow: {fileID: 1176684337}
+  weaponProviders:
+  - {fileID: 1059581859}
+  - {fileID: 2128747354}
 --- !u!114 &600483427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -660,7 +662,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 444fc7e8e9d3bca4485635439635af88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minigun: {fileID: 639728074}
+  weaponProviders:
+  - {fileID: 1059581859}
+  - {fileID: 2128747354}
 --- !u!114 &600483428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -673,7 +677,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46b42c95af5dddf47bb31ba132f0e82d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shotgun: {fileID: 1758994514}
+  weaponProviders:
+  - {fileID: 1059581859}
+  - {fileID: 2128747354}
 --- !u!114 &600483429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -686,7 +692,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c06e1f06f0c811e4b83fa1fd34656f73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pistol: {fileID: 685164473}
+  weaponProviders:
+  - {fileID: 1059581859}
+  - {fileID: 2128747354}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,6 +1063,7 @@ GameObject:
   - component: {fileID: 1059581854}
   - component: {fileID: 1059581858}
   - component: {fileID: 1059581856}
+  - component: {fileID: 1059581859}
   m_Layer: 0
   m_Name: Test Player
   m_TagString: Player
@@ -1217,7 +1226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f512986d16c2784eac0698659ef23bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startHealth: 0
+  startHealth: 100
 --- !u!114 &1059581854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1293,6 +1302,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackKey: 323
   reloadKey: 114
+--- !u!114 &1059581859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1059581842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49bedafb41d5c4040b2cf32a9a924bd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1138331350
 GameObject:
   m_ObjectHideFlags: 3
@@ -1994,6 +2015,7 @@ GameObject:
   - component: {fileID: 2128747351}
   - component: {fileID: 2128747353}
   - component: {fileID: 2128747352}
+  - component: {fileID: 2128747354}
   m_Layer: 0
   m_Name: Enemy Spawning
   m_TagString: Untagged
@@ -2111,6 +2133,19 @@ MonoBehaviour:
       weaponPrefab: {fileID: 1368183166115280648, guid: d682db0fd5908d147841961961bb118e, type: 3}
       spawnChance: 50
   isEndless: 1
+--- !u!114 &2128747354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2128747350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c459c0ab45729ce459852f7fbdcedbb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyWaves: {fileID: 2128747353}
 --- !u!1001 &1368183165699403965
 PrefabInstance:
   m_ObjectHideFlags: 0

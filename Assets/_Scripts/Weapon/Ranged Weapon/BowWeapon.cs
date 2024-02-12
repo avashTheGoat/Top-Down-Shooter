@@ -35,12 +35,12 @@ public class BowWeapon : RangedWeapon
     {
         // TODO
         // remove these logical conditions later and
-        // do a Debug.LogError if Wielder or attackLogic is null
+        // do a Debug.LogError if Wielder or attackLogic == null
         // Doing this because i'm testing enemies spawning with weapons
         // right now
-        if (Wielder is null || attackLogic is null)
+        if (Wielder == null || attackLogic == null)
         {
-            print("Wielder or attackLogic is null");
+            print("Wielder or attackLogic == null");
             return;
         }
 
@@ -104,6 +104,6 @@ public class BowWeapon : RangedWeapon
         Projectile _arrow = Instantiate(projectile);
         _arrow.Init(weaponDamage, projectileSpeed, trans.position, trans.localEulerAngles.z, projectileRange);
 
-        ShotProjectiles.Add(_arrow);
+        shotProjectiles.Add(_arrow);
     }
 }

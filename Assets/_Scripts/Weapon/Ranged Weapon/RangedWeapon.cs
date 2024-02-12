@@ -8,7 +8,6 @@ public abstract class RangedWeapon : Weapon
     public event Action OnWeaponReload;
 
 
-    public List<Projectile> ShotProjectiles { get; protected set; } = new();
 
     public float Ammo => ammo;
     public float MaxAmmo => maxAmmo;
@@ -27,6 +26,7 @@ public abstract class RangedWeapon : Weapon
     [SerializeField] protected int maxAmmo;
 
     protected IReload reloadLogic;
+    protected List<Projectile> shotProjectiles = new();
     
     protected int ammo;
     protected float reloadTimer;
@@ -54,13 +54,19 @@ public abstract class RangedWeapon : Weapon
 
     public void Init(Transform _wielder, IAttack _attackLogic, IReload _reloadLogic)
     {
-        if (_reloadLogic is null) throw new ArgumentNullException(nameof(_reloadLogic), "The passed in IReload should not be null.");
+        if (_reloadLogic == null) throw new ArgumentNullException(nameof(_reloadLogic), "The passed in IReload should not be null.");
 
         base.Init(_wielder, _attackLogic);
         reloadLogic = _reloadLogic;
     }
 
     protected abstract void Reload();
+
+    public List<Projectile> GetShotProjectiles()
+    {
+        shotProjectiles.RemoveAll(_projectile => _projectile == null);
+        return shotProjectiles;
+    }
 
     protected void InvokeOnWeaponReload() => OnWeaponReload?.Invoke();
     protected void InvokeOnAttackWithoutAmmo() => OnAttackWithoutAmmo?.Invoke();

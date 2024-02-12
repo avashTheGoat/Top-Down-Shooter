@@ -3,7 +3,7 @@ using System;
 
 public abstract class Weapon : MonoBehaviour
 {
-    public event Action OnWeaponAttack;
+    public event Action<GameObject> OnWeaponAttack;
     public float WeaponDamage => weaponDamage;
 
     public Transform Wielder { get; private set; }
@@ -35,12 +35,12 @@ public abstract class Weapon : MonoBehaviour
 
     public void ChangeWeaponLogic(IAttack _attackLogic, IReload? _reloadLogic)
     {
-        if (_attackLogic is null)
+        if (_attackLogic == null)
             throw new ArgumentNullException(nameof(_attackLogic), "The _attackLogic parameter cannot be null.");
 
         if (this is RangedWeapon)
         {
-            if (_reloadLogic is null)
+            if (_reloadLogic == null)
                 throw new ArgumentNullException(nameof(_attackLogic), "The _attackLogic parameter cannot be null when the weapon is a RangedWeapon.");
 
             RangedWeapon _rangedWeapon = this as RangedWeapon;
@@ -54,8 +54,8 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void Init(Transform _wielder, IAttack _attackLogic)
     {
-        if (_wielder is null) throw new ArgumentNullException(nameof(_wielder), "The passed in Transform should not be null.");
-        if (_attackLogic is null) throw new ArgumentNullException(nameof(_attackLogic), "The passed in IAttack should not be null.");
+        if (_wielder == null) throw new ArgumentNullException(nameof(_wielder), "The passed in Transform should not be null.");
+        if (_attackLogic == null) throw new ArgumentNullException(nameof(_attackLogic), "The passed in IAttack should not be null.");
 
         Wielder = _wielder;
         attackLogic = _attackLogic;
@@ -67,5 +67,5 @@ public abstract class Weapon : MonoBehaviour
     }
 
     protected float GetResetAttackTimer() => attackCooldownTimer = 1 / ATTACKS_PER_SECOND;
-    protected void InvokeOnWeaponAttack() => OnWeaponAttack?.Invoke();
+    protected void InvokeOnWeaponAttack() => OnWeaponAttack?.Invoke(gameObject);
 }

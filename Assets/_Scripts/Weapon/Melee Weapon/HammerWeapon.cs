@@ -6,12 +6,12 @@ public class HammerWeapon : MeleeWeapon
     {
         // TODO
         // remove these logical conditions later and
-        // do a Debug.Log if Wielder or attackLogic is null
+        // do a Debug.Log if Wielder or attackLogic == null
         // Doing this because i'm testing enemies spawning with weapons
         // right now
-        if (Wielder is null || attackLogic is null)
+        if (Wielder == null || attackLogic == null)
         {
-            print("Wielder or attackLogic is null");
+            print("Wielder or attackLogic == null");
             return;
         }
 

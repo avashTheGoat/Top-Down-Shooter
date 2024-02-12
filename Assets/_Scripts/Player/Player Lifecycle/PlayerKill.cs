@@ -4,7 +4,7 @@ using System;
 [RequireComponent(typeof(PlayerHealth))]
 public class PlayerKill : MonoBehaviour, IKillable
 {
-    public static event Action OnPlayerDeath;
+    public event Action OnPlayerDeath;
 
     private bool hasPlayerDied;
     private PlayerHealth playerHealth;
@@ -17,15 +17,16 @@ public class PlayerKill : MonoBehaviour, IKillable
 
     private void Update()
     {
+        print("Player health: " + playerHealth.Health);
         if (playerHealth.Health <= 0f && !hasPlayerDied)
-        {
             Kill();
-        }
     }
 
     public void Kill()
     {
         OnPlayerDeath?.Invoke();
         hasPlayerDied = true;
+
+        Destroy(gameObject);
     }
 }

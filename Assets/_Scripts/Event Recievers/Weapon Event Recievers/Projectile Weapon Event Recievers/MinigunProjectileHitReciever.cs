@@ -3,44 +3,27 @@ using UnityEngine;
 
 public class MinigunProjectileHitReciever : MonoBehaviour
 {
-    [SerializeField] private MinigunWeapon minigun;
+    [SerializeField] private List<Component> weaponProviders;
 
     private List<ProjectileHit> minigunBulletHits = new();
     private List<ProjectileHit> subscribedMinigunBulletHits = new();
 
-    private void Awake()
-    {
-        minigun.OnWeaponAttack += UpdatePistolBulletHits;
-    }
+    private void Awake() => UpdateMinigunBulletHits();
 
     private void Update()
     {
-        subscribedMinigunBulletHits.RemoveAll((projectile) => { return projectile == null; });
+        UpdateMinigunBulletHits();
+        subscribedMinigunBulletHits.RemoveAll(projectile => projectile == null);
 
-        List<ProjectileHit> _minigunBulletHitsToRemove = new();
-
-        for (int i = 0; i < minigunBulletHits.Count; i++)
+        foreach (ProjectileHit _minigunBulletHit in minigunBulletHits)
         {
-            ProjectileHit _minigunBulletHit = minigunBulletHits[i];
-
-            if (_minigunBulletHit == null)
-            {
-                _minigunBulletHitsToRemove.Add(_minigunBulletHit);
-                continue;
-            }
-
             if (subscribedMinigunBulletHits.Contains(_minigunBulletHit)) continue;
+            subscribedMinigunBulletHits.Add(_minigunBulletHit);
 
             _minigunBulletHit.OnObjectCollision += Debug;
             _minigunBulletHit.OnObjectCollision += DamageIfDamageable;
             _minigunBulletHit.OnObjectCollision += DestroyBullet;
 
-            subscribedMinigunBulletHits.Add(_minigunBulletHit);
-        }
-
-        foreach (ProjectileHit _minigunBulletHitToRemove in _minigunBulletHitsToRemove)
-        {
-            minigunBulletHits.Remove(_minigunBulletHitToRemove);
         }
     }
 
@@ -56,5 +39,17 @@ public class MinigunProjectileHitReciever : MonoBehaviour
 
     private void DestroyBullet(GameObject bullet, GameObject _, float __) => Destroy(bullet);
 
-    private void UpdatePistolBulletHits() => minigunBulletHits.Add(minigun.ShotProjectiles[^1].GetComponent<ProjectileHit>());
+    private void UpdateMinigunBulletHits()
+    {
+        minigunBulletHits.Clear();
+        weaponProviders.RemoveAll(_weaponProvider => _weaponProvider == null);
+
+        foreach (IWeaponProvider _weaponProvider in weaponProviders)
+        {
+            foreach (MinigunWeapon _minigun in _weaponProvider.GetWeapons<MinigunWeapon>())
+            {
+                _minigun.GetShotProjectiles().ForEach((_projectile) => minigunBulletHits.Add(_projectile.GetComponent<ProjectileHit>()));
+            }
+        }
+    }
 }

@@ -51,20 +51,16 @@ public abstract class EnemyAttackStateLogicBaseSO : ScriptableObject
         {
             RangedWeapon _rangedWeapon = enemyWeapon as RangedWeapon;
 
-            if (PlayerProvider.TryGetPlayer(out Transform _player))
-            {
-                return Vector2.Distance(_player.position, _rangedWeapon.transform.position) <= _rangedWeapon.Range;
-            }
+            if (player != null)
+                return Vector2.Distance(player.position, _rangedWeapon.transform.position) <= _rangedWeapon.Range;
         }
 
         else if (enemyWeapon is MeleeWeapon)
         {
             MeleeWeapon _meleeWeapon = enemyWeapon as MeleeWeapon;
 
-            if (PlayerProvider.TryGetPlayer(out Transform _player))
-            {
-                return _meleeWeapon.GetGameObjectsInAttackAOE().Contains(_player.gameObject);
-            }
+            if (player != null)
+                return _meleeWeapon.GetGameObjectsInAttackAOE().Contains(player.gameObject);
         }
 
         else Debug.LogError("An unidentified weapon has been detected.");
