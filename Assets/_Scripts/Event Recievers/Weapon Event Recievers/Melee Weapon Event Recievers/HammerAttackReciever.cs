@@ -48,7 +48,7 @@ public class HammerAttackReciever : MonoBehaviour
                 float _damage = _hammerWeapon.WeaponDamage * percentOfOriginalDamageWhenXAwayFromCenter.Evaluate(_distanceFromAttack);
                 _damageable.Damage(_damage);
 
-                print($"(Damage, DistanceFromCenter): ({_damage}, {_distanceFromAttack})");
+                // print($"HAMMER (Damage, DistanceFromCenter): ({_damage}, {_distanceFromAttack})");
             }
         }
     }

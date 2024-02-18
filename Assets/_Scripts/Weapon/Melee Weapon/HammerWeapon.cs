@@ -21,8 +21,6 @@ public class HammerWeapon : MeleeWeapon
 
         if (!attackLogic.ShouldAttack(this)) return;
 
-        print("hammer attack");
-
         Attack();
         InvokeOnWeaponAttack();
         attackCooldownTimer = GetResetAttackTimer();

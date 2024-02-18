@@ -7,21 +7,20 @@ public abstract class EnemyChaseStateLogicBaseSO : ScriptableObject
     protected Transform trans;
     protected NavMeshAgent agent;
     protected Transform player;
-    protected Collider2D detectionCollider;
 
     protected Weapon enemyWeapon;
     protected IAttack chaseStateAttackLogic;
+    #nullable enable
     protected IReload? chaseStateReloadLogic;
 
     public EnemyChaseStateLogicBaseSO Initialize(EnemyStateMachine _stateMachine, Transform _transform,
-        NavMeshAgent _agent, Transform _player, Collider2D _detectionCollider, Weapon _enemyWeapon,
-        IAttack _chaseStateAttackLogic, IReload? _chaseStateReloadLogic)
+    NavMeshAgent _agent, Transform _player, Weapon _enemyWeapon, IAttack _chaseStateAttackLogic, IReload? _chaseStateReloadLogic)
+    #nullable disable
     {
         stateMachine = _stateMachine;
         trans = _transform;
         agent = _agent;
         player = _player;
-        detectionCollider = _detectionCollider;
 
         enemyWeapon = _enemyWeapon;
         chaseStateAttackLogic = _chaseStateAttackLogic;
@@ -43,21 +42,6 @@ public abstract class EnemyChaseStateLogicBaseSO : ScriptableObject
     public abstract void DoUpdateLogic();
     public abstract void DoPhysicsUpdateStateLogic();
     protected abstract void ResetValues();
-
-    protected bool IsPointInCollider(Collider2D _collider, Vector2 _point)
-    {
-        Collider2D[] _hits = Physics2D.OverlapPointAll(_point);
-
-        foreach (Collider2D _hit in _hits)
-        {
-            if (_hit == _collider)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     protected bool ShouldBeInAttackState()
     {

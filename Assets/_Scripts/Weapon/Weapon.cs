@@ -33,7 +33,9 @@ public abstract class Weapon : MonoBehaviour
         trans.RotateAround(Wielder.position, Vector3.forward, attackLogic.GetWeaponRotationChange(trans));
     }
 
+    #nullable enable
     public void ChangeWeaponLogic(IAttack _attackLogic, IReload? _reloadLogic)
+    #nullable disable
     {
         if (_attackLogic == null)
             throw new ArgumentNullException(nameof(_attackLogic), "The _attackLogic parameter cannot be null.");

@@ -1966,7 +1966,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 460e0732397936c4c9ac8968eabefea7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sword: {fileID: 375759096}
+  weaponProviders:
+  - {fileID: 1059581859}
+  - {fileID: 2128747354}
 --- !u!114 &2024006287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1979,7 +1981,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c3f8d511bf9f9e4e85e16fc8581957e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hammer: {fileID: 1896861343}
+  weaponProviders:
+  - {fileID: 1059581859}
+  - {fileID: 2128747354}
   percentOfOriginalDamageWhenXAwayFromCenter:
     serializedVersion: 2
     m_Curve:
@@ -2056,7 +2060,7 @@ MonoBehaviour:
   minY: -4.5
   maxY: 4.5
   player: {fileID: 1059581847}
-  minDistanceFromPlayer: 4
+  minDistanceFromPlayerToSpawn: 0
   maxSpawnAttempts: 4
   worstCaseSpawnLocations:
   - {x: -8, y: -4}
@@ -2127,7 +2131,7 @@ MonoBehaviour:
   spawnableEnemiesForEachWave:
   - enemySpawningInfos:
     - enemyPrefab: {fileID: 3282975925898905841, guid: 8abc6237c4a7cfb48a611bacea4b63e1, type: 3}
-      weaponPrefab: {fileID: 3104220439187664240, guid: 0ea675cd863585840bade0478fe067c7, type: 3}
+      weaponPrefab: {fileID: 4163144566826951538, guid: 4f3e0333b5fcc0d44b3087c873dd0de1, type: 3}
       spawnChance: 50
     - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
       weaponPrefab: {fileID: 1368183166115280648, guid: d682db0fd5908d147841961961bb118e, type: 3}

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Chase Directly Using NavMesh
   m_EditorClassIdentifier: 
   chaseSpeed: 3
-  minTimeToWanderAfterDetectionExit: 5
-  maxTimeToWanderAfterDetectionExit: 4
-  timeToWanderAfterDetectionExit: 6
+  minTimeToWanderAfterDetectionExit: 3
+  maxTimeToWanderAfterDetectionExit: 5
+  numRaycasts: 18
+  maxDistanceFromPlayerToChase: 7

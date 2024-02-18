@@ -10,13 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d1d08786462975438e6314d210826e3, type: 3}
-  m_Name: Idle Random Wander In Circle
+  m_Name: Idle Random Wander In Circle & Chase When Player Visible
   m_EditorClassIdentifier: 
-  minWanderRange: 2
-  maxWanderRange: 4
-  minWanderSpeed: 1
-  maxWanderSpeed: 2
-  minTimeBetweenWandering: 2
-  maxTimeBetweenWandering: 4
-  minDifferenceInX: 0.25
-  minDifferenceInY: 0.25
+  minWanderRange: 3
+  maxWanderRange: 7.5
+  minWanderSpeed: 0.5
+  maxWanderSpeed: 1.5
+  minTimeBetweenWandering: 2.5
+  maxTimeBetweenWandering: 4.5
+  minDifferenceInX: 0.35
+  minDifferenceInY: 0.35
+  numRaycasts: 18
+  maxDistanceFromPlayerToChase: 6.5

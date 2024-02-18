@@ -13,8 +13,6 @@ public class EnemyAttackAttacking : MonoBehaviour, IAttack
             Vector2 _playerDirection = _player.position - trans.position;
             Vector2 _weaponDirection = _weapon.position - trans.position;
 
-            print("Player direction: " + _playerDirection);
-
             float _deltaAngle = Vector2.SignedAngle(_weaponDirection.normalized, _playerDirection.normalized);
 
             return _deltaAngle;

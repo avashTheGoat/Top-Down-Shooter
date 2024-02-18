@@ -26,11 +26,13 @@ public class EnemyStateMachine : MonoBehaviour
     // just IAttack and IReload will not be visible in the inspector
     [Header("Attacking Logic")]
     [SerializeField] private Component idleStateAttack;
-    [SerializeField] private Component? idleStateReload;
     [SerializeField] private Component chaseStateAttack;
-    [SerializeField] private Component? chaseStateReload;
     [SerializeField] private Component attackStateAttack;
+    #nullable enable
+    [SerializeField] private Component? idleStateReload;
+    [SerializeField] private Component? chaseStateReload;
     [SerializeField] private Component? attackStateReload;
+    #nullable disable
 
     #region States
     private BaseState currentState;
@@ -51,32 +53,12 @@ public class EnemyStateMachine : MonoBehaviour
         agent.updateRotation = false;
         agent.updateUpAxis = false;
 
-        IdleState = new EnemyIdleState
-        (
-            Instantiate(idleStateLogic).Initialize
-            (
-                this, transform, agent, player, detectionCollider,
-                weapon, (IAttack) idleStateAttack, (IReload) idleStateReload
-            )
-        );
-
-        ChaseState = new EnemyChaseState
-        (
-            Instantiate(chaseStateLogic).Initialize
-            (
-                this, transform, agent, player, detectionCollider,
-                weapon, (IAttack) chaseStateAttack, (IReload) chaseStateReload
-            )
-        );
-
-        AttackState = new EnemyAttackState
-        (
-            Instantiate(attackStateLogic).Initialize
-            (
-                this, transform, agent, player,
-                weapon, (IAttack) attackStateAttack, (IReload) attackStateReload
-            )
-        );
+        IdleState = new EnemyIdleState(Instantiate(idleStateLogic).Initialize(this, transform, agent, player, weapon,
+            (IAttack)idleStateAttack, (IReload)idleStateReload));
+        ChaseState = new EnemyChaseState(Instantiate(chaseStateLogic).Initialize(this, transform, agent, player, weapon,
+            (IAttack)chaseStateAttack, (IReload)chaseStateReload));
+        AttackState = new EnemyAttackState(Instantiate(attackStateLogic).Initialize(this, transform, agent, player,
+            weapon, (IAttack)attackStateAttack, (IReload)attackStateReload));
 
         switch (startingState)
         {

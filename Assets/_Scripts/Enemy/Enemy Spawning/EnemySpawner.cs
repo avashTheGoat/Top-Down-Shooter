@@ -16,7 +16,8 @@ public class EnemySpawner : MonoBehaviour
 
     [Header("Player Spawning Restriction")]
     [SerializeField] private Transform player;
-    [SerializeField] private float minDistanceFromPlayer;
+    [Tooltip("The minimum distance from the player a point needs to be to be a valid spawn location")]
+    [SerializeField] private float minDistanceFromPlayerToSpawn;
     [Space(15)]
 
     [Header("Spawning Attempts")]
@@ -92,7 +93,7 @@ public class EnemySpawner : MonoBehaviour
         _spawnLocation = spawnableSurface.navMeshData.sourceBounds.ClosestPoint(_spawnLocation);
 
         int _spawnAttempts = 1;
-        while (_spawnAttempts < maxSpawnAttempts && Vector2.Distance(player.position, _spawnLocation) < minDistanceFromPlayer)
+        while (_spawnAttempts < maxSpawnAttempts && Vector2.Distance(player.position, _spawnLocation) < minDistanceFromPlayerToSpawn)
         {
             _spawnLocation = new Vector2(UnityEngine.Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
             _spawnLocation = spawnableSurface.navMeshData.sourceBounds.ClosestPoint(_spawnLocation);
@@ -101,7 +102,7 @@ public class EnemySpawner : MonoBehaviour
         }
 
         // if too close to player despite trying other spawn locations
-        if (Vector2.Distance(player.position, _spawnLocation) < minDistanceFromPlayer)
+        if (Vector2.Distance(player.position, _spawnLocation) < minDistanceFromPlayerToSpawn)
             _spawnLocation = worstCaseSpawnLocations[UnityEngine.Random.Range(0, worstCaseSpawnLocations.Length)];
 
         return _spawnLocation;

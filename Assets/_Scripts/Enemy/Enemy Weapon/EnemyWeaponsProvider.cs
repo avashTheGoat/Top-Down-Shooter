@@ -15,8 +15,6 @@ public class EnemyWeaponsProvider : MonoBehaviour, IWeaponProvider
             if (_weapon != null) _weapons.Add(_weapon as T);
         });
 
-        print($"Enemy weapons of type {typeof(T).FullName} has {_weapons.Count} items");
-
         return _weapons;
     }
 }

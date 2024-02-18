@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Idle Random Wander In Circle", menuName = "Scriptable Objects/Enemy States/Idle States/Random Wander In Circle")]
-public class EnemyIdleRandomPointInCircle : EnemyIdleStateLogicBaseSO
+[CreateAssetMenu(fileName = "Idle Random Wander In Circle & Chase When Player Visible", menuName = "Scriptable Objects/Enemy States/Idle States/Random Wander In Circle & Chase When Player Visible")]
+public class EnemyIdleRandomPointInCircleChaseWhenPlayerVisible : EnemyIdleStateLogicBaseSO
 {
     #region Wandering Modifiers
     [Header("Wandering Modifiers")]
@@ -16,7 +16,12 @@ public class EnemyIdleRandomPointInCircle : EnemyIdleStateLogicBaseSO
 
     [SerializeField] private float minDifferenceInX;
     [SerializeField] private float minDifferenceInY;
+    [Space(15)]
     #endregion
+
+    [Header("Raycast Fields")]
+    [SerializeField] private int numRaycasts;
+    [SerializeField] private float maxDistanceFromPlayerToChase;
 
     private bool isFirstFrame = true;
 
@@ -41,7 +46,7 @@ public class EnemyIdleRandomPointInCircle : EnemyIdleStateLogicBaseSO
 
     public override void DoUpdateLogic()
     {
-        if (IsPointInCollider(detectionCollider, player.position))
+        if (IsPlayerVisible())
         {
             stateMachine.TransitionToState(stateMachine.ChaseState);
             return;
@@ -164,6 +169,30 @@ public class EnemyIdleRandomPointInCircle : EnemyIdleStateLogicBaseSO
         isFirstFrameAfterWanderingComplete = true;
 
         isFirstFrame = true;
+    }
+
+    private bool IsPlayerVisible()
+    {
+        Physics2D.queriesHitTriggers = false;
+        Vector2 _raycastDirection = (Vector2)agent.velocity == Vector2.zero ? Vector2.right : agent.velocity;
+
+        for (int i = 0; i < numRaycasts; i++)
+        {
+            RaycastHit2D[] _raycastHits = Physics2D.RaycastAll(trans.position, _raycastDirection, maxDistanceFromPlayerToChase + Mathf.Epsilon);
+            _raycastDirection = Quaternion.Euler(0, 0, 360 / numRaycasts) * _raycastDirection;
+
+            if (_raycastHits.Length <= 1) continue;
+
+            // doing 1 because 0 is the enemy, so 1 is the closest object
+            if (_raycastHits[1].collider.gameObject.transform == player && Vector2.Distance(_raycastHits[1].point, trans.position) <= maxDistanceFromPlayerToChase)
+            {
+                Physics2D.queriesHitTriggers = true;
+                return true;
+            }
+        }
+
+        Physics2D.queriesHitTriggers = true;
+        return false;
     }
 
     private bool IsSuccessfulDestination(Vector2 _finalPosition)

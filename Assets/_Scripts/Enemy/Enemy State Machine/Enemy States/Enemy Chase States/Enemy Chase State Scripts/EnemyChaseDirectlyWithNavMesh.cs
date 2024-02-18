@@ -8,11 +8,16 @@ public class EnemyChaseDirectlyWithNavMesh : EnemyChaseStateLogicBaseSO
     [SerializeField] private float chaseSpeed;
     [SerializeField] private float minTimeToWanderAfterDetectionExit;
     [SerializeField] private float maxTimeToWanderAfterDetectionExit;
-    [SerializeField] private float timeToWanderAfterDetectionExit;
+    [Space(15)]
     #endregion
+
+    [Header("Raycast Fields")]
+    [SerializeField] private int numRaycasts;
+    [SerializeField] private float maxDistanceFromPlayerToChase;
 
     private bool isFirstFrame = true;
 
+    private float timeToWanderAfterDetectionExit;
     private float timeAfterDetectionExit = 0f;
     private bool isFirstFrameAfterDetectionExit = true;
 
@@ -39,16 +44,19 @@ public class EnemyChaseDirectlyWithNavMesh : EnemyChaseStateLogicBaseSO
         if (isFirstFrame)
         {
             enemyWeapon.ChangeWeaponLogic(chaseStateAttackLogic, chaseStateReloadLogic);
-            
             isFirstFrame = false;
         }
 
-        Vector2 _playerPosition = new();
+        Vector2 _playerPosition = Vector2.zero;
         if (player != null) _playerPosition = player.position;
 
-        bool _isPlayerOutOfDetection = !IsPointInCollider(detectionCollider, _playerPosition);
+        if (IsPlayerCloseEnough())
+        {
+            timeAfterDetectionExit = 0f;
+            isFirstFrameAfterDetectionExit = true;
+        }
 
-        if (_isPlayerOutOfDetection)
+        else
         {
             if (isFirstFrameAfterDetectionExit)
             {
@@ -66,13 +74,6 @@ public class EnemyChaseDirectlyWithNavMesh : EnemyChaseStateLogicBaseSO
             }
         }
 
-        //player is in detection and player is not in attack
-        else
-        {
-            timeAfterDetectionExit = 0f;
-            isFirstFrameAfterDetectionExit = true;
-        }
-
         agent.SetDestination(_playerPosition);
     }
 
@@ -82,5 +83,29 @@ public class EnemyChaseDirectlyWithNavMesh : EnemyChaseStateLogicBaseSO
         timeAfterDetectionExit = 0f;
 
         isFirstFrame = true;
-}
+    }
+
+    private bool IsPlayerCloseEnough()
+    {
+        Physics2D.queriesHitTriggers = false;
+        Vector2 _raycastDirection = (Vector2)agent.velocity == Vector2.zero ? Vector2.right : agent.velocity;
+
+        for (int i = 0; i < numRaycasts; i++)
+        {
+            RaycastHit2D[] _raycastHits = Physics2D.RaycastAll(trans.position, _raycastDirection, maxDistanceFromPlayerToChase + Mathf.Epsilon);
+            _raycastDirection = Quaternion.Euler(0, 0, 360 / numRaycasts) * _raycastDirection;
+
+            if (_raycastHits.Length <= 1) continue;
+
+            // doing 1 because 0 is the enemy, so 1 is the closest object
+            if (_raycastHits[1].collider.gameObject.transform == player && Vector2.Distance(_raycastHits[1].point, trans.position) <= maxDistanceFromPlayerToChase)
+            {
+                Physics2D.queriesHitTriggers = true;
+                return true;
+            }
+        }
+
+        Physics2D.queriesHitTriggers = true;
+        return false;
+    }
 }

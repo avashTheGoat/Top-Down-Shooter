@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponDamage: 15.75
-  ATTACKS_PER_SECOND: 0.5
+  ATTACKS_PER_SECOND: 0.6
   RELOAD_TIME: 4.5
   projectile: {fileID: 8252440497980988240, guid: 9aaa848e7ea16ee4fbd7ddc606679d3f, type: 3}
   projectileSpeed: 17.5

@@ -14,10 +14,12 @@ public abstract class EnemyAttackStateLogicBaseSO : ScriptableObject
     protected Weapon enemyWeapon;
 
     protected IAttack attackingStateAttackLogic;
+    #nullable enable
     protected IReload? attackingStateReloadLogic;
 
     public EnemyAttackStateLogicBaseSO Initialize(EnemyStateMachine _stateMachine, Transform _transform, NavMeshAgent _agent,
-        Transform _player, Weapon _enemyWeapon, IAttack _attackingStateAttackLogic, IReload? _attackingStateReloadLogic)
+    Transform _player, Weapon _enemyWeapon, IAttack _attackingStateAttackLogic, IReload? _attackingStateReloadLogic)
+    #nullable disable
     {
         stateMachine = _stateMachine;
         trans = _transform;
