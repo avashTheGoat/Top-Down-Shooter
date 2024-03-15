@@ -8,6 +8,8 @@ public class EnemyWavesController : MonoBehaviour
     public event Action OnAllWavesComplete;
     public event Action OnEnemySpawn;
 
+    public int MAX_WAVE_COUNT;
+
     public List<GameObject> SpawnedEnemies
     {
         get
@@ -16,6 +18,19 @@ public class EnemyWavesController : MonoBehaviour
             return spawnedEnemies;
         }
     }
+
+    public int TotalEnemies
+    {
+        get
+        {
+            if (isEndless)
+                return int.MaxValue;
+
+            return totalEnemies;
+        }
+    }
+
+    public int TotalNumSpawnedEnemies { get; private set; }
 
     [SerializeField] private EnemySpawner spawner;
 
@@ -26,6 +41,8 @@ public class EnemyWavesController : MonoBehaviour
     [Space(15)]
 
     [SerializeField] private bool isEndless = false;
+
+    private int totalEnemies;
 
     private int wave = 1;
     private List<GameObject> spawnedEnemies = new();
@@ -45,6 +62,19 @@ public class EnemyWavesController : MonoBehaviour
         timeToSpawnAllEnemiesAtWaveCount.postWrapMode = WrapMode.Clamp;
 
         enemiesPerSecond = numEnemiesAtWaveCount.Evaluate(wave) / timeToSpawnAllEnemiesAtWaveCount.Evaluate(wave);
+
+        if (isEndless)
+            return;
+
+        float _prevNumEnemies = -1;
+        for (int wave = 0; wave <= MAX_WAVE_COUNT; wave++)
+        {
+            if (_prevNumEnemies == numEnemiesAtWaveCount.Evaluate(wave))
+                break;
+
+            _prevNumEnemies = numEnemiesAtWaveCount.Evaluate(wave);
+            totalEnemies += Mathf.CeilToInt(_prevNumEnemies);
+        }
     }
 
     private void Update()
@@ -61,9 +91,13 @@ public class EnemyWavesController : MonoBehaviour
 
         if (enemySpawnTimer * enemiesPerSecond >= 1 && numSpawnedEnemies < numEnemiesAtWaveCount.Evaluate(wave))
         {
-            enemySpawnTimer = 0f;
-            spawnedEnemies.AddRange(spawner.SpawnEnemies(spawnableEnemiesForEachWave[Math.Clamp(wave - 1, 0, spawnableEnemiesForEachWave.Length - 1)].enemySpawningInfos, 1));
+            int _possibleEnemiesIndex = Mathf.Clamp(wave - 1, 0, spawnableEnemiesForEachWave.Length - 1);
+            EnemySpawningInfo[] _possibleEnemies = spawnableEnemiesForEachWave[_possibleEnemiesIndex].enemySpawningInfos;
+            spawnedEnemies.AddRange(spawner.SpawnEnemies(_possibleEnemies, 1));
+            
             numSpawnedEnemies++;
+            TotalNumSpawnedEnemies++;
+            enemySpawnTimer = 0f;
 
             OnEnemySpawn?.Invoke();
         }

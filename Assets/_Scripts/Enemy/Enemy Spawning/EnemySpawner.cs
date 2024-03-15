@@ -112,15 +112,15 @@ public class EnemySpawner : MonoBehaviour
     {
         int _min = 0;
         EnemySpawningInfo _enemySpawningInfo = _enemies[0];
-        for (int j = 0; j < _enemies.Length; j++)
+        for (int i = 0; i < _enemies.Length; i++)
         {
-            if (_spawnSeed > _min && _spawnSeed < _min + _enemies[j].SpawnChance)
+            if (_spawnSeed > _min && _spawnSeed < _min + _enemies[i].SpawnChance)
             {
-                _enemySpawningInfo = _enemies[j];
+                _enemySpawningInfo = _enemies[i];
                 break;
             }
 
-            _min += _enemies[j].SpawnChance;
+            _min += _enemies[i].SpawnChance;
         }
 
         return _enemySpawningInfo;
