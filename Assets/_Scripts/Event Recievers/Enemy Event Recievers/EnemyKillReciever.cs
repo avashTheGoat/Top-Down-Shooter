@@ -28,8 +28,7 @@ public class EnemyKillReciever : MonoBehaviour
 
             if (subscribedEnemyKills.Contains(_enemyKill)) continue;
 
-            _enemyKill.OnEnemyDeath += DebugDeath;
-            _enemyKill.OnEnemyDeath += DestroyEnemy;
+            _enemyKill.OnKill += DestroyEnemy;
 
             subscribedEnemyKills.Add(_enemyKill);
         }
@@ -50,6 +49,4 @@ public class EnemyKillReciever : MonoBehaviour
     }
 
     private void DestroyEnemy(GameObject deadEnemy) => Destroy(deadEnemy);
-
-    private void DebugDeath(GameObject deadEnemy) => print("enemy died");
 }

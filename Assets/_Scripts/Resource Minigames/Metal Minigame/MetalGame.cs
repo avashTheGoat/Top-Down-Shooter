@@ -75,26 +75,28 @@ public class MetalGame : ResourceGame
                 _clickableResource.Resource = _resourceSourceToSpawn.Resource;
 
                 _clickableResource.OnClick += DamageResource;
-                _clickableResource.OnResourceDestroy += HarvestResource;
+                _clickableResource.OnKill += HarvestResource;
             }
         }
     }
 
     #region ClickableResource Listeners
-    private void HarvestResource(ClickableResource clickableResource)
+    private void HarvestResource(GameObject _clickableResourceObject)
     {
-        int _numMetalsHarvested = Random.Range(clickableResource.MinResourceAmount, clickableResource.MaxResourceAmount + 1);
-        droppedResources.Add(clickableResource.Resource, _numMetalsHarvested);
+        ClickableResource _clickableResource = _clickableResourceObject.GetComponent<ClickableResource>();
+
+        int _numMetalsHarvested = Random.Range(_clickableResource.MinResourceAmount, _clickableResource.MaxResourceAmount + 1);
+        droppedResources.Add(_clickableResource.Resource, _numMetalsHarvested);
 
 /*        harvestedMetalParticleSettings.maxParticles = _numMetalsHarvested;
 
         harvestedMetalParticles.transform.position = clickableResource.transform.position;
         harvestedMetalParticles.Play();
 */
-        Destroy(clickableResource.gameObject);
+        Destroy(_clickableResource.gameObject);
     }
 
-    private void DamageResource(ClickableResource clickableResource) => clickableResource.Damage(pickaxeDamage);
+    private void DamageResource(ClickableResource _clickableResource) => _clickableResource.Damage(pickaxeDamage);
     #endregion
 
     #region Spawning Methods

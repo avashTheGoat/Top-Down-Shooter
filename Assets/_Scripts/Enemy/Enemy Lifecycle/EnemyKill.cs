@@ -4,7 +4,7 @@ using System;
 [RequireComponent(typeof(EnemyHealth))]
 public class EnemyKill : MonoBehaviour, IKillable
 {
-    public event Action<GameObject> OnEnemyDeath;
+    public event Action<GameObject> OnKill;
 
     private bool hasEnemyBeenKilled;
     private EnemyHealth enemyHealth;
@@ -25,7 +25,7 @@ public class EnemyKill : MonoBehaviour, IKillable
 
     public void Kill()
     {
-        OnEnemyDeath?.Invoke(gameObject);
+        OnKill?.Invoke(gameObject);
         hasEnemyBeenKilled = true;
     }
 }

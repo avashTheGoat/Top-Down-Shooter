@@ -12,5 +12,5 @@ public class MetalGameTimerUI : MonoBehaviour
 
     private void Start() => metalGame.GameTimer.OnTick += UpdateText;
 
-    private void UpdateText(float _maxTime, float _timeElapsed) => text.text = $"{Mathf.RoundToInt(_maxTime - _timeElapsed)}";
+    private void UpdateText(Timer _timer) => text.text = $"{Mathf.RoundToInt(_timer.GetRemainingTime())}";
 }

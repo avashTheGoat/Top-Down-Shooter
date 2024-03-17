@@ -8,7 +8,7 @@ public class EnemyWavesController : MonoBehaviour
     public event Action OnAllWavesComplete;
     public event Action OnEnemySpawn;
 
-    public int MAX_WAVE_COUNT;
+    [field: SerializeField] public bool IsEndless { get; private set; } = false;
 
     public List<GameObject> SpawnedEnemies
     {
@@ -23,7 +23,7 @@ public class EnemyWavesController : MonoBehaviour
     {
         get
         {
-            if (isEndless)
+            if (IsEndless)
                 return int.MaxValue;
 
             return totalEnemies;
@@ -31,19 +31,20 @@ public class EnemyWavesController : MonoBehaviour
     }
 
     public int TotalNumSpawnedEnemies { get; private set; }
+    public int NumKilledEnemies { get; private set; }
 
     [SerializeField] private EnemySpawner spawner;
 
     [Header("Waves Info")]
+    [Tooltip("Animation curve that specifies the number of enemies that will spawn (y) on a certain wave (x)."
+    + "AT EVERY INTEGER WAVE OF THE CURVE, THE Y-VALUE ROUNDED UP MUST BE DIFFERENT TO THE PREVIOUS INTEGER " +
+    "WAVE Y-VALUE ROUNDED UP")]
     [SerializeField] private AnimationCurve numEnemiesAtWaveCount;
     [SerializeField] private AnimationCurve timeToSpawnAllEnemiesAtWaveCount;
     [SerializeField] private EnemySpawningInfos[] spawnableEnemiesForEachWave;
     [Space(15)]
 
-    [SerializeField] private bool isEndless = false;
-
     private int totalEnemies;
-
     private int wave = 1;
     private List<GameObject> spawnedEnemies = new();
 
@@ -63,11 +64,11 @@ public class EnemyWavesController : MonoBehaviour
 
         enemiesPerSecond = numEnemiesAtWaveCount.Evaluate(wave) / timeToSpawnAllEnemiesAtWaveCount.Evaluate(wave);
 
-        if (isEndless)
+        if (IsEndless)
             return;
 
         float _prevNumEnemies = -1;
-        for (int wave = 0; wave <= MAX_WAVE_COUNT; wave++)
+        for (int wave = 1; wave <= spawnableEnemiesForEachWave.Length; wave++)
         {
             if (_prevNumEnemies == numEnemiesAtWaveCount.Evaluate(wave))
                 break;
@@ -79,7 +80,7 @@ public class EnemyWavesController : MonoBehaviour
 
     private void Update()
     {
-        if (!isEndless && wave >= spawnableEnemiesForEachWave.Length)
+        if (!IsEndless && wave >= spawnableEnemiesForEachWave.Length)
         {
             if (!haveAllWavesBeenCompleted) OnAllWavesComplete?.Invoke();
 
@@ -93,7 +94,12 @@ public class EnemyWavesController : MonoBehaviour
         {
             int _possibleEnemiesIndex = Mathf.Clamp(wave - 1, 0, spawnableEnemiesForEachWave.Length - 1);
             EnemySpawningInfo[] _possibleEnemies = spawnableEnemiesForEachWave[_possibleEnemiesIndex].enemySpawningInfos;
-            spawnedEnemies.AddRange(spawner.SpawnEnemies(_possibleEnemies, 1));
+
+            List<GameObject> _newSpawnedEnemies = spawner.SpawnEnemies(_possibleEnemies, 1);
+            foreach (GameObject _spawnedEnemy in _newSpawnedEnemies)
+                _spawnedEnemy.GetComponent<IKillable>().OnKill += _ => NumKilledEnemies++;
+
+            spawnedEnemies.AddRange(_newSpawnedEnemies);
             
             numSpawnedEnemies++;
             TotalNumSpawnedEnemies++;
@@ -103,9 +109,7 @@ public class EnemyWavesController : MonoBehaviour
         }
 
         if (SpawnedEnemies.Count == 0 && numSpawnedEnemies >= numEnemiesAtWaveCount.Evaluate(wave))
-        {
             NextWave();
-        }
     }
 
     private void NextWave()

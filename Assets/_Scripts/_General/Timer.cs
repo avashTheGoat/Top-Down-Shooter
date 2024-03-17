@@ -2,7 +2,7 @@ using System;
 
 public class Timer
 {
-    public event Action<float, float> OnTick;
+    public event Action<Timer> OnTick;
     public event Action OnComplete;
 
     public float TimeElapsed { get; private set; } = 0f;
@@ -22,7 +22,7 @@ public class Timer
     public void Tick(float _deltaTime)
     {
         TimeElapsed += _deltaTime;
-        OnTick?.Invoke(maxTime, TimeElapsed);
+        OnTick?.Invoke(this);
 
         if (maxTime == float.MinValue)
             return;
@@ -38,4 +38,6 @@ public class Timer
 
         return maxTime - TimeElapsed < 0 ? 0 : maxTime - TimeElapsed;
     }
+
+    public void Reset() => TimeElapsed = 0f; 
 }

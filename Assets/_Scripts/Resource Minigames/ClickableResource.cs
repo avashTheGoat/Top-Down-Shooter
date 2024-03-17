@@ -6,7 +6,7 @@ using System;
 public class ClickableResource : MonoBehaviour, IDamageable, IKillable
 {
     public event Action<ClickableResource> OnClick;
-    public event Action<ClickableResource> OnResourceDestroy;
+    public event Action<GameObject> OnKill;
 
     public ResourceSO Resource;
 
@@ -30,7 +30,7 @@ public class ClickableResource : MonoBehaviour, IDamageable, IKillable
             Kill();
     }
 
-    public void Kill() => OnResourceDestroy.Invoke(this);
+    public void Kill() => OnKill.Invoke(gameObject);
 
     public void SetMinResourceAmount(int newMin)
     {

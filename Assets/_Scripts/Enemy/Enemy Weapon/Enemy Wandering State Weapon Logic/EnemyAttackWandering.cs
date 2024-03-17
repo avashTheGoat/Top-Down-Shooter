@@ -10,7 +10,6 @@ public class EnemyAttackWandering : MonoBehaviour, IAttack
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        print("Agent: " + agent);
         trans = transform;
     }
 
