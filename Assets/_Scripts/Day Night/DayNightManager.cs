@@ -10,9 +10,7 @@ public class DayNightManager : MonoBehaviour
     public event Action OnDayEnd;
     public event Action OnNightEnd;
 
-    public bool ShouldUpdate = true;
-
-    [SerializeField] private float dayTimeSecondsLength;
+    [field: SerializeField] public float DayTimeSecondsLength { get; private set; } = 60f;
 
     [Header("Delta Night Time (when enemy dies/spawns)")]
     [SerializeField] private float deltaNightTimePerSec;
@@ -20,7 +18,7 @@ public class DayNightManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private DayNightCycle dayNightCycle;
-    [SerializeField] private EnemyWavesController enemyWaves;
+    [SerializeField] private EnemyWavesSpawner enemyWaves;
     [Space(15)]
 
     [Header("Night Info")]
@@ -35,23 +33,26 @@ public class DayNightManager : MonoBehaviour
     private IEnumerator nightLerpEnumerator;
     private List<GameObject> subscribedEnemies = new();
 
+    #region Minigame Daytime Slowing
+    private float slownessMultiplier;
+    private float minSecBeforeEnd;
+    private bool shouldStayInTime;
+    #endregion
+
     private void Awake()
     {
         nightLerpEnumerator = Co_LerpNightTime();
 
-        dayTimeTimer = new(dayTimeSecondsLength);
+        dayTimeTimer = new(DayTimeSecondsLength);
         dayTimeTimer.OnTick += UpdateDayTime;
         dayTimeTimer.OnComplete += () => OnDayEnd?.Invoke();
-        dayTimeTimer.OnComplete += () => dayNightCycle.SetDayPercentProgress(NIGHT_START);
+        dayTimeTimer.OnComplete += () => dayNightCycle.SetDayPercentProgress(NIGHT_START + Mathf.Epsilon);
     }
 
     private void Start() => enemyWaves.OnEnemySpawn += UpdateNightTime;
 
     private void Update()
     {
-        if (!ShouldUpdate)
-            return;
-
         if (IsNight())
         {
             isFirstDayTime = true;
@@ -73,6 +74,9 @@ public class DayNightManager : MonoBehaviour
 
         else
         {
+            if (shouldStayInTime && dayTimeTimer.GetRemainingTime() <= minSecBeforeEnd)
+                return;
+
             if (isFirstDayTime)
             {
                 dayNightCycle.SetDayPercentProgress(NIGHT_END);
@@ -85,7 +89,7 @@ public class DayNightManager : MonoBehaviour
                 isFirstDayTime = false;
             }
 
-            dayTimeTimer.Tick(Time.deltaTime);
+            dayTimeTimer.Tick(Time.deltaTime * (shouldStayInTime ? slownessMultiplier : 1f));
         }
     }
 
@@ -103,7 +107,7 @@ public class DayNightManager : MonoBehaviour
 
     private void UpdateDayTime(Timer _timer)
     {
-        float _dayProgress = _timer.TimeElapsed / dayTimeSecondsLength * (NIGHT_START - NIGHT_END);
+        float _dayProgress = _timer.TimeElapsed / DayTimeSecondsLength * (NIGHT_START - NIGHT_END);
         dayNightCycle.SetDayPercentProgress(NIGHT_END + _dayProgress);
     }
 
@@ -123,8 +127,8 @@ public class DayNightManager : MonoBehaviour
     // takes both num enemies spawned and num enemies killed into account
     private float GetNightProgress()
     {
-        float _nightProgress = enemyWaves.TotalNumSpawnedEnemies / enemyWaves.TotalEnemies * (1f - (NIGHT_START - NIGHT_END)) * 0.5f;
-        _nightProgress += enemyWaves.NumKilledEnemies / enemyWaves.TotalEnemies * (1f - (NIGHT_START - NIGHT_END)) * 0.5f;
+        float _nightProgress = enemyWaves.TotalNumSpawnedEnemies / (float)enemyWaves.TotalEnemies * (1f - (NIGHT_START - NIGHT_END)) * 0.5f;
+        _nightProgress += enemyWaves.NumKilledEnemies / (float)enemyWaves.TotalEnemies * (1f - (NIGHT_START - NIGHT_END)) * 0.5f;
 
         return _nightProgress;
     }
@@ -164,4 +168,13 @@ public class DayNightManager : MonoBehaviour
 
         hasNightTimeCoroutineBeenStarted = false;
     }
+
+    public void ActivateMinigameMode(float _slownessMultiplier, float _minSecBeforeEnd)
+    {
+        slownessMultiplier = _slownessMultiplier;
+        minSecBeforeEnd = _minSecBeforeEnd;
+        shouldStayInTime = true;
+    }
+
+    public void DeactivateMinigameMode() => shouldStayInTime = false;
 }

@@ -28,7 +28,7 @@ public class MetalGame : ResourceGame
     protected override void Awake()
     {
         base.Awake();
-        // harvestedMetalParticleSettings = harvestedMetalParticles.main;
+        harvestedMetalParticleSettings = harvestedMetalParticles.main;
         GameTimer = new(maxTime);
     }
 
@@ -37,33 +37,43 @@ public class MetalGame : ResourceGame
         if (spawnedMetals.Count == 0)
             return;
 
-        if (IsGameOver())
+        if (IsGameOverSuccessfully())
         {
-            InvokeOnGameComplete(droppedResources.GetInventory());
-            foreach (KeyValuePair<ResourceSO, int> _resourceCount in droppedResources.GetInventory())
-            {
-                print($"{_resourceCount.Key}: {_resourceCount.Value}");
-            }
+            InvokeOnGameSuccessfullyComplete(droppedResources);
+
+            GameTimer.Reset();
+            spawnedMetals = new();
+            droppedResources = new();
+            return;
+        }
+
+        if (GameTimer.GetRemainingTime() == 0f)
+        {
+            InvokeOnGameUnsuccessfullyComplete(droppedResources, "You ran out of time!");
+
+            GameUI.transform.DestroyChildren();
+            GameTimer.Reset();
+            spawnedMetals = new();
+            droppedResources = new();
             return;
         }
 
         GameTimer.Tick(Time.deltaTime);
     }
 
-    [ContextMenu("StartGame")]
     public override void StartGame()
     {
         if (PlayerProvider.TryGetPlayer(out Transform _player))
         {
             // if player doesn't have pickaxe, invoke OnUnableToPlay
 
-            gameUi.enabled = true;
+            GameUI.enabled = true;
 
             int _numMetals = Random.Range(MinNumMetals, MaxNumMetals + 1);
             for (int i = 0; i < _numMetals; i++)
             {
                 ResourceSourceInfo _resourceSourceToSpawn = GetRandomResourceSourceInfo();
-                GameObject _spawnedObject = Instantiate(_resourceSourceToSpawn.ResourceObject, Vector2.zero, Quaternion.identity, gameUi.transform);
+                GameObject _spawnedObject = Instantiate(_resourceSourceToSpawn.ResourceObject, Vector2.zero, Quaternion.identity, GameUI.transform);
 
                 RectTransform _trans = _spawnedObject.GetComponent<RectTransform>();
                 _trans.localPosition = GetRandomValidSpawnPos();
@@ -77,6 +87,8 @@ public class MetalGame : ResourceGame
                 _clickableResource.OnClick += DamageResource;
                 _clickableResource.OnKill += HarvestResource;
             }
+
+            InvokeOnSuccessfulStart();
         }
     }
 
@@ -132,7 +144,7 @@ public class MetalGame : ResourceGame
     }
     #endregion
 
-    private bool IsGameOver()
+    private bool IsGameOverSuccessfully()
     {
         foreach (Transform _spawnedMetal in spawnedMetals)
         {

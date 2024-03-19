@@ -1,20 +1,24 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class PlayerWeaponSwitcher : MonoBehaviour
+[RequireComponent(typeof(PlayerWeaponsProvider))]
+public class PlayerWeaponsSwitcher : MonoBehaviour
 {
     [SerializeField] private KeyCode weaponSwitchKey;
-    [SerializeField] private List<Weapon> playerWeapons = new();
 
+    private List<Weapon> playerWeapons = new();
     private Weapon activeWeapon;
     private int curWeaponIndex = 0;
 
+    private PlayerWeaponsProvider weaponsProvider;
+
     private void Awake()
     {
+        weaponsProvider = GetComponent<PlayerWeaponsProvider>();
+        playerWeapons = weaponsProvider.GetWeapons<Weapon>();
+
         foreach (Weapon _weapon in playerWeapons)
-        {
             _weapon.gameObject.SetActive(false);
-        }
 
         activeWeapon = playerWeapons[0];
         activeWeapon.gameObject.SetActive(true);
@@ -24,15 +28,15 @@ public class PlayerWeaponSwitcher : MonoBehaviour
     {
         if (Input.GetKeyDown(weaponSwitchKey))
         {
-            SwitchPistol((curWeaponIndex + 1) % playerWeapons.Count);
+            SwitchWeapon((curWeaponIndex + 1) % playerWeapons.Count);
             curWeaponIndex++;
         }
     }
 
-    private void SwitchPistol(int _pistolIndex)
+    private void SwitchWeapon(int _weaponIndex)
     {
         activeWeapon.gameObject.SetActive(false);
-        activeWeapon = playerWeapons[_pistolIndex];
+        activeWeapon = playerWeapons[_weaponIndex];
         activeWeapon.gameObject.SetActive(true);
     }
 }

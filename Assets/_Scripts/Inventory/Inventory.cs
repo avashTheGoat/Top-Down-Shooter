@@ -54,6 +54,14 @@ public class Inventory
 
     public int Remove(ResourceSO resource) => Remove(resource, 1);
 
+    public int Get(ResourceSO _resource)
+    {
+        if (!inventory.ContainsKey(_resource))
+            return -1;
+
+        return inventory[_resource];
+    }
+
     public bool Contains(ResourceSO resource) => inventory.ContainsKey(resource);
 
     public Dictionary<ResourceSO, int> GetInventory() => inventory;

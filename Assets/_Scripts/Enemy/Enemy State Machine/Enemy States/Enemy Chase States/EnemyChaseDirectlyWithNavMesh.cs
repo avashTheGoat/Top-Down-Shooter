@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Chase Directly Using NavMesh", menuName = "Scriptable Objects/Enemy States/Chase States/Chase Directly Using NavMesh")]
+[CreateAssetMenu(fileName = "Chase Directly Using NavMesh", menuName = "Scriptable Objects/Enemy/Enemy States/Chase States/Chase Directly Using NavMesh")]
 public class EnemyChaseDirectlyWithNavMesh : EnemyChaseStateLogicBaseSO
 {
     #region Chase Modifiers

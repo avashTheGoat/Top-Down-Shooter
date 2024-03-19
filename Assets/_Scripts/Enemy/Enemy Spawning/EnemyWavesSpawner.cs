@@ -2,19 +2,17 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class EnemyWavesController : MonoBehaviour
+public class EnemyWavesSpawner : MonoBehaviour
 {
     public event Action<int> OnWaveComplete;
     public event Action OnAllWavesComplete;
     public event Action OnEnemySpawn;
 
-    [field: SerializeField] public bool IsEndless { get; private set; } = false;
-
     public List<GameObject> SpawnedEnemies
     {
         get
         {
-            spawnedEnemies.RemoveAll((_enemy) => { return _enemy == null; });
+            spawnedEnemies.RemoveAll((_enemy) =>  _enemy == null);
             return spawnedEnemies;
         }
     }
@@ -23,7 +21,7 @@ public class EnemyWavesController : MonoBehaviour
     {
         get
         {
-            if (IsEndless)
+            if (isEndless)
                 return int.MaxValue;
 
             return totalEnemies;
@@ -35,14 +33,10 @@ public class EnemyWavesController : MonoBehaviour
 
     [SerializeField] private EnemySpawner spawner;
 
-    [Header("Waves Info")]
-    [Tooltip("Animation curve that specifies the number of enemies that will spawn (y) on a certain wave (x)."
-    + "AT EVERY INTEGER WAVE OF THE CURVE, THE Y-VALUE ROUNDED UP MUST BE DIFFERENT TO THE PREVIOUS INTEGER " +
-    "WAVE Y-VALUE ROUNDED UP")]
-    [SerializeField] private AnimationCurve numEnemiesAtWaveCount;
-    [SerializeField] private AnimationCurve timeToSpawnAllEnemiesAtWaveCount;
-    [SerializeField] private EnemySpawningInfos[] spawnableEnemiesForEachWave;
-    [Space(15)]
+    private AnimationCurve numEnemiesAtWaveCount;
+    private AnimationCurve secsToEnemiesAtWaveCount;
+    private EnemySpawningInfos[] spawnableEnemiesForEachWave;
+    private bool isEndless = false;
 
     private int totalEnemies;
     private int wave = 1;
@@ -55,32 +49,9 @@ public class EnemyWavesController : MonoBehaviour
 
     private bool haveAllWavesBeenCompleted = false;
 
-    private void Awake()
-    {
-        numEnemiesAtWaveCount.preWrapMode = WrapMode.Clamp;
-        numEnemiesAtWaveCount.postWrapMode = WrapMode.Clamp;
-        timeToSpawnAllEnemiesAtWaveCount.preWrapMode = WrapMode.Clamp;
-        timeToSpawnAllEnemiesAtWaveCount.postWrapMode = WrapMode.Clamp;
-
-        enemiesPerSecond = numEnemiesAtWaveCount.Evaluate(wave) / timeToSpawnAllEnemiesAtWaveCount.Evaluate(wave);
-
-        if (IsEndless)
-            return;
-
-        float _prevNumEnemies = -1;
-        for (int wave = 1; wave <= spawnableEnemiesForEachWave.Length; wave++)
-        {
-            if (_prevNumEnemies == numEnemiesAtWaveCount.Evaluate(wave))
-                break;
-
-            _prevNumEnemies = numEnemiesAtWaveCount.Evaluate(wave);
-            totalEnemies += Mathf.CeilToInt(_prevNumEnemies);
-        }
-    }
-
     private void Update()
     {
-        if (!IsEndless && wave >= spawnableEnemiesForEachWave.Length)
+        if (!isEndless && wave > spawnableEnemiesForEachWave.Length)
         {
             if (!haveAllWavesBeenCompleted) OnAllWavesComplete?.Invoke();
 
@@ -110,16 +81,58 @@ public class EnemyWavesController : MonoBehaviour
 
         if (SpawnedEnemies.Count == 0 && numSpawnedEnemies >= numEnemiesAtWaveCount.Evaluate(wave))
             NextWave();
+        print("Spawned enemies count: " + SpawnedEnemies.Count);
     }
 
     private void NextWave()
     {
+        Debug.LogWarning("Advancing to next wave");
+
         OnWaveComplete?.Invoke(wave);
 
         wave++;
         enemySpawnTimer = 0f;
         numSpawnedEnemies = 0;
 
-        enemiesPerSecond = numEnemiesAtWaveCount.Evaluate(wave) / timeToSpawnAllEnemiesAtWaveCount.Evaluate(wave);
+        enemiesPerSecond = numEnemiesAtWaveCount.Evaluate(wave) / secsToEnemiesAtWaveCount.Evaluate(wave);
+    }
+
+    public void SetWavesSettings(AnimationCurve _numEnemiesAtWaveCount, AnimationCurve _secsToSpawnEnemiesAtWaveCount,
+        EnemySpawningInfos[] _spawnableEnemiesAtWaveCount, bool _isEndless)
+    {
+        numEnemiesAtWaveCount = _numEnemiesAtWaveCount;
+        secsToEnemiesAtWaveCount = _secsToSpawnEnemiesAtWaveCount;
+        spawnableEnemiesForEachWave = _spawnableEnemiesAtWaveCount;
+        isEndless = _isEndless;
+
+        numEnemiesAtWaveCount.preWrapMode = WrapMode.Clamp;
+        numEnemiesAtWaveCount.postWrapMode = WrapMode.Clamp;
+        secsToEnemiesAtWaveCount.preWrapMode = WrapMode.Clamp;
+        secsToEnemiesAtWaveCount.postWrapMode = WrapMode.Clamp;
+
+        enemiesPerSecond = numEnemiesAtWaveCount.Evaluate(wave) / secsToEnemiesAtWaveCount.Evaluate(wave);
+
+        if (isEndless)
+            return;
+
+        float _prevNumEnemies = -1;
+        for (int wave = 1; wave <= spawnableEnemiesForEachWave.Length; wave++)
+        {
+            if (_prevNumEnemies == numEnemiesAtWaveCount.Evaluate(wave))
+                break;
+
+            _prevNumEnemies = numEnemiesAtWaveCount.Evaluate(wave);
+            totalEnemies += Mathf.CeilToInt(_prevNumEnemies);
+        }
+    }
+
+    public void ResetObj()
+    {
+        wave = 1;
+        enemySpawnTimer = 0f;
+        numSpawnedEnemies = 0;
+        TotalNumSpawnedEnemies = 0;
+        NumKilledEnemies = 0;
+        totalEnemies = 0;
     }
 }

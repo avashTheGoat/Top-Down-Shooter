@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyKillReciever : MonoBehaviour
 {
-    [SerializeField] private EnemyWavesController enemyWaves;
+    [SerializeField] private EnemyWavesSpawner enemyWaves;
 
     private List<EnemyKill> enemyKills = new();
     private List<EnemyKill> subscribedEnemyKills = new();

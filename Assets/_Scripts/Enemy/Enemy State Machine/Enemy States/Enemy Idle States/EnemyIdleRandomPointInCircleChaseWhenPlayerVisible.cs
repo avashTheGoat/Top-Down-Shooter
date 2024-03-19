@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Idle Random Wander In Circle & Chase When Player Visible", menuName = "Scriptable Objects/Enemy States/Idle States/Random Wander In Circle & Chase When Player Visible")]
+[CreateAssetMenu(fileName = "Idle Random Wander In Circle & Chase When Player Visible", menuName = "Scriptable Objects/Enemy/Enemy States/Idle States/Random Wander In Circle & Chase When Player Visible")]
 public class EnemyIdleRandomPointInCircleChaseWhenPlayerVisible : EnemyIdleStateLogicBaseSO
 {
     #region Wandering Modifiers

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Attack & Chase Visible Player", menuName = "Scriptable Objects/Enemy States/Attack States/Attack & Chase Visible Player")]
+[CreateAssetMenu(fileName = "Attack & Chase Visible Player", menuName = "Scriptable Objects/Enemy/Enemy States/Attack States/Attack & Chase Visible Player")]
 public class EnemyAttackChaseVisiblePlayer : EnemyAttackStateLogicBaseSO
 {
     [Header("Raycast Fields")]

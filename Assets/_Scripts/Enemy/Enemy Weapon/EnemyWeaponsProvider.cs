@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemyWeaponsProvider : MonoBehaviour, IWeaponProvider
 {
-    [SerializeField] private EnemyWavesController enemyWaves;
+    [SerializeField] private EnemyWavesSpawner enemyWaves;
 
     public List<T> GetWeapons<T>() where T : Weapon
     {

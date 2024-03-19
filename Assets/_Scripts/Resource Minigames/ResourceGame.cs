@@ -4,16 +4,17 @@ using System;
 
 public abstract class ResourceGame : MonoBehaviour
 {
-    public event Action<Dictionary<ResourceSO, int>> OnGameComplete;
+    public event Action OnSuccessfulStart;
     public event Action<string> OnUnableToStartGame;
+    public event Action<Inventory> OnGameSuccessfullyComplete;
+    public event Action<Inventory, string> OnGameUnsuccessfullyComplete;
+
+    [field: SerializeField] public Canvas GameUI { get; private set; }
 
     [Header("Resource Spawning")]
     [SerializeField] protected ResourceSourceInfo[] possibleResourceSources;
     [SerializeField] protected Vector2 lowerLeftSpawnBound;
     [SerializeField] protected Vector2 upperRightSpawnBound;
-    [Space(15)]
-
-    [SerializeField] protected Canvas gameUi;
 
     protected virtual void Awake()
     {
@@ -53,6 +54,8 @@ public abstract class ResourceGame : MonoBehaviour
         return new Vector2(_randX, _randY);
     }
 
-    protected void InvokeOnGameComplete(Dictionary<ResourceSO, int> droppedResources) => OnGameComplete?.Invoke(droppedResources);
-    protected void InvokeOnUnableToStartGame(string message) => OnUnableToStartGame?.Invoke(message);
+    protected void InvokeOnSuccessfulStart() => OnSuccessfulStart?.Invoke();
+    protected void InvokeOnUnableToStartGame(string _message) => OnUnableToStartGame?.Invoke(_message);
+    protected void InvokeOnGameSuccessfullyComplete(Inventory _droppedResources) => OnGameSuccessfullyComplete?.Invoke(_droppedResources);
+    protected void InvokeOnGameUnsuccessfullyComplete(Inventory _droppedResources, string _message) => OnGameUnsuccessfullyComplete?.Invoke(_droppedResources, _message);
 }
