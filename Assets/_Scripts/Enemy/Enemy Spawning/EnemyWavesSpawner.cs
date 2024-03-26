@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class EnemyWavesSpawner : MonoBehaviour
 {
+    public event Action<int> OnWaveStart;
     public event Action<int> OnWaveComplete;
     public event Action OnAllWavesComplete;
     public event Action OnEnemySpawn;
 
-    public List<GameObject> SpawnedEnemies
+    public List<Transform> SpawnedEnemies
     {
         get
         {
@@ -40,7 +41,7 @@ public class EnemyWavesSpawner : MonoBehaviour
 
     private int totalEnemies;
     private int wave = 1;
-    private List<GameObject> spawnedEnemies = new();
+    private List<Transform> spawnedEnemies = new();
 
     private float enemiesPerSecond;
     private float enemySpawnTimer = 0f;
@@ -49,11 +50,14 @@ public class EnemyWavesSpawner : MonoBehaviour
 
     private bool haveAllWavesBeenCompleted = false;
 
+    private void OnEnable() => OnWaveStart?.Invoke(1);
+
     private void Update()
     {
-        if (!isEndless && wave > spawnableEnemiesForEachWave.Length)
+        if (AreWavesOver())
         {
-            if (!haveAllWavesBeenCompleted) OnAllWavesComplete?.Invoke();
+            if (!haveAllWavesBeenCompleted)
+                OnAllWavesComplete?.Invoke();
 
             haveAllWavesBeenCompleted = true;
             return;
@@ -66,8 +70,8 @@ public class EnemyWavesSpawner : MonoBehaviour
             int _possibleEnemiesIndex = Mathf.Clamp(wave - 1, 0, spawnableEnemiesForEachWave.Length - 1);
             EnemySpawningInfo[] _possibleEnemies = spawnableEnemiesForEachWave[_possibleEnemiesIndex].enemySpawningInfos;
 
-            List<GameObject> _newSpawnedEnemies = spawner.SpawnEnemies(_possibleEnemies, 1);
-            foreach (GameObject _spawnedEnemy in _newSpawnedEnemies)
+            List<Transform> _newSpawnedEnemies = spawner.SpawnEnemies(_possibleEnemies, 1);
+            foreach (Transform _spawnedEnemy in _newSpawnedEnemies)
                 _spawnedEnemy.GetComponent<IKillable>().OnKill += _ => NumKilledEnemies++;
 
             spawnedEnemies.AddRange(_newSpawnedEnemies);
@@ -81,21 +85,25 @@ public class EnemyWavesSpawner : MonoBehaviour
 
         if (SpawnedEnemies.Count == 0 && numSpawnedEnemies >= numEnemiesAtWaveCount.Evaluate(wave))
             NextWave();
-        print("Spawned enemies count: " + SpawnedEnemies.Count);
     }
 
     private void NextWave()
     {
-        Debug.LogWarning("Advancing to next wave");
-
-        OnWaveComplete?.Invoke(wave);
-
         wave++;
+
+        if (AreWavesOver())
+            return;
+
+        OnWaveComplete?.Invoke(wave - 1);
+
         enemySpawnTimer = 0f;
         numSpawnedEnemies = 0;
-
         enemiesPerSecond = numEnemiesAtWaveCount.Evaluate(wave) / secsToEnemiesAtWaveCount.Evaluate(wave);
+
+        OnWaveStart?.Invoke(wave);
     }
+
+    private bool AreWavesOver() => !isEndless && wave > spawnableEnemiesForEachWave.Length;
 
     public void SetWavesSettings(AnimationCurve _numEnemiesAtWaveCount, AnimationCurve _secsToSpawnEnemiesAtWaveCount,
         EnemySpawningInfos[] _spawnableEnemiesAtWaveCount, bool _isEndless)

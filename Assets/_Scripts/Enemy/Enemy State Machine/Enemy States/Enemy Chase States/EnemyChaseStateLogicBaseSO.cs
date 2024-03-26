@@ -65,4 +65,19 @@ public abstract class EnemyChaseStateLogicBaseSO : ScriptableObject
 
         return false;
     }
+
+    protected void SetWeaponLogic()
+    {
+        if (enemyWeapon is RangedWeapon)
+        {
+            RangedWeapon _enemyRangedWeapon = (RangedWeapon)enemyWeapon;
+            _enemyRangedWeapon.SetWeaponLogic(chaseStateAttackLogic, chaseStateReloadLogic);
+        }
+
+        else if (enemyWeapon is MeleeWeapon)
+            enemyWeapon.SetWeaponLogic(chaseStateAttackLogic);
+
+        else
+            throw new System.Exception("Unrecognized weapon type.");
+    }
 }

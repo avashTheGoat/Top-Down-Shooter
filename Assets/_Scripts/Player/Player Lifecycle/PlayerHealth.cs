@@ -1,29 +1,35 @@
 using UnityEngine;
+using System;
 
 public class PlayerHealth : MonoBehaviour, IDamageable
 {
+    public event Action<float, GameObject> OnDamage;
+    public event Action<float, GameObject> OnHeal;
+    
     public float Health { get; private set; }
+    
+    [SerializeField] private float maxHealth = 100f;
 
-    [Min(0f)]
-    [SerializeField] private float startHealth;
-
-    private void Awake() => Health = startHealth;
+    private void Awake() => Health = maxHealth;
 
     public void Damage(float _damage)
     {
         if (_damage < 0)
-            throw new System.ArgumentException("The damage cannot be less than 0.", nameof(_damage));
+            throw new ArgumentException("The damage cannot be less than 0.", nameof(_damage));
 
-        Health -= _damage;
-        print($"Player got damaged to {Health}");
+        Health = Mathf.Clamp(Health - _damage, 0f, 100f);
+        OnDamage?.Invoke(Health, gameObject);
     }
 
     public void Heal(float _healAmount)
     {
         if (_healAmount < 0)
-            throw new System.ArgumentException("The heal amount cannot be less than 0.", nameof(_healAmount));
+            throw new ArgumentException("The heal amount cannot be less than 0.", nameof(_healAmount));
 
-        Health += _healAmount;
+        Health = Mathf.Clamp(Health + _healAmount, 0f, maxHealth);
+        OnHeal?.Invoke(Health, gameObject);
         print($"Player got healed to {Health}");
     }
+
+    public float GetMaxHealth() => maxHealth;
 }

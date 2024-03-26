@@ -34,6 +34,7 @@ public class MetalGame : ResourceGame
 
     private void Update()
     {
+        // only happens when game ends and list gets reset to new
         if (spawnedMetals.Count == 0)
             return;
 
@@ -51,7 +52,7 @@ public class MetalGame : ResourceGame
         {
             InvokeOnGameUnsuccessfullyComplete(droppedResources, "You ran out of time!");
 
-            GameUI.transform.DestroyChildren();
+            GameUI.transform.DestroyChildren(_gameObject => spawnedMetals.Contains(_gameObject.GetComponent<RectTransform>()));
             GameTimer.Reset();
             spawnedMetals = new();
             droppedResources = new();

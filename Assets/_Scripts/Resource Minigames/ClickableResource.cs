@@ -5,8 +5,11 @@ using System;
 [RequireComponent(typeof(Button))]
 public class ClickableResource : MonoBehaviour, IDamageable, IKillable
 {
+    // should prob remove OnClick later
     public event Action<ClickableResource> OnClick;
     public event Action<GameObject> OnKill;
+    public event Action<float, GameObject> OnDamage;
+    public event Action<float, GameObject> OnHeal;
 
     public ResourceSO Resource;
 
@@ -46,5 +49,15 @@ public class ClickableResource : MonoBehaviour, IDamageable, IKillable
             throw new ArgumentException("MaxResourceAmount cannot be less than 0.");
 
         MaxResourceAmount = newMax;
+    }
+
+    public void Heal(float _heal)
+    {
+        throw new NotImplementedException();
+    }
+
+    public float GetMaxHealth()
+    {
+        throw new NotImplementedException();
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public abstract class EnemyAttackStateLogicBaseSO : ScriptableObject
 {
     [Tooltip("A float from 0 to 1 representing the percentage of the normal speed that the enemy will move at while attacking.")]
-    [Min(0f)]
+    [Range(0f, 1f)]
     [SerializeField] protected float attackingSpeedPercent;
 
     protected EnemyStateMachine stateMachine;
@@ -68,5 +68,20 @@ public abstract class EnemyAttackStateLogicBaseSO : ScriptableObject
         else Debug.LogError("An unidentified weapon has been detected.");
 
         return false;
+    }
+    
+    protected void SetWeaponLogic()
+    {
+        if (enemyWeapon is RangedWeapon)
+        {
+            RangedWeapon _enemyRangedWeapon = (RangedWeapon) enemyWeapon;
+            _enemyRangedWeapon.SetWeaponLogic(attackingStateAttackLogic, attackingStateReloadLogic);
+        }
+
+        else if (enemyWeapon is MeleeWeapon)
+            enemyWeapon.SetWeaponLogic(attackingStateAttackLogic);
+
+        else
+            throw new System.Exception("Unrecognized weapon type.");
     }
 }

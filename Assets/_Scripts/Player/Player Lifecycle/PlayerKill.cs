@@ -15,10 +15,13 @@ public class PlayerKill : MonoBehaviour, IKillable
         hasPlayerDied = false;
     }
 
-    private void Update()
+    private void Start()
     {
-        if (playerHealth.Health <= 0f && !hasPlayerDied)
-            Kill();
+        playerHealth.OnDamage += (_health, _) =>
+        {
+            if (_health <= 0 && !hasPlayerDied)
+                Kill();
+        };
     }
 
     public void Kill()

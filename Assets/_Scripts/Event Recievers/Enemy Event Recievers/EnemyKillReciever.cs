@@ -6,6 +6,11 @@ public class EnemyKillReciever : MonoBehaviour
 {
     [SerializeField] private EnemyWavesSpawner enemyWaves;
 
+    [Header("Health Drop")]
+    [Range(0f, 1f)]
+    [SerializeField] private float healthDropPercentChance;
+    [SerializeField] private PlayerHealthPickup heartPrefab;
+
     private List<EnemyKill> enemyKills = new();
     private List<EnemyKill> subscribedEnemyKills = new();
 
@@ -29,6 +34,7 @@ public class EnemyKillReciever : MonoBehaviour
             if (subscribedEnemyKills.Contains(_enemyKill)) continue;
 
             _enemyKill.OnKill += DestroyEnemy;
+            _enemyKill.OnKill += DropHeart;
 
             subscribedEnemyKills.Add(_enemyKill);
         }
@@ -42,11 +48,19 @@ public class EnemyKillReciever : MonoBehaviour
     private List<EnemyKill> GetEnemyKills()
     {
         List<EnemyKill> _enemyKills = new();
-
         enemyWaves.SpawnedEnemies.ForEach((_enemy) => { _enemyKills.Add(_enemy.GetComponent<EnemyKill>()); });
 
         return _enemyKills;
     }
 
-    private void DestroyEnemy(GameObject deadEnemy) => Destroy(deadEnemy);
+    private void DestroyEnemy(GameObject _enemy) => Destroy(_enemy);
+
+    private void DropHeart(GameObject _enemy)
+    {
+        if (healthDropPercentChance >= UnityEngine.Random.value)
+        {
+            GameObject _heart = Instantiate(heartPrefab).gameObject;
+            _heart.transform.position = _enemy.transform.position;
+        }
+    }
 }

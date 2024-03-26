@@ -18,15 +18,15 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: 2
+      outSlope: 2
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1.0085027
-      value: 1.036077
+      time: 2.0432587
+      value: 9.038513
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -42,17 +42,17 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1.035675
-      outSlope: 1.035675
+      inSlope: 3.4730747
+      outSlope: 3.4730747
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1
-      value: 1.035675
-      inSlope: 1.035675
-      outSlope: 1.035675
+      time: 2.0183258
+      value: 7.009796
+      inSlope: 3.4730747
+      outSlope: 3.4730747
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -63,6 +63,10 @@ MonoBehaviour:
   spawnableEnemiesAtWaveCount:
   - enemySpawningInfos:
     - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
-      weaponPrefab: {fileID: 1368183166115280648, guid: d682db0fd5908d147841961961bb118e, type: 3}
+      weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
+      spawnChance: 100
+  - enemySpawningInfos:
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
+      weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
       spawnChance: 100
   IsEndless: 0

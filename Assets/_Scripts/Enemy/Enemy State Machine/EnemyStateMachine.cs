@@ -3,15 +3,6 @@ using UnityEngine.AI;
 
 public class EnemyStateMachine : MonoBehaviour
 {
-    private enum EnemyState
-    {
-        Wander,
-        Chase,
-        Attack
-    };
-
-    [SerializeField] private EnemyState startingState;
-
     [Header("Enemy Colliders")]
     [SerializeField] private Collider2D detectionCollider;
     [Space(15)]
@@ -22,8 +13,6 @@ public class EnemyStateMachine : MonoBehaviour
     [SerializeField] private EnemyAttackStateLogicBaseSO attackStateLogic;
     [Space(15)]
 
-    // very iffy to use Component, but i'm doing it so that it is visible in the inspector
-    // just IAttack and IReload will not be visible in the inspector
     [Header("Attacking Logic")]
     [SerializeField] private Component idleStateAttack;
     [SerializeField] private Component chaseStateAttack;
@@ -35,7 +24,7 @@ public class EnemyStateMachine : MonoBehaviour
     #nullable disable
 
     #region States
-    private BaseState currentState;
+    public BaseState CurrentState { get; private set; }
     public EnemyIdleState IdleState { get; private set; }
     public EnemyChaseState ChaseState { get; private set; }
     public EnemyAttackState AttackState { get; private set; }
@@ -45,6 +34,8 @@ public class EnemyStateMachine : MonoBehaviour
     private Transform player;
     private Weapon weapon;
 
+    private Component enemyWaves;
+
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -53,37 +44,29 @@ public class EnemyStateMachine : MonoBehaviour
         agent.updateRotation = false;
         agent.updateUpAxis = false;
 
-        IdleState = new EnemyIdleState(Instantiate(idleStateLogic).Initialize(this, transform, agent, player, weapon,
-            (IAttack)idleStateAttack, (IReload)idleStateReload));
+        IdleState = new EnemyIdleState(Instantiate(idleStateLogic).Initialize(this, transform, agent, player,
+        ((EnemyWavesSpawner)enemyWaves).SpawnedEnemies, weapon, (IAttack)idleStateAttack, (IReload)idleStateReload));
         ChaseState = new EnemyChaseState(Instantiate(chaseStateLogic).Initialize(this, transform, agent, player, weapon,
             (IAttack)chaseStateAttack, (IReload)chaseStateReload));
         AttackState = new EnemyAttackState(Instantiate(attackStateLogic).Initialize(this, transform, agent, player,
             weapon, (IAttack)attackStateAttack, (IReload)attackStateReload));
 
-        switch (startingState)
-        {
-            case EnemyState.Wander:
-                currentState = IdleState;
-                break;
-
-            case EnemyState.Chase:
-                currentState = ChaseState;
-                break;
-
-            case EnemyState.Attack:
-                currentState = AttackState;
-                break;
-        }
+        CurrentState = IdleState;
+        IdleState.EnterState();
     }
 
-    private void Update() => currentState.UpdateState();
+    private void Update() => CurrentState.UpdateState();
 
     public void TransitionToState(BaseState _newState)
     {
-        currentState.ExitState();
-        currentState = _newState;
-        currentState.EnterState();
+        CurrentState.ExitState();
+        CurrentState = _newState;
+        CurrentState.EnterState();
     }
 
-    public void Init(Weapon _weapon) => weapon = _weapon;
+    public void Init(Weapon _weapon, EnemyWavesSpawner _enemyWaves)
+    {
+        weapon = _weapon;
+        enemyWaves = _enemyWaves;
+    }
 }

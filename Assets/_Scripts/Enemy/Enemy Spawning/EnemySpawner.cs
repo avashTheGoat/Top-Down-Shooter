@@ -5,9 +5,11 @@ using System;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private NavMeshSurface spawnableSurface;
+    [Header("Enemy References")]
+    [SerializeField] private EnemyWavesSpawner enemyWavesSpawner; 
     
     [Header("Spawning Restrictions")]
+    [SerializeField] private NavMeshSurface spawnableSurface;
     [SerializeField] private float minX;
     [SerializeField] private float maxX;
     [SerializeField] private float minY;
@@ -24,7 +26,11 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int maxSpawnAttempts;
     [SerializeField] private Vector2[] worstCaseSpawnLocations;
 
-    public List<GameObject> SpawnEnemies(EnemySpawningInfo[] _enemies, int _numEnemies)
+    private Bounds navMeshBounds;
+
+    private void Awake() => navMeshBounds = spawnableSurface.navMeshData.sourceBounds;
+
+    public List<Transform> SpawnEnemies(EnemySpawningInfo[] _enemies, int _numEnemies)
     {
         if (_enemies == null)
         {
@@ -65,7 +71,7 @@ public class EnemySpawner : MonoBehaviour
                 $"but it was {_spawnChancesSum}.");
         }
 
-        List<GameObject> _spawnedEnemies = new();
+        List<Transform> _spawnedEnemies = new();
         for (int i = 0; i < _numEnemies; i++)
         {
             Vector2 _spawnLocation = GetRandomSpawnPosition();
@@ -79,9 +85,11 @@ public class EnemySpawner : MonoBehaviour
             _weapon.transform.rotation = Quaternion.identity;
             _weapon.SetActive(true);
 
-            _enemy.GetComponent<EnemyStateMachine>().Init(_weapon.GetComponent<Weapon>());
+            Weapon _weaponComponent = _weapon.GetComponent<Weapon>();
+            _enemy.GetComponent<EnemyStateMachine>().Init(_weaponComponent, enemyWavesSpawner);
+            _enemy.GetComponent<EnemyWeaponManager>().Weapon = _weaponComponent;
 
-            _spawnedEnemies.Add(_enemy);
+            _spawnedEnemies.Add(_enemy.transform);
         }
 
         return _spawnedEnemies;
@@ -90,13 +98,14 @@ public class EnemySpawner : MonoBehaviour
     private Vector2 GetRandomSpawnPosition()
     {
         Vector2 _spawnLocation = new Vector2(UnityEngine.Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
-        _spawnLocation = spawnableSurface.navMeshData.sourceBounds.ClosestPoint(_spawnLocation);
+        if (!navMeshBounds.Contains(_spawnLocation))
+            _spawnLocation = navMeshBounds.ClosestPoint(_spawnLocation);
 
         int _spawnAttempts = 1;
         while (_spawnAttempts < maxSpawnAttempts && Vector2.Distance(player.position, _spawnLocation) < minDistanceFromPlayerToSpawn)
         {
             _spawnLocation = new Vector2(UnityEngine.Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
-            _spawnLocation = spawnableSurface.navMeshData.sourceBounds.ClosestPoint(_spawnLocation);
+            _spawnLocation = navMeshBounds.ClosestPoint(_spawnLocation);
 
             _spawnAttempts++;
         }

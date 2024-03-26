@@ -43,11 +43,12 @@ public class ShotgunProjectileHitReciever : MonoBehaviour
         shotgunBulletHits.Clear();
         weaponProviders.RemoveAll(_weaponProvider => _weaponProvider == null);
 
-        foreach (IWeaponProvider _weaponProvider in weaponProviders)
+        foreach (IProvider<RangedWeapon> _weaponProvider in weaponProviders)
         {
-            foreach (ShotgunWeapon _pistol in _weaponProvider.GetWeapons<ShotgunWeapon>())
+            foreach (RangedWeapon _rangedWeapon in _weaponProvider.Provide())
             {
-                _pistol.GetShotProjectiles().ForEach((_projectile) => shotgunBulletHits.Add(_projectile.GetComponent<ProjectileHit>()));
+                if (_rangedWeapon is ShotgunWeapon)
+                    _rangedWeapon.GetShotProjectiles().ForEach((_projectile) => shotgunBulletHits.Add(_projectile.GetComponent<ProjectileHit>()));
             }
         }
     }

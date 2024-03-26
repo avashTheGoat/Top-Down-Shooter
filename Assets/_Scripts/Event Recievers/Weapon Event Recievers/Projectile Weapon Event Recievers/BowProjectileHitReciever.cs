@@ -46,11 +46,12 @@ public class BowProjectileHitReciever : MonoBehaviour
         bowArrowPierces.Clear();
         weaponProviders.RemoveAll(_weaponProvider => _weaponProvider == null);
 
-        foreach (IWeaponProvider _weaponProvider in weaponProviders)
+        foreach (IProvider<RangedWeapon> _weaponProvider in weaponProviders)
         {
-            foreach (BowWeapon _pistol in _weaponProvider.GetWeapons<BowWeapon>())
+            foreach (RangedWeapon _rangedWeapon in _weaponProvider.Provide())
             {
-                _pistol.GetShotProjectiles().ForEach((_projectile) => bowArrowPierces.Add(_projectile.GetComponent<ProjectilePierce>()));
+                if (_rangedWeapon is BowWeapon)
+                    _rangedWeapon.GetShotProjectiles().ForEach((_projectile) => bowArrowPierces.Add(_projectile.GetComponent<ProjectilePierce>()));
             }
         }
     }

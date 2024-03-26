@@ -31,7 +31,7 @@ public class DayNightManager : MonoBehaviour
     private float newNightTimeProgress;
     private bool hasNightTimeCoroutineBeenStarted = false;
     private IEnumerator nightLerpEnumerator;
-    private List<GameObject> subscribedEnemies = new();
+    private List<Transform> subscribedEnemies = new();
 
     #region Minigame Daytime Slowing
     private float slownessMultiplier;
@@ -62,7 +62,7 @@ public class DayNightManager : MonoBehaviour
             if (!enemyWaves.isActiveAndEnabled)
                 return;
 
-            foreach (var _enemy in enemyWaves.SpawnedEnemies)
+            foreach (Transform _enemy in enemyWaves.SpawnedEnemies)
             {
                 if (subscribedEnemies.Contains(_enemy))
                     continue;
@@ -104,6 +104,15 @@ public class DayNightManager : MonoBehaviour
     }
 
     public void SubscribeToDayTimerOnTick(Action<Timer> _func) => dayTimeTimer.OnTick += _func;
+
+    public void ActivateMinigameMode(float _slownessMultiplier, float _minSecBeforeEnd)
+    {
+        slownessMultiplier = _slownessMultiplier;
+        minSecBeforeEnd = _minSecBeforeEnd;
+        shouldStayInTime = true;
+    }
+
+    public void DeactivateMinigameMode() => shouldStayInTime = false;
 
     private void UpdateDayTime(Timer _timer)
     {
@@ -168,13 +177,4 @@ public class DayNightManager : MonoBehaviour
 
         hasNightTimeCoroutineBeenStarted = false;
     }
-
-    public void ActivateMinigameMode(float _slownessMultiplier, float _minSecBeforeEnd)
-    {
-        slownessMultiplier = _slownessMultiplier;
-        minSecBeforeEnd = _minSecBeforeEnd;
-        shouldStayInTime = true;
-    }
-
-    public void DeactivateMinigameMode() => shouldStayInTime = false;
 }

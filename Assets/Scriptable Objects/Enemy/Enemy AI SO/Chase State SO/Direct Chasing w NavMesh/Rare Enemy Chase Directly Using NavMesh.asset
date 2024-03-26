@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b015e1c961f91ef43a2cb2b58fa688c2, type: 3}
+  m_Name: Rare Enemy Chase Directly Using NavMesh
+  m_EditorClassIdentifier: 
+  chaseSpeed: 2.25
+  minTimeToWanderAfterDetectionExit: 4
+  maxTimeToWanderAfterDetectionExit: 6
+  numRaycasts: 18
+  maxDistanceFromPlayerToChase: 8

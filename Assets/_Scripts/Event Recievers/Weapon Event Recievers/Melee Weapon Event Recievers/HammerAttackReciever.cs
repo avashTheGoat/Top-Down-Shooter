@@ -15,10 +15,7 @@ public class HammerAttackReciever : MonoBehaviour
         percentOfOriginalDamageWhenXAwayFromCenter.preWrapMode = WrapMode.Clamp;
     }
 
-    private void Start()
-    {
-        UpdateHammers();
-    }
+    private void Start() => UpdateHammers();
 
     private void Update()
     {
@@ -58,10 +55,13 @@ public class HammerAttackReciever : MonoBehaviour
         hammers.Clear();
         weaponProviders.RemoveAll(_weaponProvider => _weaponProvider == null);
 
-        foreach (IWeaponProvider _weaponProvider in weaponProviders)
+        foreach (IProvider<MeleeWeapon> _weaponProvider in weaponProviders)
         {
-            foreach (HammerWeapon _hammer in _weaponProvider.GetWeapons<HammerWeapon>())
-                hammers.Add(_hammer);
+            foreach (MeleeWeapon _meleeWeapon in _weaponProvider.Provide())
+            {
+                if (_meleeWeapon is HammerWeapon)
+                    hammers.Add(_meleeWeapon as HammerWeapon);
+            }
         }
     }
 }

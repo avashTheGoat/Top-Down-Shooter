@@ -1,18 +1,58 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyWeaponsProvider : MonoBehaviour, IWeaponProvider
+public class EnemyWeaponsProvider : MonoBehaviour, IProvider<Weapon>, IProvider<RangedWeapon>, IProvider<MeleeWeapon>
 {
     [SerializeField] private EnemyWavesSpawner enemyWaves;
 
-    public List<T> GetWeapons<T>() where T : Weapon
-    {
-        List<T> _weapons = new();
+    public List<Weapon> GetWeapons() => ((IProvider<Weapon>) this).Provide();
+    public List<RangedWeapon> GetRangedWeapons => ((IProvider<RangedWeapon>) this).Provide();
+    public List<MeleeWeapon> GetMeleeWeapons => ((IProvider<MeleeWeapon>) this).Provide();
 
-        enemyWaves.SpawnedEnemies.ForEach((_enemy) =>
+
+    List<Weapon> IProvider<Weapon>.Provide()
+    {
+        List<Weapon> _weapons = new();
+        enemyWaves.SpawnedEnemies.ForEach(_enemy =>
         {
-            Component _weapon = _enemy.GetComponentInChildren(typeof(T), true);
-            if (_weapon != null) _weapons.Add(_weapon as T);
+            Weapon _weapon = _enemy.GetComponent<EnemyWeaponManager>().Weapon;
+            if (_weapon == null)
+                return;
+
+            if (_weapon is Weapon)
+                _weapons.Add(_weapon);
+        });
+
+        return _weapons;
+    }
+
+    List<MeleeWeapon> IProvider<MeleeWeapon>.Provide()
+    {
+        List<MeleeWeapon> _weapons = new();
+        enemyWaves.SpawnedEnemies.ForEach(_enemy =>
+        {
+            Weapon _weapon = _enemy.GetComponent<EnemyWeaponManager>().Weapon;
+            if (_weapon == null)
+                return;
+
+            if (_weapon is MeleeWeapon)
+                _weapons.Add(_weapon as MeleeWeapon);
+        });
+
+        return _weapons;
+    }
+
+    List<RangedWeapon> IProvider<RangedWeapon>.Provide()
+    {
+        List<RangedWeapon> _weapons = new();
+        enemyWaves.SpawnedEnemies.ForEach(_enemy =>
+        {
+            Weapon _weapon = _enemy.GetComponent<EnemyWeaponManager>().Weapon;
+            if (_weapon == null)
+                return;
+
+            if (_weapon is RangedWeapon)
+                _weapons.Add(_weapon as RangedWeapon);
         });
 
         return _weapons;

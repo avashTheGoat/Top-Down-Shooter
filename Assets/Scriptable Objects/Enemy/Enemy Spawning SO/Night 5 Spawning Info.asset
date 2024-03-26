@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a6f9b9a8ff7690468c2d5b56b52da79, type: 3}
+  m_Name: Night 5 Spawning Info
+  m_EditorClassIdentifier: 
+  numEnemiesAtWaveCount:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 3.0131063
+      value: 20.080061
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  secsToSpawnEnemiesAtWaveCount:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 3.413047
+      outSlope: 3.413047
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 3.0127575
+      value: 10.282683
+      inSlope: 3.413047
+      outSlope: 3.413047
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spawnableEnemiesAtWaveCount:
+  - enemySpawningInfos:
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
+      weaponPrefab: {fileID: 1368183166115280648, guid: d682db0fd5908d147841961961bb118e, type: 3}
+      spawnChance: 32
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
+      weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
+      spawnChance: 68
+  - enemySpawningInfos:
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
+      weaponPrefab: {fileID: 1368183166115280648, guid: d682db0fd5908d147841961961bb118e, type: 3}
+      spawnChance: 25
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 8abc6237c4a7cfb48a611bacea4b63e1, type: 3}
+      weaponPrefab: {fileID: 1368183166115280648, guid: d682db0fd5908d147841961961bb118e, type: 3}
+      spawnChance: 15
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
+      weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
+      spawnChance: 60
+  - enemySpawningInfos:
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
+      weaponPrefab: {fileID: 1368183166115280648, guid: d682db0fd5908d147841961961bb118e, type: 3}
+      spawnChance: 30
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
+      weaponPrefab: {fileID: 3104220439187664240, guid: 0ea675cd863585840bade0478fe067c7, type: 3}
+      spawnChance: 20
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 8abc6237c4a7cfb48a611bacea4b63e1, type: 3}
+      weaponPrefab: {fileID: 1368183166115280648, guid: d682db0fd5908d147841961961bb118e, type: 3}
+      spawnChance: 10
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
+      weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
+      spawnChance: 40
+  IsEndless: 0

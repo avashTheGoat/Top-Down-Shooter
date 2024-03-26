@@ -1,42 +1,40 @@
 using UnityEngine;
-using System.Collections.Generic;
 
-[RequireComponent(typeof(PlayerWeaponsProvider))]
+[RequireComponent(typeof(PlayerWeaponsManager))]
 public class PlayerWeaponsSwitcher : MonoBehaviour
 {
+    public Weapon ActiveWeapon { get; private set; }
+    
     [SerializeField] private KeyCode weaponSwitchKey;
 
-    private List<Weapon> playerWeapons = new();
-    private Weapon activeWeapon;
+    private PlayerWeaponsManager weaponsManager;
     private int curWeaponIndex = 0;
 
-    private PlayerWeaponsProvider weaponsProvider;
+    private void Awake() => weaponsManager = GetComponent<PlayerWeaponsManager>();
 
-    private void Awake()
+    private void Start()
     {
-        weaponsProvider = GetComponent<PlayerWeaponsProvider>();
-        playerWeapons = weaponsProvider.GetWeapons<Weapon>();
-
-        foreach (Weapon _weapon in playerWeapons)
+        foreach (Weapon _weapon in weaponsManager.GetWeapons())
             _weapon.gameObject.SetActive(false);
 
-        activeWeapon = playerWeapons[0];
-        activeWeapon.gameObject.SetActive(true);
+        ActiveWeapon = weaponsManager.PlayerWeapons[0];
+        ActiveWeapon.gameObject.SetActive(true);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(weaponSwitchKey))
         {
-            SwitchWeapon((curWeaponIndex + 1) % playerWeapons.Count);
-            curWeaponIndex++;
+            int _newWeaponIndex = (curWeaponIndex + 1) % weaponsManager.PlayerWeapons.Count;
+            SwitchWeapon(_newWeaponIndex);
+            curWeaponIndex = _newWeaponIndex;
         }
     }
 
     private void SwitchWeapon(int _weaponIndex)
     {
-        activeWeapon.gameObject.SetActive(false);
-        activeWeapon = playerWeapons[_weaponIndex];
-        activeWeapon.gameObject.SetActive(true);
+        ActiveWeapon.gameObject.SetActive(false);
+        ActiveWeapon = weaponsManager.PlayerWeapons[_weaponIndex];
+        ActiveWeapon.gameObject.SetActive(true);
     }
 }

@@ -41,10 +41,13 @@ public class SwordAttackReciever : MonoBehaviour
         swords.Clear();
         weaponProviders.RemoveAll(_weaponProvider => _weaponProvider == null);
 
-        foreach (IWeaponProvider _weaponProvider in weaponProviders)
+        foreach (IProvider<MeleeWeapon> _weaponProvider in weaponProviders)
         {
-            foreach (SwordWeapon _sword in _weaponProvider.GetWeapons<SwordWeapon>())
-                swords.Add(_sword);
+            foreach (MeleeWeapon _meleeWeapon in _weaponProvider.Provide())
+            {
+                if (_meleeWeapon is SwordWeapon)
+                    swords.Add(_meleeWeapon as SwordWeapon);
+            }
         }
     }
 }

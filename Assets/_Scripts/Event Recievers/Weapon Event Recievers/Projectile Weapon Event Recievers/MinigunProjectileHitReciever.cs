@@ -44,11 +44,12 @@ public class MinigunProjectileHitReciever : MonoBehaviour
         minigunBulletHits.Clear();
         weaponProviders.RemoveAll(_weaponProvider => _weaponProvider == null);
 
-        foreach (IWeaponProvider _weaponProvider in weaponProviders)
+        foreach (IProvider<RangedWeapon> _weaponProvider in weaponProviders)
         {
-            foreach (MinigunWeapon _minigun in _weaponProvider.GetWeapons<MinigunWeapon>())
+            foreach (RangedWeapon _rangedWeapon in _weaponProvider.Provide())
             {
-                _minigun.GetShotProjectiles().ForEach((_projectile) => minigunBulletHits.Add(_projectile.GetComponent<ProjectileHit>()));
+                if (_rangedWeapon is MinigunWeapon)
+                    _rangedWeapon.GetShotProjectiles().ForEach(_projectile => minigunBulletHits.Add(_projectile.GetComponent<ProjectileHit>()));
             }
         }
     }

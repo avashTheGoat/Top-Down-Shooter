@@ -8,17 +8,9 @@ public class ResourceGameStarter : MonoBehaviour
     [SerializeField] private DayNightManager dayNightManager;
     [Space(15)]
 
-    private bool canStartGame = true;
+    private bool canPlayGame = false;
 
-    private Transform trans;
-
-    private void Awake() => trans = transform;
-
-    private void Start()
-    {
-        dayNightManager.OnDayEnd += () => canStartGame = false;
-        dayNightManager.OnNightEnd += () => canStartGame = true;
-    }
+    private void Start() => dayNightManager.OnNightEnd += () => canPlayGame = true;
 
     private void OnCollisionEnter2D(Collision2D _col)
     {
@@ -27,9 +19,9 @@ public class ResourceGameStarter : MonoBehaviour
             if (_col.transform != _player)
                 return;
 
-            if (canStartGame)
+            if (!dayNightManager.IsNight() && canPlayGame)
             {
-                canStartGame = false;
+                canPlayGame = false;
                 game.StartGame();
             }
         }

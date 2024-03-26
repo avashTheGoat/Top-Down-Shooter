@@ -3,9 +3,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Resource", menuName = "Scriptable Objects/Resources/New Resource")]
 public class ResourceSO : ScriptableObject
 {
-    [SerializeField] private ResourceSO resource1;
-    [SerializeField] private ResourceSO resource2;
-
     [field:SerializeField] public Sprite ResourceImage { get; private set; }
     [field: SerializeField] public string ResourceName { get; private set; }
 

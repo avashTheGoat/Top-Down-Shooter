@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d33520958b2170242b97973b5488e276, type: 3}
   m_Name: Enemy Attack & Chase Visible Player Slower
   m_EditorClassIdentifier: 
-  attackingSpeedPercent: 0.25
+  attackingSpeedPercent: 0.35
   numRaycasts: 18
   maxRaycastDistance: 7
