@@ -5,11 +5,16 @@ using UnityEngine;
 public abstract class RangedWeapon : Weapon
 {
     public event Action OnAttackWithoutAmmo;
-    public event Action OnWeaponReload;
+    public event Action OnReload;
+    public event Action OnReloadComplete;
 
     public float Ammo => ammo;
     public float MaxAmmo => maxAmmo;
+
     public float Range => projectileRange;
+
+    public float ReloadTime => RELOAD_TIME;
+    public float CurReloadTimeLeft => reloadTimer;
 
     [Header("Reloading")]
     [SerializeField] protected float RELOAD_TIME;
@@ -37,7 +42,7 @@ public abstract class RangedWeapon : Weapon
         base.Awake();
 
         ammo = maxAmmo;
-        reloadTimer = 0;
+        reloadTimer = 0f;
     }
 
     protected override void Update()
@@ -67,13 +72,20 @@ public abstract class RangedWeapon : Weapon
 
         tagsToIgnore = _tagsToIgnore;
     }
-
+    
+    public override void ResetWeapon()
+    {
+        reloadTimer = 0f;
+        didReload = false;
+    }
+    
     public List<Projectile> GetShotProjectiles()
     {
         shotProjectiles.RemoveAll(_projectile => _projectile == null);
         return shotProjectiles;
     }
 
-    protected void InvokeOnWeaponReload() => OnWeaponReload?.Invoke();
+    protected void InvokeOnReload() => OnReload?.Invoke();
+    protected void InvokeOnReloadComplete() => OnReloadComplete?.Invoke();
     protected void InvokeOnAttackWithoutAmmo() => OnAttackWithoutAmmo?.Invoke();
 }

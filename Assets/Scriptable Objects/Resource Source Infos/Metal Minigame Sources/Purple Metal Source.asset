@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ab44a1c3bd0c3141b55a99d39c0bd40, type: 3}
+  m_Name: Purple Metal Source
+  m_EditorClassIdentifier: 
+  <ResourceObject>k__BackingField: {fileID: 787742772800518988, guid: f2cc58b18cfccaf4d97439ae626905ae, type: 3}
+  <Resource>k__BackingField: {fileID: 11400000, guid: 507d9061e38fe914cbc420036caea538, type: 2}
+  <MinAmount>k__BackingField: 3
+  <MaxAmount>k__BackingField: 7
+  spawnChance: 50

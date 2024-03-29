@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ab44a1c3bd0c3141b55a99d39c0bd40, type: 3}
-  m_Name: Metal Source
+  m_Name: Green Metal Source
   m_EditorClassIdentifier: 
-  <ResourceObject>k__BackingField: {fileID: 787742772800518988, guid: f2cc58b18cfccaf4d97439ae626905ae, type: 3}
+  <ResourceObject>k__BackingField: {fileID: 787742772800518988, guid: edfe0f941cadb7a4eb7c851ab95b2d74, type: 3}
   <Resource>k__BackingField: {fileID: 11400000, guid: 507d9061e38fe914cbc420036caea538, type: 2}
-  <MinAmount>k__BackingField: 2
-  <MaxAmount>k__BackingField: 5
-  spawnChance: 100
+  <MinAmount>k__BackingField: 3
+  <MaxAmount>k__BackingField: 7
+  spawnChance: 50

@@ -16,7 +16,7 @@ public class MinigunWeapon : RangedWeapon
 
         if (reloadLogic.ShouldReload(this) && reloadTimer == 0f)
         {
-            InvokeOnWeaponReload();
+            InvokeOnReload();
 
             attackCooldownTimer = GetResetAttackTimer();
             reloadTimer = RELOAD_TIME;
@@ -32,6 +32,8 @@ public class MinigunWeapon : RangedWeapon
         {
             Reload();
             didReload = false;
+
+            InvokeOnReloadComplete();
         }
 
         if (attackCooldownTimer != 0f)

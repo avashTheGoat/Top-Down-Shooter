@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3406710641943605260}
   - component: {fileID: 3406710641943605258}
   - component: {fileID: 3406710641943605259}
-  - component: {fileID: 3406710641943605256}
   m_Layer: 0
   m_Name: Health Bar Fill IMG
   m_TagString: Untagged
@@ -77,19 +76,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3406710641943605256
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3406710641943605263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79477c1ae0940664c8b140d9f7552d3b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fillImage: {fileID: 3406710641943605259}
 --- !u!1 &3406710642055294786
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,7 +174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1518dd001e5976e4894d55fbe2535120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  barFill: {fileID: 3406710641943605256}
+  fillImage: {fileID: 3406710641943605259}
+  damageableComponent: {fileID: 0}
 --- !u!1 &3406710643846461354
 GameObject:
   m_ObjectHideFlags: 0

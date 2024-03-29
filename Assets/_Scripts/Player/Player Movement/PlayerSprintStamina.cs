@@ -3,20 +3,20 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMovement))]
 public class PlayerSprintStamina : MonoBehaviour
 {
-    [Min(0)]
-    [SerializeField] private float maxStamina;
+    [field: SerializeField] public float MaxStamina { get; private set; }
+    public float Stamina { get; private set; }
+
     [Min(0)]
     [SerializeField] private float staminaIncreasePerSec;
     [Min(0)]
     [SerializeField] private float staminaDecreasePerSec;
 
     private PlayerMovement playerMovement;
-    private float stamina;
     private bool hasRunOutOfStaminaWhileSprinting;
 
     private void Awake()
     {
-        stamina = maxStamina;
+        Stamina = MaxStamina;
         playerMovement = GetComponent<PlayerMovement>();
         hasRunOutOfStaminaWhileSprinting = false;
     }
@@ -31,9 +31,9 @@ public class PlayerSprintStamina : MonoBehaviour
         {
             if (!hasRunOutOfStaminaWhileSprinting)
             {
-                stamina -= staminaDecreasePerSec * Time.deltaTime;
+                Stamina -= staminaDecreasePerSec * Time.deltaTime;
 
-                if (stamina <= 0f)
+                if (Stamina <= 0f)
                 {
                     hasRunOutOfStaminaWhileSprinting = true;
                 }
@@ -42,11 +42,11 @@ public class PlayerSprintStamina : MonoBehaviour
 
         if (!Input.GetKey(KeyCode.LeftShift) || hasRunOutOfStaminaWhileSprinting)
         {
-            stamina += staminaIncreasePerSec * Time.deltaTime;
+            Stamina += staminaIncreasePerSec * Time.deltaTime;
             
             if (hasRunOutOfStaminaWhileSprinting)
             {
-                hasRunOutOfStaminaWhileSprinting = stamina != maxStamina;
+                hasRunOutOfStaminaWhileSprinting = Stamina != MaxStamina;
             }
 
             if (!Input.GetKey(KeyCode.LeftShift))
@@ -55,8 +55,8 @@ public class PlayerSprintStamina : MonoBehaviour
             }
         }
 
-        stamina = Mathf.Clamp(stamina, 0f, maxStamina);
+        Stamina = Mathf.Clamp(Stamina, 0f, MaxStamina);
 
-        playerMovement.CanSprint = stamina > 0f && !hasRunOutOfStaminaWhileSprinting;
+        playerMovement.CanSprint = Stamina > 0f && !hasRunOutOfStaminaWhileSprinting;
     }
 }

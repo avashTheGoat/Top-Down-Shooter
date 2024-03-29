@@ -13,7 +13,7 @@ public class ShotgunWeapon : RangedWeapon
 
         if (reloadLogic.ShouldReload(this) && reloadTimer == 0f)
         {
-            InvokeOnWeaponReload();
+            InvokeOnReload();
 
             attackCooldownTimer = GetResetAttackTimer();
             reloadTimer = RELOAD_TIME;
@@ -29,6 +29,8 @@ public class ShotgunWeapon : RangedWeapon
         {
             Reload();
             didReload = false;
+
+            InvokeOnReloadComplete();
         }
 
         if (attackCooldownTimer != 0f)

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <CraftingRequirements>k__BackingField:
   - Resource: {fileID: 11400000, guid: 507d9061e38fe914cbc420036caea538, type: 2}
-    Amount: 30
+    Amount: 25
   <Result>k__BackingField: {fileID: 4163144566826951537, guid: 4f3e0333b5fcc0d44b3087c873dd0de1, type: 3}

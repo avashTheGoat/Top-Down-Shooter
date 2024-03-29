@@ -49,6 +49,8 @@ public abstract class Weapon : Item
         Wielder = _wielder;
     }
 
+    public abstract void ResetWeapon();
+
     protected virtual void Attack()
     {
         

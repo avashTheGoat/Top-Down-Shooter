@@ -17,4 +17,9 @@ public class MeleeWeapon : Weapon
 
         return _hitObjects;
     }
+
+    public override void ResetWeapon()
+    {
+        
+    }
 }

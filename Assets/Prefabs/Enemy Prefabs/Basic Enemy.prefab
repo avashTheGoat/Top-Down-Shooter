@@ -188,7 +188,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -451,6 +451,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 3902190704832929797}
     m_Modifications:
     - target: {fileID: 3406710643623657010, guid: 3dca63ddedfe10e43b85c93a44f4c0f8, type: 3}
+      propertyPath: fillImage
+      value: 
+      objectReference: {fileID: 1928369206156131434}
+    - target: {fileID: 3406710643623657010, guid: 3dca63ddedfe10e43b85c93a44f4c0f8, type: 3}
       propertyPath: damageableComponent
       value: 
       objectReference: {fileID: 3282975925898905837}
@@ -550,10 +554,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3406710641943605256, guid: 3dca63ddedfe10e43b85c93a44f4c0f8, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3dca63ddedfe10e43b85c93a44f4c0f8, type: 3}
 --- !u!224 &1928369204609774164 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3406710643623657013, guid: 3dca63ddedfe10e43b85c93a44f4c0f8, type: 3}
   m_PrefabInstance: {fileID: 3856735861230767201}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1928369206156131434 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3406710641943605259, guid: 3dca63ddedfe10e43b85c93a44f4c0f8, type: 3}
+  m_PrefabInstance: {fileID: 3856735861230767201}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

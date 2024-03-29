@@ -50,7 +50,7 @@ MonoBehaviour:
   Image: {fileID: 21300000, guid: ff59ac963a6cd974e835f1e824168436, type: 3}
   weaponDamage: 17
   ATTACKS_PER_SECOND: 0.7
-  RELOAD_TIME: 3.5
+  RELOAD_TIME: 3
   projectile: {fileID: 8252440497980988240, guid: 9aaa848e7ea16ee4fbd7ddc606679d3f, type: 3}
   projectileSpeed: 19
   projectileRange: 3.5

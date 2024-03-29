@@ -7,6 +7,7 @@ public class BowWeapon : RangedWeapon
 
     [Header("Charging")]
     [SerializeField] private float maxChargeTime;
+    [SerializeField] private float minChargeTimeToShoot;
     [Tooltip("Curve describing what percentage of the damage variable the arrow will have. As the x increases, time charging the arrow increases.")]
     [SerializeField] private AnimationCurve maxDamagePercentCurve;
     [Tooltip("Curve describing what percentage of the speed variable the arrow will have. As the x increases, time charging the arrow increases.")]
@@ -33,22 +34,11 @@ public class BowWeapon : RangedWeapon
 
     protected override void Update()
     {
-        // TODO
-        // remove these logical conditions later and
-        // do a Debug.LogError if Wielder or attackLogic == null
-        // Doing this because i'm testing enemies spawning with weapons
-        // right now
-        if (Wielder == null || attackLogic == null)
-        {
-            print("Wielder or attackLogic == null");
-            return;
-        }
-
         base.Update();
 
         if (reloadLogic.ShouldReload(this) && reloadTimer == 0f)
         {
-            InvokeOnWeaponReload();
+            InvokeOnReload();
             
             attackCooldownTimer = GetResetAttackTimer();
             reloadTimer = RELOAD_TIME;
@@ -64,6 +54,8 @@ public class BowWeapon : RangedWeapon
         {
             Reload();
             didReload = false;
+
+            InvokeOnReloadComplete();
         }
 
         if (attackCooldownTimer != 0f)
@@ -73,6 +65,13 @@ public class BowWeapon : RangedWeapon
         {
             if (hasChargedPreviously && ammo > 0)
             {
+                if (chargeTimer < minChargeTimeToShoot)
+                {
+                    hasChargedPreviously = false;
+                    InvokeOnAttackWithoutAmmo();
+                    return;
+                }
+
                 chargeTimer = Mathf.Clamp(chargeTimer / maxChargeTime, 0f, 1f);
 
                 weaponDamage = MAX_DAMAGE * maxDamagePercentCurve.Evaluate(chargeTimer);
