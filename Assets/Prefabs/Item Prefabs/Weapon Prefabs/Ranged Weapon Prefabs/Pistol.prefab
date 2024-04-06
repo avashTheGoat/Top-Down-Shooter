@@ -51,10 +51,12 @@ MonoBehaviour:
   weaponDamage: 11
   ATTACKS_PER_SECOND: 2
   RELOAD_TIME: 1
+  maxAmmo: 15
   projectile: {fileID: 8252440497980988240, guid: c927d5c59e1b58b4ea1a1a2a37a54f25, type: 3}
   projectileSpeed: 15.5
   projectileRange: 4.25
-  maxAmmo: 15
+  minAngleChange: 0
+  maxAngleChange: 3
 --- !u!212 &1368183166115280645
 SpriteRenderer:
   m_ObjectHideFlags: 0

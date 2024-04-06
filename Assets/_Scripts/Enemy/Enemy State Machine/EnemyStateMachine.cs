@@ -3,25 +3,12 @@ using UnityEngine.AI;
 
 public class EnemyStateMachine : MonoBehaviour
 {
-    [Header("Enemy Colliders")]
-    [SerializeField] private Collider2D detectionCollider;
-    [Space(15)]
+    [SerializeField] private LayerMask ignoreLayers;
 
     [Header("State Logic")]
     [SerializeField] private EnemyIdleStateLogicBaseSO idleStateLogic;
     [SerializeField] private EnemyChaseStateLogicBaseSO chaseStateLogic;
     [SerializeField] private EnemyAttackStateLogicBaseSO attackStateLogic;
-    [Space(15)]
-
-    [Header("Attacking Logic")]
-    [SerializeField] private Component idleStateAttack;
-    [SerializeField] private Component chaseStateAttack;
-    [SerializeField] private Component attackStateAttack;
-    #nullable enable
-    [SerializeField] private Component? idleStateReload;
-    [SerializeField] private Component? chaseStateReload;
-    [SerializeField] private Component? attackStateReload;
-    #nullable disable
 
     #region States
     public BaseState CurrentState { get; private set; }
@@ -45,11 +32,13 @@ public class EnemyStateMachine : MonoBehaviour
         agent.updateUpAxis = false;
 
         IdleState = new EnemyIdleState(Instantiate(idleStateLogic).Initialize(this, transform, agent, player,
-        ((EnemyWavesSpawner)enemyWaves).SpawnedEnemies, weapon, (IAttack)idleStateAttack, (IReload)idleStateReload));
-        ChaseState = new EnemyChaseState(Instantiate(chaseStateLogic).Initialize(this, transform, agent, player, weapon,
-            (IAttack)chaseStateAttack, (IReload)chaseStateReload));
-        AttackState = new EnemyAttackState(Instantiate(attackStateLogic).Initialize(this, transform, agent, player,
-            weapon, (IAttack)attackStateAttack, (IReload)attackStateReload));
+        ((EnemyWavesSpawner)enemyWaves).SpawnedEnemies, weapon));
+
+        ChaseState = new EnemyChaseState(Instantiate(chaseStateLogic)
+        .Initialize(this, transform, agent, player, ignoreLayers, weapon));
+
+        AttackState = new EnemyAttackState(Instantiate(attackStateLogic)
+        .Initialize(this, transform, agent, ignoreLayers, player, weapon));
 
         CurrentState = IdleState;
         IdleState.EnterState();

@@ -11,10 +11,6 @@ public class EnemyChaseWithNavMeshIdleAfterTimeOfNoSight : EnemyChaseStateLogicB
     [Space(15)]
     #endregion
 
-    [Header("Raycast Fields")]
-    [SerializeField] private int numRaycasts;
-    [SerializeField] private float maxDistanceFromPlayerToChase;
-
     private float timeToWanderAfterDetectionExit;
     private float timeAfterDetectionExit = 0f;
     private bool isFirstFrameAfterDetectionExit = true;
@@ -43,7 +39,7 @@ public class EnemyChaseWithNavMeshIdleAfterTimeOfNoSight : EnemyChaseStateLogicB
         Vector2 _playerPosition = Vector2.zero;
         if (player != null) _playerPosition = player.position;
 
-        if (IsPlayerCloseEnough())
+        if (IsPlayerVisibleAndCloseEnough())
         {
             timeAfterDetectionExit = 0f;
             isFirstFrameAfterDetectionExit = true;
@@ -76,27 +72,22 @@ public class EnemyChaseWithNavMeshIdleAfterTimeOfNoSight : EnemyChaseStateLogicB
         timeAfterDetectionExit = 0f;
     }
 
-    private bool IsPlayerCloseEnough()
+    public override float GetWeaponRotationChange(Transform _weapon)
     {
-        Physics2D.queriesHitTriggers = false;
-        Vector2 _raycastDirection = (Vector2)agent.velocity == Vector2.zero ? Vector2.right : agent.velocity;
-
-        for (int i = 0; i < numRaycasts; i++)
+        if (PlayerProvider.TryGetPlayer(out Transform _player))
         {
-            RaycastHit2D[] _raycastHits = Physics2D.RaycastAll(trans.position, _raycastDirection, maxDistanceFromPlayerToChase + Mathf.Epsilon);
-            _raycastDirection = Quaternion.Euler(0, 0, 360 / numRaycasts) * _raycastDirection;
+            Vector2 _playerDirection = (_player.position - trans.position).normalized;
+            Vector2 _weaponDirection = (_weapon.position - trans.position).normalized;
 
-            if (_raycastHits.Length <= 1) continue;
+            float _deltaAngle = Vector2.SignedAngle(_weaponDirection, _playerDirection);
 
-            // doing 1 because 0 is the enemy, so 1 is the closest object
-            if (_raycastHits[1].collider.gameObject.transform == player && Vector2.Distance(_raycastHits[1].point, trans.position) <= maxDistanceFromPlayerToChase)
-            {
-                Physics2D.queriesHitTriggers = true;
-                return true;
-            }
+            return _deltaAngle;
         }
 
-        Physics2D.queriesHitTriggers = true;
-        return false;
+        return 0f;
     }
+
+    public override bool ShouldAttack(Weapon _weapon) => false;
+
+    public override bool ShouldReload(RangedWeapon _weapon) => _weapon.Ammo <= _weapon.MaxAmmo / 2;
 }

@@ -110,8 +110,11 @@ public class BowWeapon : RangedWeapon
     {
         base.Attack();
 
-        Projectile _arrow = Instantiate(projectile);
-        _arrow.Init(weaponDamage, projectileSpeed, trans.position, trans.localEulerAngles.z, projectileRange);
+        float _deltaAngle = GetRandAngleChange();
+
+        ProjectileInfo _arrow = Instantiate(projectile);
+        _arrow.Init(weaponDamage, projectileSpeed, trans.position,
+        trans.localEulerAngles.z + _deltaAngle, projectileRange, TagsToIgnore);
 
         shotProjectiles.Add(_arrow);
     }

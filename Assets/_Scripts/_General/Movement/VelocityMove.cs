@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class VelocityMove : MonoBehaviour, IMovable
+public class VelocityMove : MonoBehaviour, IMoveable
 {
     private Rigidbody2D rb;
 

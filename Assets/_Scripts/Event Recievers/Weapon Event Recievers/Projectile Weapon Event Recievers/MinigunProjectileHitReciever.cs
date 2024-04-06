@@ -20,14 +20,11 @@ public class MinigunProjectileHitReciever : MonoBehaviour
             if (subscribedMinigunBulletHits.Contains(_minigunBulletHit)) continue;
             subscribedMinigunBulletHits.Add(_minigunBulletHit);
 
-            _minigunBulletHit.OnObjectCollision += Debug;
             _minigunBulletHit.OnObjectCollision += DamageIfDamageable;
             _minigunBulletHit.OnObjectCollision += DestroyBullet;
 
         }
     }
-
-    private void Debug(GameObject _, GameObject hitObject, float __) => print($"Minigun bullet hit something. Name is {hitObject.name}");
 
     private void DamageIfDamageable(GameObject _, GameObject hitObject, float damageAmount)
     {

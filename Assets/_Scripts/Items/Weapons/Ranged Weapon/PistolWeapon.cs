@@ -50,8 +50,11 @@ public class PistolWeapon : RangedWeapon
     {
         base.Attack();
 
-        Projectile _bullet = Instantiate(projectile);
+        float _deltaAngle = GetRandAngleChange();
+
+        ProjectileInfo _bullet = Instantiate(projectile);
         shotProjectiles.Add(_bullet);
-        _bullet.Init(weaponDamage, projectileSpeed, trans.position, trans.localEulerAngles.z, projectileRange);
+        _bullet.Init(weaponDamage, projectileSpeed, trans.position,
+        trans.localEulerAngles.z + _deltaAngle, projectileRange, TagsToIgnore);
     }
 }

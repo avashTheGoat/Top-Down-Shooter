@@ -1,15 +1,5 @@
-using UnityEngine;
-
 public class MinigunWeapon : RangedWeapon
 {
-    [Header("Shooting Angle")]
-    [Tooltip("Minimum change in angle for bullet shot. Should not be negative because that is applied randomly at runtime. Leave min and max at 0 for no angle change.")]
-    [Min(0f)]
-    [SerializeField] private float minAngleChange;
-    [Tooltip("Maximum change in angle for bullet shot. Should not be negative because that is applied randomly at runtime. Leave min and max at 0 for no angle change.")]
-    [Min(0f)]
-    [SerializeField] private float maxAngleChange;
-
     protected override void Update()
     {
         base.Update();
@@ -60,11 +50,11 @@ public class MinigunWeapon : RangedWeapon
     {
         base.Attack();
 
-        float _randAngleChange = Random.Range(minAngleChange, maxAngleChange);
-        _randAngleChange = Random.Range(0, 1 + 1) == 1 ? -_randAngleChange : _randAngleChange;
+        float _deltaAngle = GetRandAngleChange();
 
-        Projectile _bullet = Instantiate(projectile);
+        ProjectileInfo _bullet = Instantiate(projectile);
         shotProjectiles.Add(_bullet);
-        _bullet.Init(weaponDamage, projectileSpeed, trans.position, trans.localEulerAngles.z + _randAngleChange, projectileRange);
+        _bullet.Init(weaponDamage, projectileSpeed, trans.position,
+        trans.localEulerAngles.z + _deltaAngle, projectileRange, TagsToIgnore);
     }
 }

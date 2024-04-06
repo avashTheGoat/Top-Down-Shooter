@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class RangedWeapon : Weapon
 {
-    public event Action OnAttackWithoutAmmo;
+    public event Action<GameObject> OnAttackWithoutAmmo;
     public event Action OnReload;
     public event Action OnReloadComplete;
 
@@ -16,26 +16,31 @@ public abstract class RangedWeapon : Weapon
     public float ReloadTime => RELOAD_TIME;
     public float CurReloadTimeLeft => reloadTimer;
 
-    [Header("Reloading")]
+    [Header("Reloading/Ammo")]
     [SerializeField] protected float RELOAD_TIME;
+    [SerializeField] protected int maxAmmo;
     [Space(15)]
 
     [Header("Projectile")]
-    [SerializeField] protected Projectile projectile;
+    [SerializeField] protected ProjectileInfo projectile;
     [SerializeField] protected float projectileSpeed;
     [SerializeField] protected float projectileRange;
-    [Space(15)]    
+    [Space(15)]
 
-    [SerializeField] protected int maxAmmo;
+    [Header("Shooting Angle")]
+    [Tooltip("Minimum change in angle for bullet shot. Should not be negative because that is applied randomly at runtime. Leave min and max at 0 for no angle change.")]
+    [Min(0f)]
+    [SerializeField] protected float minAngleChange;
+    [Tooltip("Maximum change in angle for bullet shot. Should not be negative because that is applied randomly at runtime. Leave min and max at 0 for no angle change.")]
+    [Min(0f)]
+    [SerializeField] protected float maxAngleChange;
 
     protected IReload reloadLogic;
-    protected List<Projectile> shotProjectiles = new();
+    protected List<ProjectileInfo> shotProjectiles = new();
     
     protected int ammo;
     protected float reloadTimer;
     protected bool didReload = false;
-
-    protected List<string> tagsToIgnore;
 
     protected override void Awake()
     {
@@ -64,14 +69,6 @@ public abstract class RangedWeapon : Weapon
 
         reloadLogic = _reloadLogic;
     }
-
-    public void SetTagsToIgnore(List<string> _tagsToIgnore)
-    {
-        if (_tagsToIgnore == null)
-            throw new ArgumentNullException(nameof(_tagsToIgnore), $"{nameof(_tagsToIgnore)} should not be null.");
-
-        tagsToIgnore = _tagsToIgnore;
-    }
     
     public override void ResetWeapon()
     {
@@ -79,13 +76,21 @@ public abstract class RangedWeapon : Weapon
         didReload = false;
     }
     
-    public List<Projectile> GetShotProjectiles()
+    public List<ProjectileInfo> GetShotProjectiles()
     {
         shotProjectiles.RemoveAll(_projectile => _projectile == null);
         return shotProjectiles;
     }
 
+    protected float GetRandAngleChange()
+    {
+        float _randAngleChange = UnityEngine.Random.Range(minAngleChange, maxAngleChange);
+        _randAngleChange = UnityEngine.Random.Range(0, 1 + 1) == 1 ? -_randAngleChange : _randAngleChange;
+
+        return _randAngleChange;
+    }
+
     protected void InvokeOnReload() => OnReload?.Invoke();
     protected void InvokeOnReloadComplete() => OnReloadComplete?.Invoke();
-    protected void InvokeOnAttackWithoutAmmo() => OnAttackWithoutAmmo?.Invoke();
+    protected void InvokeOnAttackWithoutAmmo() => OnAttackWithoutAmmo?.Invoke(gameObject);
 }

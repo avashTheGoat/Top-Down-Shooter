@@ -2,27 +2,29 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(Projectile))]
+[RequireComponent(typeof(ProjectileInfo), typeof(Collider2D))]
 public class ProjectileHit : MonoBehaviour
 {
     public event Action<GameObject, GameObject, float> OnObjectCollision;
 
-    public List<string> TagsToIgnore { get; private set; } = new();
+    protected ProjectileInfo projectileInfo;
+    protected Collider2D col;
 
-    protected Projectile projectile;
+    private void Awake() => col = GetComponent<Collider2D>();
 
-    protected virtual void Awake() => projectile = GetComponent<Projectile>();
+    protected virtual void Start() => projectileInfo = GetComponent<ProjectileInfo>();
 
-    protected virtual void OnCollisionEnter2D(Collision2D _col)
+    protected virtual void OnTriggerEnter2D(Collider2D _col)
     {
-        if (TagsToIgnore.Contains(_col.gameObject.tag))
+        if (_col.isTrigger)
             return;
 
         if (_col.gameObject == gameObject)
             return;
 
-        OnObjectCollision?.Invoke(gameObject, _col.gameObject, projectile.Damage);
-    }
+        if (projectileInfo.TagsToIgnore.Contains(_col.gameObject.tag))
+            return;
 
-    protected void InvokeOnObjectCollision(GameObject _colObject) => OnObjectCollision?.Invoke(gameObject, _colObject, projectile.Damage);
+        OnObjectCollision?.Invoke(gameObject, _col.gameObject, projectileInfo.Damage);
+    }
 }

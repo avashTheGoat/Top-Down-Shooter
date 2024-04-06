@@ -3,11 +3,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Attack & Chase Visible Player", menuName = "Scriptable Objects/Enemy/Enemy States/Attack States/Attack & Chase Visible Player")]
 public class EnemyAttackChaseVisiblePlayer : EnemyAttackStateLogicBaseSO
 {
-    [Header("Player Visibility Raycast Fields")]
-    [Tooltip("The number of raycasts that should be created to check for player visibility")]
-    [SerializeField] private int numRaycasts;
-    [SerializeField] private float maxRaycastDistance;
-
     private float initialSpeed;
 
     public override void DoEnterStateLogic()
@@ -40,28 +35,22 @@ public class EnemyAttackChaseVisiblePlayer : EnemyAttackStateLogicBaseSO
 
     protected override void ResetValues() { }
 
-    private bool IsPlayerVisible()
+    public override bool ShouldAttack(Weapon _weapon) => IsPlayerVisible();
+
+    public override float GetWeaponRotationChange(Transform _weapon)
     {
-        Physics2D.queriesHitTriggers = false;
-        Vector2 _raycastDirection = (Vector2)agent.velocity == Vector2.zero ? Vector2.right : agent.velocity;
-
-        for (int i = 0; i < numRaycasts; i++)
+        if (PlayerProvider.TryGetPlayer(out Transform _player))
         {
-            RaycastHit2D[] _raycastHits = Physics2D.RaycastAll(trans.position, _raycastDirection, maxRaycastDistance + Mathf.Epsilon);
-            _raycastDirection = Quaternion.Euler(0, 0, 360 / numRaycasts) * _raycastDirection;
+            Vector2 _playerDirection = _player.position - trans.position;
+            Vector2 _weaponDirection = _weapon.position - trans.position;
 
-            if (_raycastHits.Length <= 1) continue;
+            float _deltaAngle = Vector2.SignedAngle(_weaponDirection.normalized, _playerDirection.normalized);
 
-            // doing 1 because 0 is the enemy, so 1 is the closest object
-            if (_raycastHits[1].collider.gameObject.transform == player)
-            {
-                Physics2D.queriesHitTriggers = true;
-                return true;
-            }
+            return _deltaAngle;
         }
 
-        Physics2D.queriesHitTriggers = true;
-        // MonoBehaviour.print("Cannot see player");
-        return false;
+        return 0f;
     }
+
+    public override bool ShouldReload(RangedWeapon _weapon) => _weapon.Ammo <= 0;
 }

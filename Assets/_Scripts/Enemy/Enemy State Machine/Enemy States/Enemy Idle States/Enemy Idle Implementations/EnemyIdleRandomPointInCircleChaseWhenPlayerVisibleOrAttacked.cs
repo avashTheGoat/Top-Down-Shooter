@@ -164,6 +164,20 @@ public class EnemyIdleRandomPointInCircleChaseWhenPlayerVisibleOrAttacked : Enem
         }
     }
 
+    public override float GetWeaponRotationChange(Transform _weapon)
+    {
+        Vector2 _movementDirection = agent.velocity.normalized;
+        Vector2 _weaponDirection = (_weapon.position - trans.position).normalized;
+
+        float _deltaAngle = Vector2.SignedAngle(_weaponDirection, _movementDirection);
+
+        return _deltaAngle;
+    }
+
+    public override bool ShouldAttack(Weapon _weapon) => false;
+
+    public override bool ShouldReload(RangedWeapon _weapon) => _weapon.Ammo < _weapon.MaxAmmo;
+
     protected override void ResetValues()
     {
         isDoneWandering = false;

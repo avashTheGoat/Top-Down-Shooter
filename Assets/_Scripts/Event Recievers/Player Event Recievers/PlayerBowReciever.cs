@@ -20,14 +20,12 @@ public class PlayerBowReciever : MonoBehaviour
     private float startingCameraSize;
 
     private float startingWalkSpeed;
-    private float startingSprintSpeed;
 
     private void Start()
     {
         startingCameraSize = main.m_Lens.OrthographicSize;
 
         startingWalkSpeed = playerMovement.WalkSpeed;
-        startingSprintSpeed = playerMovement.SprintSpeed;
     }
 
     private void Update()
@@ -48,12 +46,11 @@ public class PlayerBowReciever : MonoBehaviour
                     float _t = Mathf.Clamp(_curCharge / _maxCharge, 0f, 1f);
                     main.m_Lens.OrthographicSize = Mathf.Lerp(startingCameraSize, maxZoomOrthoSize, _t);
 
-                    playerMovement.SetWalkSpeed(startingWalkSpeed * chargingSpeedPercent);
-                    playerMovement.SetSprintSpeed(startingSprintSpeed * chargingSpeedPercent);
+                    playerMovement.SetMovementSpeed(startingWalkSpeed * chargingSpeedPercent);
                 };
 
-                _bowWeapon.OnWeaponAttack += _bow => DoOnAttack();
-                _bowWeapon.OnAttackWithoutAmmo += DoOnAttack;
+                _bowWeapon.OnAttack += _ => DoOnAttack();
+                _bowWeapon.OnAttackWithoutAmmo += _ => DoOnAttack();
             }
         });
     }
@@ -62,7 +59,6 @@ public class PlayerBowReciever : MonoBehaviour
     {
         main.m_Lens.OrthographicSize = startingCameraSize;
 
-        playerMovement.SetWalkSpeed(startingWalkSpeed);
-        playerMovement.SetSprintSpeed(startingSprintSpeed);
+        playerMovement.SetMovementSpeed(startingWalkSpeed);
     }
 }

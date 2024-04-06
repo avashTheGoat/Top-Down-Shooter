@@ -1,30 +1,30 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class EnemyChaseStateLogicBaseSO : ScriptableObject
+public abstract class EnemyChaseStateLogicBaseSO : ScriptableObject, IAttack, IReload
 {
+    [Header("Raycast Fields")]
+    [SerializeField] private int numRaycasts;
+    [SerializeField] private float maxDistanceFromPlayerToChase;
+
     protected EnemyStateMachine stateMachine;
     protected Transform trans;
     protected NavMeshAgent agent;
     protected Transform player;
+    private LayerMask ignoreLayers;
 
     protected Weapon enemyWeapon;
-    protected IAttack chaseStateAttackLogic;
-    #nullable enable
-    protected IReload? chaseStateReloadLogic;
 
     public EnemyChaseStateLogicBaseSO Initialize(EnemyStateMachine _stateMachine, Transform _transform,
-    NavMeshAgent _agent, Transform _player, Weapon _enemyWeapon, IAttack _chaseStateAttackLogic, IReload? _chaseStateReloadLogic)
-    #nullable disable
+    NavMeshAgent _agent, Transform _player, LayerMask _ignoreLayers, Weapon _enemyWeapon)
     {
         stateMachine = _stateMachine;
         trans = _transform;
         agent = _agent;
         player = _player;
+        ignoreLayers = _ignoreLayers;
 
         enemyWeapon = _enemyWeapon;
-        chaseStateAttackLogic = _chaseStateAttackLogic;
-        chaseStateReloadLogic = _chaseStateReloadLogic;
 
         return this;
     }
@@ -71,13 +71,44 @@ public abstract class EnemyChaseStateLogicBaseSO : ScriptableObject
         if (enemyWeapon is RangedWeapon)
         {
             RangedWeapon _enemyRangedWeapon = (RangedWeapon)enemyWeapon;
-            _enemyRangedWeapon.SetWeaponLogic(chaseStateAttackLogic, chaseStateReloadLogic);
+            _enemyRangedWeapon.SetWeaponLogic(this, this);
         }
 
         else if (enemyWeapon is MeleeWeapon)
-            enemyWeapon.SetWeaponLogic(chaseStateAttackLogic);
+            enemyWeapon.SetWeaponLogic(this);
 
         else
             throw new System.Exception("Unrecognized weapon type.");
     }
+
+    protected bool IsPlayerVisibleAndCloseEnough()
+    {
+        Physics2D.queriesHitTriggers = false;
+        Vector2 _raycastDirection = (Vector2)agent.velocity == Vector2.zero ? Vector2.right : agent.velocity;
+
+        for (int i = 0; i < numRaycasts; i++)
+        {
+            RaycastHit2D[] _raycastHits = Physics2D.RaycastAll(trans.position, _raycastDirection, maxDistanceFromPlayerToChase + Mathf.Epsilon, ~ignoreLayers);
+            _raycastDirection = Quaternion.Euler(0, 0, 360 / numRaycasts) * _raycastDirection;
+
+            if (_raycastHits.Length == 0)
+                continue;
+
+            if (_raycastHits[0].transform == player && Vector2.Distance(_raycastHits[0].point, trans.position) <= maxDistanceFromPlayerToChase)
+            {
+                Physics2D.queriesHitTriggers = true;
+                return true;
+            }
+        }
+
+        Physics2D.queriesHitTriggers = true;
+        return false;
+    }
+
+    // IAttack and IReload
+    public abstract bool ShouldAttack(Weapon _weapon);
+
+    public abstract float GetWeaponRotationChange(Transform _weapon);
+
+    public abstract bool ShouldReload(RangedWeapon _weapon);
 }

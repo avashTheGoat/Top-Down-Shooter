@@ -1,12 +1,16 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public abstract class Weapon : Item
 {
-    public event Action<GameObject> OnWeaponAttack;
+    public event Action<GameObject> OnAttack;
+
     public float WeaponDamage => weaponDamage;
 
     public Transform Wielder { get; private set; }
+
+    public List<string> TagsToIgnore { get; private set; } = new();
 
     [Header("Attacking")]
     [SerializeField] protected float weaponDamage;
@@ -49,6 +53,14 @@ public abstract class Weapon : Item
         Wielder = _wielder;
     }
 
+    public void SetTagsToIgnore(List<string> _tagsToIgnore)
+    {
+        if (_tagsToIgnore == null)
+            throw new ArgumentNullException(nameof(_tagsToIgnore));
+
+        TagsToIgnore = _tagsToIgnore;
+    }
+
     public abstract void ResetWeapon();
 
     protected virtual void Attack()
@@ -57,5 +69,5 @@ public abstract class Weapon : Item
     }
 
     protected float GetResetAttackTimer() => attackCooldownTimer = 1 / ATTACKS_PER_SECOND;
-    protected void InvokeOnWeaponAttack() => OnWeaponAttack?.Invoke(gameObject);
+    protected void InvokeOnWeaponAttack() => OnAttack?.Invoke(gameObject);
 }

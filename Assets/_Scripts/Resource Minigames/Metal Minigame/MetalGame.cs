@@ -5,10 +5,16 @@ public class MetalGame : ResourceGame
 {
     public Timer GameTimer { get; private set; }
 
+    [SerializeField] private int gameUiSpawnIndex;
+
+    [Header("Spawning Min/Max")]
     [SerializeField] private int MinNumMetals;
     [SerializeField] private int MaxNumMetals;
+    [Space(15)]
 
-    [Header("Spawning Restrictions")]
+    [Header("Spawning Location Restrictions")]
+    [SerializeField] private Vector2 lowerLeftSpawnBound;
+    [SerializeField] private Vector2 upperRightSpawnBound;
     [SerializeField] private float minMetalDistance;
     [SerializeField] private int maxSpawnTries;
     [SerializeField] private List<Vector2> worstCaseSpawnLocations;
@@ -68,6 +74,9 @@ public class MetalGame : ResourceGame
         {
             // if player doesn't have pickaxe, invoke OnUnableToPlay
 
+            InvokeOnSuccessfulStart();
+            PlayerInteractionManager.DisableCursor();
+
             GameUI.enabled = true;
 
             int _numMetals = Random.Range(MinNumMetals, MaxNumMetals + 1);
@@ -75,6 +84,7 @@ public class MetalGame : ResourceGame
             {
                 ResourceSourceInfo _resourceSourceToSpawn = GetRandomResourceSourceInfo();
                 GameObject _spawnedObject = Instantiate(_resourceSourceToSpawn.ResourceObject, Vector2.zero, Quaternion.identity, GameUI.transform);
+                _spawnedObject.transform.SetSiblingIndex(gameUiSpawnIndex);
 
                 RectTransform _trans = _spawnedObject.GetComponent<RectTransform>();
                 _trans.localPosition = GetRandomValidSpawnPos();
@@ -88,8 +98,6 @@ public class MetalGame : ResourceGame
                 _clickableResource.OnClick += DamageResource;
                 _clickableResource.OnKill += HarvestResource;
             }
-
-            InvokeOnSuccessfulStart();
         }
     }
 
@@ -113,6 +121,13 @@ public class MetalGame : ResourceGame
     #endregion
 
     #region Spawning Methods
+    private Vector2 GetRandomSpawnPos()
+    {
+        float _randX = Random.Range(lowerLeftSpawnBound.x, upperRightSpawnBound.x);
+        float _randY = Random.Range(lowerLeftSpawnBound.y, upperRightSpawnBound.y);
+        return new Vector2(_randX, _randY);
+    }
+
     private Vector2 GetRandomValidSpawnPos()
     {
         int _numTries = 1;

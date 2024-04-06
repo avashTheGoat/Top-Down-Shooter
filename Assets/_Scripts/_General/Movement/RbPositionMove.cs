@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RbPositionMove : MonoBehaviour, IMovable
+public class RbPositionMove : MonoBehaviour, IMoveable
 {
     private Rigidbody2D rb;
     private Transform trans;

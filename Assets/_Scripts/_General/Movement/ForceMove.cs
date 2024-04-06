@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class ForceMove : MonoBehaviour, IMovable
+public class ForceMove : MonoBehaviour, IMoveable
 {
     private Rigidbody2D rb;
 

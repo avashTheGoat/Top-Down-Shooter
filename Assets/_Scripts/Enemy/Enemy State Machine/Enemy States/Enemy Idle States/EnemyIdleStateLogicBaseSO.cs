@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 
-public abstract class EnemyIdleStateLogicBaseSO : ScriptableObject
+public abstract class EnemyIdleStateLogicBaseSO : ScriptableObject, IAttack, IReload
 {
     protected EnemyStateMachine stateMachine;
     protected Transform trans;
@@ -11,14 +11,9 @@ public abstract class EnemyIdleStateLogicBaseSO : ScriptableObject
     protected List<Transform> enemies;
 
     protected Weapon enemyWeapon;
-    protected IAttack idleStateAttackLogic;
-    #nullable enable
-    protected IReload? idleStateReloadLogic;
 
     public EnemyIdleStateLogicBaseSO Initialize(EnemyStateMachine _stateMachine, Transform _transform, NavMeshAgent _agent,
-    Transform _player, List<Transform> _enemies, Weapon _enemyWeapon, IAttack _idleStateAttackLogic,
-    IReload? _idleStateReloadLogic)
-    #nullable disable
+    Transform _player, List<Transform> _enemies, Weapon _enemyWeapon)
     {
         stateMachine = _stateMachine;
         trans = _transform;
@@ -27,8 +22,6 @@ public abstract class EnemyIdleStateLogicBaseSO : ScriptableObject
         enemies = _enemies;
 
         enemyWeapon = _enemyWeapon;
-        idleStateAttackLogic = _idleStateAttackLogic;
-        idleStateReloadLogic = _idleStateReloadLogic;
 
         return this;
     }
@@ -52,13 +45,20 @@ public abstract class EnemyIdleStateLogicBaseSO : ScriptableObject
         if (enemyWeapon is RangedWeapon)
         {
             RangedWeapon _enemyRangedWeapon = (RangedWeapon)enemyWeapon;
-            _enemyRangedWeapon.SetWeaponLogic(idleStateAttackLogic, idleStateReloadLogic);
+            _enemyRangedWeapon.SetWeaponLogic(this, this);
         }
 
         else if (enemyWeapon is MeleeWeapon)
-            enemyWeapon.SetWeaponLogic(idleStateAttackLogic);
+            enemyWeapon.SetWeaponLogic(this);
 
         else
             throw new System.Exception("Unrecognized weapon type.");
     }
+
+    // IAttack and IReload
+    public abstract bool ShouldAttack(Weapon _weapon);
+
+    public abstract float GetWeaponRotationChange(Transform _weapon);
+
+    public abstract bool ShouldReload(RangedWeapon _weapon);
 }

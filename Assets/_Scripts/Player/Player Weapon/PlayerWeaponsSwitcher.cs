@@ -39,8 +39,8 @@ public class PlayerWeaponsSwitcher : MonoBehaviour
 
                     BowWeapon _bow = (BowWeapon)_rangedWeapon;
                     _bow.OnBowCharge += (_, __) => isBowCharging = true;
-                    _bow.OnAttackWithoutAmmo += () => isBowCharging = false;
-                    _bow.OnWeaponAttack += _ => isBowCharging = false;
+                    _bow.OnAttackWithoutAmmo += _ => isBowCharging = false;
+                    _bow.OnAttack += _ => isBowCharging = false;
                 }
             }
         }

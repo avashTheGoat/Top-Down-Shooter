@@ -12,5 +12,6 @@ public class EnemyWeaponManager : MonoBehaviour
     {
         weaponInitializer.InitializeWeaponWielder(Weapon);
         weaponInitializer.ApplyWeaponTransformChange(Weapon);
+        weaponInitializer.InitializeTagsToIgnore(Weapon);
     }
 }

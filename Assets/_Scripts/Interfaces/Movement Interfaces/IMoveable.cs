@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IMovable
+public interface IMoveable
 {
     public void Move(Vector2 _movementVector);
 }

@@ -20,7 +20,7 @@ public class SwordAttackReciever : MonoBehaviour
             if (subscribedSwords.Contains(_sword)) continue;
             subscribedSwords.Add(_sword);
 
-            _sword.OnWeaponAttack += DamageObjectsInCollider;
+            _sword.OnAttack += DamageObjectsInCollider;
         }
     }
 

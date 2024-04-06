@@ -17,15 +17,9 @@ GameObject:
   - component: {fileID: 3282975925898905843}
   - component: {fileID: 8051712671086722257}
   - component: {fileID: 9183366056512049301}
-  - component: {fileID: 7549195087834146812}
-  - component: {fileID: 2726532114702519249}
-  - component: {fileID: -7348681918334114167}
-  - component: {fileID: 8423886634316928270}
-  - component: {fileID: -3842269947012103500}
-  - component: {fileID: 1267466413241819824}
   m_Layer: 7
   m_Name: Rare Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -184,16 +178,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e791d6e7374fa3e429b85796b5aa4698, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionCollider: {fileID: 3282975926120301120}
+  ignoreLayers:
+    serializedVersion: 2
+    m_Bits: 192
   idleStateLogic: {fileID: 11400000, guid: 927d482a84283604a8a3a15fcce1861b, type: 2}
   chaseStateLogic: {fileID: 11400000, guid: 04e61f093858ce447805722388f8a28e, type: 2}
   attackStateLogic: {fileID: 11400000, guid: 85210a28798eede4cb57c93c8e37c519, type: 2}
-  idleStateAttack: {fileID: 7549195087834146812}
-  chaseStateAttack: {fileID: -7348681918334114167}
-  attackStateAttack: {fileID: -3842269947012103500}
-  idleStateReload: {fileID: 2726532114702519249}
-  chaseStateReload: {fileID: 8423886634316928270}
-  attackStateReload: {fileID: 1267466413241819824}
 --- !u!114 &8051712671086722257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,79 +211,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponOffset: {x: 1, y: 0}
   weaponSizeMultiplier: {x: 1, y: 1}
-  tagsToIgnore: []
---- !u!114 &7549195087834146812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3282975925898905841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f6258d4543d9d649bcd76913969724a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2726532114702519249
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3282975925898905841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7917484dc43880a43a337a9bee3f7007, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-7348681918334114167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3282975925898905841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2b663c5be51d1642aed17dc38985c58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8423886634316928270
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3282975925898905841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 467d489d3b025e447b157bd1252b987e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-3842269947012103500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3282975925898905841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9841af188b5e2247a3ae25d4881e4c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1267466413241819824
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3282975925898905841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59e1c40e758152e409c86e5a14171a81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  tagsToIgnore:
+  - Enemy
 --- !u!1 &3282975926120301127
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IMover
 {
     public static event Action OnPlayerMove;
 
@@ -9,25 +9,23 @@ public class PlayerMovement : MonoBehaviour
     public bool CanSprint;
 
     public float WalkSpeed => walkSpeed;
-    public float SprintSpeed => sprintSpeed;
+    public float SprintSpeedMultiplier => sprintSpeedMultiplier;
 
     [Min(0f)]
     [SerializeField] private float walkSpeed;
     [Min(0f)]
-    [SerializeField] private float sprintSpeed;
+    [SerializeField] private float sprintSpeedMultiplier;
 
-    private IMovable movementMethod;
+    private IMoveable movementMethod;
     private Vector2 movementVector;
     private float speed;
 
     private void Awake()
     {
-        movementMethod = GetComponent<IMovable>();
+        movementMethod = GetComponent<IMoveable>();
 
         if (movementMethod == null)
-        {
             Debug.LogError("The player does not have an IMovable attached to it");
-        }
 
         CanSprint = true;
     }
@@ -35,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         movementVector = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        speed = (Input.GetKey(KeyCode.LeftShift) && CanSprint) ? sprintSpeed : walkSpeed;
+        speed = (Input.GetKey(KeyCode.LeftShift) && CanSprint) ? (sprintSpeedMultiplier * walkSpeed) : walkSpeed;
     }
 
     private void FixedUpdate()
@@ -49,19 +47,13 @@ public class PlayerMovement : MonoBehaviour
             OnPlayerMove?.Invoke();
     }
 
-    public void SetWalkSpeed(float _newWalkSpeed)
+    public float GetMovementSpeed() => speed;
+
+    public void SetMovementSpeed(float _newSpeed)
     {
-        if (_newWalkSpeed < 0f)
-            throw new ArgumentException($"{nameof(_newWalkSpeed)} cannot be negative. It is {_newWalkSpeed}.");
+        if (_newSpeed < 0f)
+            throw new ArgumentException($"{nameof(_newSpeed)} cannot be negative. It is {_newSpeed}.");
 
-        walkSpeed = _newWalkSpeed;
-    }
-
-    public void SetSprintSpeed(float _newSprintSpeed)
-    {
-        if (_newSprintSpeed < 0f)
-            throw new ArgumentException($"{nameof(_newSprintSpeed)} cannot be negative. It is {_newSprintSpeed}.");
-
-        sprintSpeed = _newSprintSpeed;
+        walkSpeed = _newSpeed;
     }
 }

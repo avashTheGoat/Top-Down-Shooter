@@ -28,7 +28,6 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
         Health = Mathf.Clamp(Health + _healAmount, 0f, maxHealth);
         OnHeal?.Invoke(Health, gameObject);
-        print($"Player got healed to {Health}");
     }
 
     public float GetMaxHealth() => maxHealth;

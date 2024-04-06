@@ -13,8 +13,6 @@ public abstract class ResourceGame : MonoBehaviour
 
     [Header("Resource Spawning")]
     [SerializeField] protected ResourceSourceInfo[] possibleResourceSources;
-    [SerializeField] protected Vector2 lowerLeftSpawnBound;
-    [SerializeField] protected Vector2 upperRightSpawnBound;
 
     protected virtual void Awake()
     {
@@ -45,13 +43,6 @@ public abstract class ResourceGame : MonoBehaviour
         }
 
         return _enemySpawningInfo;
-    }
-
-    protected Vector2 GetRandomSpawnPos()
-    {
-        float _randX = UnityEngine.Random.Range(lowerLeftSpawnBound.x, upperRightSpawnBound.x);
-        float _randY =UnityEngine.Random.Range(lowerLeftSpawnBound.y, upperRightSpawnBound.y);
-        return new Vector2(_randX, _randY);
     }
 
     protected void InvokeOnSuccessfulStart() => OnSuccessfulStart?.Invoke();

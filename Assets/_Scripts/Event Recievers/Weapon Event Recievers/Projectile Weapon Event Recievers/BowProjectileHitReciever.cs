@@ -20,12 +20,9 @@ public class BowProjectileHitReciever : MonoBehaviour
             if (subscribedBowArrowPierces.Contains(_bowArrowPierce)) continue;
             subscribedBowArrowPierces.Add(_bowArrowPierce);
 
-            _bowArrowPierce.OnObjectCollision += Debug;
             _bowArrowPierce.OnObjectCollision += ArrowHitLogic;
         }
     }
-
-    private void Debug(GameObject _, GameObject _hitObject, float __) => print($"Bow arrow hit something. Name is {_hitObject.name}");
 
     private void ArrowHitLogic(GameObject _arrow,  GameObject _hitObject, float _damageAmount)
     {

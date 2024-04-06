@@ -1,14 +1,13 @@
 using UnityEngine;
-using System;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(PlayerWeaponLogic), typeof(WeaponInitializer))]
 public class PlayerWeaponsManager : MonoBehaviour, IProvider<Weapon>, IProvider<RangedWeapon>, IProvider<MeleeWeapon>
 {
     [field: SerializeField] public List<Weapon> PlayerWeapons { get; private set; } = new();
 
-    private PlayerWeaponLogic weaponLogic;
-    private WeaponInitializer playerWeaponInitializer;
+    [SerializeField] private PlayerWeaponLogic weaponLogic;
+    [SerializeField] private WeaponInitializer playerWeaponInitializer;
+
 
     private Transform trans;
 
@@ -28,6 +27,7 @@ public class PlayerWeaponsManager : MonoBehaviour, IProvider<Weapon>, IProvider<
         {
             playerWeaponInitializer.ApplyWeaponTransformChange(_playerWeapon);
             playerWeaponInitializer.InitializeWeapon(_playerWeapon);
+            playerWeaponInitializer.InitializeTagsToIgnore(_playerWeapon);
         }
     }
 

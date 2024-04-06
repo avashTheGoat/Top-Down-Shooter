@@ -4,8 +4,11 @@ using System.Collections.Generic;
 [RequireComponent(typeof(IAttack), typeof(IReload))]
 public class WeaponInitializer : MonoBehaviour
 {
+    [Header("Transform Changes")]
     [SerializeField] private Vector2 weaponOffset;
     [SerializeField] private Vector2 weaponSizeMultiplier;
+    [Space(15)]
+
     [SerializeField] private List<string> tagsToIgnore;
 
     private IAttack attack;
@@ -60,7 +63,7 @@ public class WeaponInitializer : MonoBehaviour
 
     public void InitializeWeaponWielder(Weapon _weapon) => _weapon.SetWielder(trans);
 
-    public void InitializeWeaponProjectileIgnoreTags(RangedWeapon _rangedWeapon) => _rangedWeapon.SetTagsToIgnore(tagsToIgnore);
+    public void InitializeTagsToIgnore(Weapon _weapon) => _weapon.SetTagsToIgnore(tagsToIgnore);
 
     public void SetAttackAndReload(IAttack _newAttack, IReload _newReload)
     {

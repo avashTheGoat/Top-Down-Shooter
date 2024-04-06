@@ -45,9 +45,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.4305859, y: 0.09568572}
   serializedVersion: 2
-  m_Radius: 1.2
+  m_Radius: 0.8220415
 --- !u!1 &4163144566826951538
 GameObject:
   m_ObjectHideFlags: 0
@@ -74,7 +74,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4163144566826951538}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -99,7 +99,7 @@ MonoBehaviour:
   Description: Big hammer
   Image: {fileID: 0}
   weaponDamage: 33.37
-  ATTACKS_PER_SECOND: 0.45
+  ATTACKS_PER_SECOND: 0.6
   attackAOE: {fileID: 4163144566376913258}
 --- !u!212 &4163144566826951536
 SpriteRenderer:

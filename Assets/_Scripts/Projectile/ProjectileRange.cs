@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Projectile))]
+[RequireComponent(typeof(ProjectileInfo))]
 public class ProjectileRange : MonoBehaviour
 {
     public event Action OnProjectileMaxRange;
@@ -19,7 +19,7 @@ public class ProjectileRange : MonoBehaviour
 
     private void Start()
     {
-        range = GetComponent<Projectile>().Range;
+        range = GetComponent<ProjectileInfo>().Range;
         startPosition = trans.position;
     }
 

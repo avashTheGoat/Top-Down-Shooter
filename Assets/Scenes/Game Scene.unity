@@ -914,6 +914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   crosshairUI: {fileID: 300036742}
+  useParentDisplacement: 0
 --- !u!1 &314029112
 GameObject:
   m_ObjectHideFlags: 0
@@ -1180,6 +1181,7 @@ RectTransform:
   m_Children:
   - {fileID: 314029113}
   - {fileID: 1367706301}
+  - {fileID: 1981130082}
   m_Father: {fileID: 1293839394}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3722,7 +3724,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CanSprint: 0
   walkSpeed: 340
-  sprintSpeed: 475
+  sprintSpeedMultiplier: 1.35
 --- !u!50 &1059581845
 Rigidbody2D:
   serializedVersion: 4
@@ -3905,7 +3907,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponOffset: {x: 1, y: 0}
   weaponSizeMultiplier: {x: 1, y: 1}
-  tagsToIgnore: []
+  tagsToIgnore:
+  - Player
 --- !u!114 &1059581858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4002,6 +4005,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <PlayerWeapons>k__BackingField:
   - {fileID: 20126949}
+  weaponLogic: {fileID: 1059581858}
+  playerWeaponInitializer: {fileID: 1059581856}
 --- !u!1 &1092337837
 GameObject:
   m_ObjectHideFlags: 0
@@ -5959,6 +5964,97 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1428472358
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1428472359}
+  - component: {fileID: 1428472361}
+  - component: {fileID: 1428472360}
+  - component: {fileID: 1428472362}
+  m_Layer: 0
+  m_Name: Pickaxe IMG
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1428472359
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428472358}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1981130082}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1428472360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428472358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 78496238ae846a44bb1fcdec6e13c763, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1428472361
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428472358}
+  m_CullTransparentMesh: 1
+--- !u!114 &1428472362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428472358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d8cf2cdca1e744588dc27a21e0a82b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crosshairUI: {fileID: 1428472359}
+  useParentDisplacement: 1
 --- !u!1 &1430623564
 GameObject:
   m_ObjectHideFlags: 0
@@ -7115,10 +7211,11 @@ MonoBehaviour:
   possibleResourceSources:
   - {fileID: 11400000, guid: 4b89fc55c1a9140429c7d5c8190ee353, type: 2}
   - {fileID: 11400000, guid: 21925ea983807ea4f8766a27ea594aa1, type: 2}
-  lowerLeftSpawnBound: {x: -200, y: -100}
-  upperRightSpawnBound: {x: 200, y: 100}
+  gameUiSpawnIndex: 2
   MinNumMetals: 3
   MaxNumMetals: 7
+  lowerLeftSpawnBound: {x: -200, y: -100}
+  upperRightSpawnBound: {x: 200, y: 100}
   minMetalDistance: 55
   maxSpawnTries: 4
   worstCaseSpawnLocations:
@@ -7861,6 +7958,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1979948264}
   m_CullTransparentMesh: 1
+--- !u!1 &1981130081
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1981130082}
+  m_Layer: 0
+  m_Name: Pickaxe Cursor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1981130082
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1981130081}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1428472359}
+  m_Father: {fileID: 377359675}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2012045279
 GameObject:
   m_ObjectHideFlags: 0
@@ -8196,7 +8330,7 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 2.0006
-      value: 0.08929261
+      value: 0.20284852
       inSlope: 0
       outSlope: 0
       tangentMode: 0

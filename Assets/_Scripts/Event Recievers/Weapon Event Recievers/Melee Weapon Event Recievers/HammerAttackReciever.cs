@@ -27,7 +27,7 @@ public class HammerAttackReciever : MonoBehaviour
             if (subscribedHammers.Contains(_hammer)) continue;
             subscribedHammers.Add(_hammer);
 
-            _hammer.OnWeaponAttack += DamageObjectsInCollider;
+            _hammer.OnAttack += DamageObjectsInCollider;
         }
     }
 

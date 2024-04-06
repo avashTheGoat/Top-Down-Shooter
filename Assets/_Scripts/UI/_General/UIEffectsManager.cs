@@ -43,6 +43,9 @@ public class UIEffectsManager : MonoBehaviour
 
         while (_time / _fadeDuration < 1f)
         {
+            if (_fadeTarget == null)
+                break;
+
             _fadeTarget.alpha = Mathf.Lerp(_startAlpha, _alphaTarget, _time / _fadeDuration);
             _time += Time.deltaTime;
 

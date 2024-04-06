@@ -103,10 +103,12 @@ MonoBehaviour:
   weaponDamage: 18
   ATTACKS_PER_SECOND: 0.8
   RELOAD_TIME: 3
+  maxAmmo: 3
   projectile: {fileID: 8252440497980988240, guid: 6114bd76810530949856f34626aab870, type: 3}
   projectileSpeed: 18
   projectileRange: 8
-  maxAmmo: 3
+  minAngleChange: 0
+  maxAngleChange: 2
   maxChargeTime: 1.25
   minChargeTimeToShoot: 0.5
   maxDamagePercentCurve:

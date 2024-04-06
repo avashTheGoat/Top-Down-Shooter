@@ -20,14 +20,11 @@ public class PistolProjectileHitReciever : MonoBehaviour
             if (subscribedPistolBulletHits.Contains(_pistolBulletHit)) continue;
             subscribedPistolBulletHits.Add(_pistolBulletHit);
 
-            _pistolBulletHit.OnObjectCollision += Debug;
             _pistolBulletHit.OnObjectCollision += DamageIfDamageable;
             _pistolBulletHit.OnObjectCollision += DestroyBullet;
 
         }
     }
-
-    private void Debug(GameObject __, GameObject hitObject, float _) => print($"Pistol bullet hit something. Name is {hitObject.name}");
 
     private void DamageIfDamageable(GameObject _, GameObject hitObject, float damageAmount)
     {

@@ -51,10 +51,12 @@ MonoBehaviour:
   weaponDamage: 17
   ATTACKS_PER_SECOND: 0.7
   RELOAD_TIME: 3
+  maxAmmo: 2
   projectile: {fileID: 8252440497980988240, guid: 9aaa848e7ea16ee4fbd7ddc606679d3f, type: 3}
   projectileSpeed: 19
   projectileRange: 3.5
-  maxAmmo: 2
+  minAngleChange: 0
+  maxAngleChange: 1.5
   totalDeltaAngle: 30
   numBullets: 3
 --- !u!212 &3104220439187664239
