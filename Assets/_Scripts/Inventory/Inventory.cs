@@ -2,13 +2,16 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
-public class Inventory
+public class Inventory<T>
 {
-    private Dictionary<ResourceSO, int> inventory = new();
+    public event Action<T, int> OnItemAdd;
+    public event Action<T, int> OnItemRemove;
+
+    private Dictionary<T, int> inventory = new();
 
     public Inventory() { inventory = new(); }
 
-    public Inventory(List<ResourceSO> initialResources, List<int> initialResourceAmounts)
+    public Inventory(List<T> initialResources, List<int> initialResourceAmounts)
     {
         if (initialResources == null || initialResourceAmounts == null)
             return;
@@ -20,41 +23,48 @@ public class Inventory
             inventory.Add(initialResources[i], initialResourceAmounts[i]);
     }
 
-    public bool Add(ResourceSO resource, int amount)
+    public bool Add(T _item, int _amount)
     {
-        if (inventory.TryGetValue(resource, out int _existingAmount))
+        int _newAmount = _amount;
+        bool _wasPresent = false;
+
+        if (inventory.TryGetValue(_item, out int _existingAmount))
         {
-            inventory[resource] = amount + _existingAmount;
-            return true;
+            _newAmount += _existingAmount;
+            _wasPresent = true;
         }
+
+        inventory[_item] = _newAmount;
+        OnItemAdd?.Invoke(_item, _newAmount);
+        return _wasPresent;
+    }
+
+    public bool Add(T _item) => Add(_item, 1);
+
+    public int Remove(T _item, int _amount)
+    {
+        if (!inventory.ContainsKey(_item))
+        {
+            OnItemRemove?.Invoke(_item, 0);
+            return 0;
+        }
+
+        int _existingAmount = inventory[_item];
+        int _deltaAmount = _existingAmount - Mathf.Max(0, _existingAmount - _amount);
+
+        if (_existingAmount != _deltaAmount)
+            inventory[_item] = _existingAmount - _deltaAmount;
 
         else
-        {
-            inventory.Add(resource, amount);
-            return false;
-        }
+            inventory.Remove(_item);
+
+        OnItemRemove?.Invoke(_item, _existingAmount - _deltaAmount);
+        return _deltaAmount;
     }
 
-    public bool Add(ResourceSO resouce) => Add(resouce, 1);
+    public int Remove(T _resource) => Remove(_resource, 1);
 
-    public int Remove(ResourceSO resource, int amount)
-    {
-        if (inventory.TryGetValue(resource, out int _existingAmount))
-        {
-            int _deltaAmount = _existingAmount - Mathf.Max(0, _existingAmount - amount);
-            if (_existingAmount != _deltaAmount)
-                inventory[resource] = _existingAmount - _deltaAmount;
-            else inventory.Remove(resource);
-
-            return _deltaAmount;
-        }
-
-        else return 0;
-    }
-
-    public int Remove(ResourceSO resource) => Remove(resource, 1);
-
-    public int Get(ResourceSO _resource)
+    public int Get(T _resource)
     {
         if (!inventory.ContainsKey(_resource))
             return -1;
@@ -62,7 +72,7 @@ public class Inventory
         return inventory[_resource];
     }
 
-    public bool Contains(ResourceSO resource) => inventory.ContainsKey(resource);
+    public bool Contains(T _resource) => inventory.ContainsKey(_resource);
 
-    public Dictionary<ResourceSO, int> GetInventory() => inventory;
+    public Dictionary<T, int> GetInventory() => inventory;
 }

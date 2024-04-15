@@ -45,18 +45,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b95474e19b96246916e54f08a48e05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: Minigun
-  Description: Spammer weapon
-  Image: {fileID: 21300000, guid: 08905326f01c8fd4491a4f42acd12641, type: 3}
-  weaponDamage: 3.25
-  ATTACKS_PER_SECOND: 13.5
-  RELOAD_TIME: 4.5
+  itemName: Minigun
+  description: Spammer weapon
+  image: {fileID: 21300000, guid: 08905326f01c8fd4491a4f42acd12641, type: 3}
+  Damage: 4.5
+  AttacksPerSecond: 11
+  ReloadTime: 5.5
+  MaxAmmo: 50
   projectile: {fileID: 8252440497980988240, guid: 9802881ba44263f46b8930c93848aa5b, type: 3}
-  projectileSpeed: 22
-  projectileRange: 4
-  maxAmmo: 70
-  minAngleChange: 0
-  maxAngleChange: 8.5
+  ProjectileSpeed: 32
+  Range: 0
+  MinAngleChange: 0
+  MaxAngleChange: 8.35
+  TotalDeltaAngle: 0
+  NumBullets: 1
 --- !u!212 &2897679329776139301
 SpriteRenderer:
   m_ObjectHideFlags: 0

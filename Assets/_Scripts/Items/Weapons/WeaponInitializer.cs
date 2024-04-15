@@ -36,7 +36,7 @@ public class WeaponInitializer : MonoBehaviour
         );
     }
 
-    public bool InitializeWeapon(Weapon _weapon)
+    public void InitializeWeapon(Weapon _weapon)
     {
         if (attack == null)
             throw new System.ArgumentNullException("attack cannot be null.");
@@ -57,8 +57,6 @@ public class WeaponInitializer : MonoBehaviour
 
         else
             throw new System.Exception("weapon type not recognized. It is " + _weapon.GetType());
-
-        return true;
     }
 
     public void InitializeWeaponWielder(Weapon _weapon) => _weapon.SetWielder(trans);

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public class CraftingRecipeManager : MonoBehaviour
+public class CraftingRecipeUIManager : MonoBehaviour
 {
     public event Action<CraftingRecipeSO> OnRecipeCraft;
     public CraftingRecipeSO CraftingRecipe { get; private set; }
@@ -35,7 +35,7 @@ public class CraftingRecipeManager : MonoBehaviour
         }
     }
 
-    public bool SetButtonInteractionBasedOnCraftability(Inventory _inventory)
+    public bool SetButtonInteractionBasedOnCraftability(Inventory<ResourceSO> _inventory)
     {
         craftButton.interactable = true;
         foreach (ResourceAmount _resourceAmount in CraftingRecipe.CraftingRequirements)

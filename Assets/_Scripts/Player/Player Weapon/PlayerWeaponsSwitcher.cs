@@ -4,7 +4,7 @@ using System;
 [RequireComponent(typeof(PlayerWeaponsManager))]
 public class PlayerWeaponsSwitcher : MonoBehaviour
 {
-    public event Action OnWeaponSwitch;
+    public event Action<Weapon, Weapon> OnWeaponSwitch;
 
     public Weapon ActiveWeapon { get; private set; }
     
@@ -55,11 +55,14 @@ public class PlayerWeaponsSwitcher : MonoBehaviour
 
     private void SwitchWeapon(int _weaponIndex)
     {
+        Weapon _prevWeapon = ActiveWeapon;
+
         ActiveWeapon.gameObject.SetActive(false);
         ActiveWeapon.ResetWeapon();
+
         ActiveWeapon = weaponsManager.PlayerWeapons[_weaponIndex];
         ActiveWeapon.gameObject.SetActive(true);
 
-        OnWeaponSwitch?.Invoke();
+        OnWeaponSwitch?.Invoke(_prevWeapon, ActiveWeapon);
     }
 }

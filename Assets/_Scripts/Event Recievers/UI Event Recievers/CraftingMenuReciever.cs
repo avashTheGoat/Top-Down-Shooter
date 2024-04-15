@@ -4,7 +4,11 @@ public class CraftingMenuReciever : MonoBehaviour
 {
     [SerializeField] private CraftingMenuManager craftingMenu;
     [SerializeField] private CraftingMenuUIManager craftingMenuUI;
+
+    [Header("Player")]
     [SerializeField] private PlayerWeaponsManager playerWeapons;
+    [SerializeField] private PlayerInventory playerInventory;
+    [SerializeField] private PlayerWeaponsSwitcher switcherForTestingWeaponMod;
 
     private void Start()
     {
@@ -13,8 +17,11 @@ public class CraftingMenuReciever : MonoBehaviour
 
         craftingMenuUI.OnCraft += _item =>
         {
-            if (_item is Weapon)
-                playerWeapons.AddWeapon((Weapon)_item);
+            if (_item is Weapon _weapon)
+                playerWeapons.AddWeapon(_weapon);
+
+            else if (_item is WeaponMod _mod)
+                _mod.ApplyMod(switcherForTestingWeaponMod.ActiveWeapon);
         };
     }
 }

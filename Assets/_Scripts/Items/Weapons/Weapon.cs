@@ -6,15 +6,14 @@ public abstract class Weapon : Item
 {
     public event Action<GameObject> OnAttack;
 
-    public float WeaponDamage => weaponDamage;
 
     public Transform Wielder { get; private set; }
 
     public List<string> TagsToIgnore { get; private set; } = new();
 
     [Header("Attacking")]
-    [SerializeField] protected float weaponDamage;
-    [SerializeField] protected float ATTACKS_PER_SECOND;
+    public float Damage;
+    public float AttacksPerSecond;
     [Space(15)]
 
     protected IAttack attackLogic;
@@ -68,6 +67,6 @@ public abstract class Weapon : Item
         
     }
 
-    protected float GetResetAttackTimer() => attackCooldownTimer = 1 / ATTACKS_PER_SECOND;
+    protected float GetResetAttackTimer() => attackCooldownTimer = 1 / AttacksPerSecond;
     protected void InvokeOnWeaponAttack() => OnAttack?.Invoke(gameObject);
 }

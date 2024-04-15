@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1205559560805583164
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7351704492928737629}
+  - component: {fileID: 4776851643973141854}
+  - component: {fileID: -2142308989739697750}
+  m_Layer: 0
+  m_Name: Sniper Barrel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7351704492928737629
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205559560805583164}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4776851643973141854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205559560805583164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50a6674ba237d6249abc3a0a0093e437, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Sniper Barrel
+  description: Increases bullet speed and damage but reduces reload speed and attack
+    speed
+  image: {fileID: 0}
+  modSettings: {fileID: 11400000, guid: a755c90461c3a4f488a64bd5be4de2d7, type: 2}
+  isForMeleeWeapon: 0
+  disallowedTypes:
+  - {fileID: -2142308989739697750}
+--- !u!114 &-2142308989739697750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205559560805583164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1b95474e19b96246916e54f08a48e05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: 
+  description: 
+  image: {fileID: 0}
+  Damage: 0
+  AttacksPerSecond: 0
+  ReloadTime: 0
+  MaxAmmo: 0
+  projectile: {fileID: 0}
+  ProjectileSpeed: 0
+  Range: 0
+  MinAngleChange: 0
+  MaxAngleChange: 0

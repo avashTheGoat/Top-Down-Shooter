@@ -6,13 +6,15 @@ public class PlayerSprintStamina : MonoBehaviour
     [field: SerializeField] public float MaxStamina { get; private set; }
     public float Stamina { get; private set; }
 
-    [Min(0)]
-    [SerializeField] private float staminaIncreasePerSec;
-    [Min(0)]
-    [SerializeField] private float staminaDecreasePerSec;
+    [Range(0f, 1f)]
+    [SerializeField] private float staminaIncreasePercentPerSecond;
+    [Range(0f, 1f)]
+    [SerializeField] private float staminaDecreasePercentPerSecond;
+    [SerializeField] private float staminaIncreaseDelay;
 
     private PlayerMovement playerMovement;
     private bool hasRunOutOfStaminaWhileSprinting;
+    private float staminaIncreaseDelayTimer = 0f;
 
     private void Awake()
     {
@@ -29,34 +31,38 @@ public class PlayerSprintStamina : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
+            staminaIncreaseDelayTimer = staminaIncreaseDelay;
+
             if (!hasRunOutOfStaminaWhileSprinting)
             {
-                Stamina -= staminaDecreasePerSec * Time.deltaTime;
+                Stamina -= MaxStamina * staminaDecreasePercentPerSecond * Time.deltaTime;
 
                 if (Stamina <= 0f)
-                {
                     hasRunOutOfStaminaWhileSprinting = true;
-                }
             }
         }
 
         if (!Input.GetKey(KeyCode.LeftShift) || hasRunOutOfStaminaWhileSprinting)
         {
-            Stamina += staminaIncreasePerSec * Time.deltaTime;
-            
-            if (hasRunOutOfStaminaWhileSprinting)
+            if (staminaIncreaseDelayTimer == 0f)
             {
-                hasRunOutOfStaminaWhileSprinting = Stamina != MaxStamina;
+                Stamina += MaxStamina * staminaIncreasePercentPerSecond * Time.deltaTime;
+
+                if (hasRunOutOfStaminaWhileSprinting)
+                    hasRunOutOfStaminaWhileSprinting = Stamina != MaxStamina;
+
+                if (!Input.GetKey(KeyCode.LeftShift))
+                    hasRunOutOfStaminaWhileSprinting = false;
             }
 
-            if (!Input.GetKey(KeyCode.LeftShift))
+            else
             {
-                hasRunOutOfStaminaWhileSprinting = false;
+                staminaIncreaseDelayTimer -= Time.deltaTime;
+                staminaIncreaseDelayTimer = Mathf.Clamp(staminaIncreaseDelayTimer, 0f, staminaIncreaseDelay);
             }
         }
 
         Stamina = Mathf.Clamp(Stamina, 0f, MaxStamina);
-
         playerMovement.CanSprint = Stamina > 0f && !hasRunOutOfStaminaWhileSprinting;
     }
 }

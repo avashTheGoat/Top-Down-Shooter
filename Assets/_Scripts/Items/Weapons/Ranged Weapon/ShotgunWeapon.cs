@@ -2,11 +2,6 @@ using UnityEngine;
 
 public class ShotgunWeapon : RangedWeapon
 {
-    [Header("Multi-Shot")]
-    [Tooltip("Difference in angle between leftmost and rightmost bullets")]
-    [SerializeField] private float totalDeltaAngle;
-    [SerializeField] private int numBullets;
-
     protected override void Update()
     {
         base.Update();
@@ -16,7 +11,7 @@ public class ShotgunWeapon : RangedWeapon
             InvokeOnReload();
 
             attackCooldownTimer = GetResetAttackTimer();
-            reloadTimer = RELOAD_TIME;
+            reloadTimer = ReloadTime;
             didReload = true;
 
             return;
@@ -51,23 +46,23 @@ public class ShotgunWeapon : RangedWeapon
         attackCooldownTimer = GetResetAttackTimer();
     }
 
-    protected override void Reload() => ammo = maxAmmo;
+    protected override void Reload() => ammo = MaxAmmo;
 
     protected override void Attack()
     {
         base.Attack();
 
-        float _deltaAngle = totalDeltaAngle / 2;
-        for (int i = 0; i < numBullets; i++)
+        float _deltaAngle = TotalDeltaAngle / 2;
+        for (int i = 0; i < NumBullets; i++)
         {
             float _netAngleChane = _deltaAngle + GetRandAngleChange();
 
             ProjectileInfo _bullet = Instantiate(projectile);
             shotProjectiles.Add(_bullet);
-            _bullet.Init(weaponDamage, projectileSpeed, trans.position,
-            trans.localEulerAngles.z + _netAngleChane, projectileRange, TagsToIgnore);
+            _bullet.Init(Damage, ProjectileSpeed, trans.position,
+            trans.localEulerAngles.z + _netAngleChane, Range, TagsToIgnore);
 
-            _deltaAngle -= totalDeltaAngle / (numBullets - 1);
+            _deltaAngle -= TotalDeltaAngle / (NumBullets - 1);
         }
     }
 }

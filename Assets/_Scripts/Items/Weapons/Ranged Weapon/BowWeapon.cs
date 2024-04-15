@@ -27,9 +27,9 @@ public class BowWeapon : RangedWeapon
     {
         base.Awake();
 
-        MAX_DAMAGE = weaponDamage;
-        MAX_PROJECTILE_SPEED = projectileSpeed;
-        MAX_RANGE = projectileRange;
+        MAX_DAMAGE = Damage;
+        MAX_PROJECTILE_SPEED = ProjectileSpeed;
+        MAX_RANGE = Range;
     }
 
     protected override void Update()
@@ -41,7 +41,7 @@ public class BowWeapon : RangedWeapon
             InvokeOnReload();
             
             attackCooldownTimer = GetResetAttackTimer();
-            reloadTimer = RELOAD_TIME;
+            reloadTimer = ReloadTime;
             didReload = true;
             
             return;
@@ -74,9 +74,9 @@ public class BowWeapon : RangedWeapon
 
                 chargeTimer = Mathf.Clamp(chargeTimer / maxChargeTime, 0f, 1f);
 
-                weaponDamage = MAX_DAMAGE * maxDamagePercentCurve.Evaluate(chargeTimer);
-                projectileSpeed = MAX_PROJECTILE_SPEED * maxProjectileSpeedPercentCurve.Evaluate(chargeTimer);
-                projectileRange = MAX_RANGE * maxRangePercentCurve.Evaluate(chargeTimer);
+                Damage = MAX_DAMAGE * maxDamagePercentCurve.Evaluate(chargeTimer);
+                ProjectileSpeed = MAX_PROJECTILE_SPEED * maxProjectileSpeedPercentCurve.Evaluate(chargeTimer);
+                Range = MAX_RANGE * maxRangePercentCurve.Evaluate(chargeTimer);
 
                 Attack();
 
@@ -104,7 +104,7 @@ public class BowWeapon : RangedWeapon
         OnBowCharge?.Invoke(maxChargeTime, chargeTimer);
     }
 
-    protected override void Reload() => ammo = maxAmmo;
+    protected override void Reload() => ammo = MaxAmmo;
     
     protected override void Attack()
     {
@@ -113,8 +113,8 @@ public class BowWeapon : RangedWeapon
         float _deltaAngle = GetRandAngleChange();
 
         ProjectileInfo _arrow = Instantiate(projectile);
-        _arrow.Init(weaponDamage, projectileSpeed, trans.position,
-        trans.localEulerAngles.z + _deltaAngle, projectileRange, TagsToIgnore);
+        _arrow.Init(Damage, ProjectileSpeed, trans.position,
+        trans.localEulerAngles.z + _deltaAngle, Range, TagsToIgnore);
 
         shotProjectiles.Add(_arrow);
     }

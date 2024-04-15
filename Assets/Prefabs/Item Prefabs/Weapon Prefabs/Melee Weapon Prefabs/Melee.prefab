@@ -45,11 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61aab4c4623887449bd064a18cbe0d02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: Hands
-  Description: Just hands. Also stop hacking
-  Image: {fileID: 0}
-  weaponDamage: 6
-  ATTACKS_PER_SECOND: 2.25
+  itemName: Hands
+  description: STOP HACKING
+  image: {fileID: 0}
+  Damage: 7
+  AttacksPerSecond: 2
   attackAOE: {fileID: 5257004405285867879}
 --- !u!1 &2496917111966815065
 GameObject:

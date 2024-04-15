@@ -5,35 +5,37 @@ using UnityEngine;
 public abstract class RangedWeapon : Weapon
 {
     public event Action<GameObject> OnAttackWithoutAmmo;
-    public event Action OnReload;
-    public event Action OnReloadComplete;
-
-    public float Ammo => ammo;
-    public float MaxAmmo => maxAmmo;
-
-    public float Range => projectileRange;
-
-    public float ReloadTime => RELOAD_TIME;
-    public float CurReloadTimeLeft => reloadTimer;
+    public event Action<GameObject> OnReload;
+    public event Action<GameObject> OnReloadComplete;
 
     [Header("Reloading/Ammo")]
-    [SerializeField] protected float RELOAD_TIME;
-    [SerializeField] protected int maxAmmo;
+    public float ReloadTime;
+    public int MaxAmmo;
     [Space(15)]
 
     [Header("Projectile")]
     [SerializeField] protected ProjectileInfo projectile;
-    [SerializeField] protected float projectileSpeed;
-    [SerializeField] protected float projectileRange;
+    public float ProjectileSpeed;
+    public float Range;
     [Space(15)]
 
     [Header("Shooting Angle")]
     [Tooltip("Minimum change in angle for bullet shot. Should not be negative because that is applied randomly at runtime. Leave min and max at 0 for no angle change.")]
     [Min(0f)]
-    [SerializeField] protected float minAngleChange;
+    public float MinAngleChange;
     [Tooltip("Maximum change in angle for bullet shot. Should not be negative because that is applied randomly at runtime. Leave min and max at 0 for no angle change.")]
     [Min(0f)]
-    [SerializeField] protected float maxAngleChange;
+    public float MaxAngleChange;
+
+    [Header("Multi-Shot")]
+    [Tooltip("Difference in angle between leftmost and rightmost bullets")]
+    [Min(0f)]
+    public float TotalDeltaAngle = 0f;
+    [Min(1)]
+    public int NumBullets = 1;
+
+    public float Ammo => ammo;
+    public float CurReloadTimeLeft => reloadTimer;
 
     protected IReload reloadLogic;
     protected List<ProjectileInfo> shotProjectiles = new();
@@ -46,7 +48,7 @@ public abstract class RangedWeapon : Weapon
     {
         base.Awake();
 
-        ammo = maxAmmo;
+        ammo = MaxAmmo;
         reloadTimer = 0f;
     }
 
@@ -55,7 +57,7 @@ public abstract class RangedWeapon : Weapon
         base.Update();
 
         reloadTimer -= Time.deltaTime;
-        reloadTimer = Mathf.Clamp(reloadTimer, 0, RELOAD_TIME);
+        reloadTimer = Mathf.Clamp(reloadTimer, 0, ReloadTime);
     }
 
     protected abstract void Reload();
@@ -84,13 +86,13 @@ public abstract class RangedWeapon : Weapon
 
     protected float GetRandAngleChange()
     {
-        float _randAngleChange = UnityEngine.Random.Range(minAngleChange, maxAngleChange);
+        float _randAngleChange = UnityEngine.Random.Range(MinAngleChange, MaxAngleChange);
         _randAngleChange = UnityEngine.Random.Range(0, 1 + 1) == 1 ? -_randAngleChange : _randAngleChange;
 
         return _randAngleChange;
     }
 
-    protected void InvokeOnReload() => OnReload?.Invoke();
-    protected void InvokeOnReloadComplete() => OnReloadComplete?.Invoke();
+    protected void InvokeOnReload() => OnReload?.Invoke(gameObject);
+    protected void InvokeOnReloadComplete() => OnReloadComplete?.Invoke(gameObject);
     protected void InvokeOnAttackWithoutAmmo() => OnAttackWithoutAmmo?.Invoke(gameObject);
 }

@@ -42,7 +42,7 @@ public class HammerAttackReciever : MonoBehaviour
             if (_hitObject.TryGetComponent(out IDamageable _damageable))
             {
                 float _distanceFromAttack = Vector2.Distance(_hammerWeapon.GetAttackAOECenter(), _hitObject.transform.position);
-                float _damage = _hammerWeapon.WeaponDamage * percentOfOriginalDamageWhenXAwayFromCenter.Evaluate(_distanceFromAttack);
+                float _damage = _hammerWeapon.Damage * percentOfOriginalDamageWhenXAwayFromCenter.Evaluate(_distanceFromAttack);
                 _damageable.Damage(_damage);
 
                 // print($"HAMMER (Damage, DistanceFromCenter): ({_damage}, {_distanceFromAttack})");

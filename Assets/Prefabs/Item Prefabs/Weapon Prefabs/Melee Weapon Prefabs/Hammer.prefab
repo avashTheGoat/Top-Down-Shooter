@@ -95,11 +95,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcb766fe2bb1493409b6693761efa55c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: Hammer
-  Description: Big hammer
-  Image: {fileID: 0}
-  weaponDamage: 33.37
-  ATTACKS_PER_SECOND: 0.6
+  itemName: Hammer
+  description: Big hammer
+  image: {fileID: 0}
+  Damage: 35
+  AttacksPerSecond: 0.7
   attackAOE: {fileID: 4163144566376913258}
 --- !u!212 &4163144566826951536
 SpriteRenderer:

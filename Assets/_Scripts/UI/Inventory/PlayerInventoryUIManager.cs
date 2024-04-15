@@ -11,7 +11,7 @@ public class PlayerInventoryUIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        foreach (KeyValuePair<ResourceSO, int> _resourceCount in playerInventory.Inventory.GetInventory())
+        foreach (KeyValuePair<ResourceSO, int> _resourceCount in playerInventory.ResourceInventory.GetInventory())
         {
             Image _newInventorySlot = Instantiate(inventorySlotPrefab, inventoryItems);
             _newInventorySlot.sprite = _resourceCount.Key.ResourceImage;

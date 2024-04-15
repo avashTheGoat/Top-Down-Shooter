@@ -32,7 +32,7 @@ public class SwordAttackReciever : MonoBehaviour
             if (_hitObject.Equals(_swordWeapon.Wielder)) continue;
 
             if (_hitObject.TryGetComponent(out IDamageable _damageable))
-                _damageable.Damage(_swordWeapon.WeaponDamage);
+                _damageable.Damage(_swordWeapon.Damage);
         }
     }
 

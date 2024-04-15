@@ -46,11 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61aab4c4623887449bd064a18cbe0d02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: Sword
-  Description: Sharp
-  Image: {fileID: 0}
-  weaponDamage: 14
-  ATTACKS_PER_SECOND: 1.5
+  itemName: Sword
+  description: Very sharp
+  image: {fileID: 0}
+  Damage: 14
+  AttacksPerSecond: 1
   attackAOE: {fileID: 2496917111966815067}
 --- !u!212 &2496917111802942993
 SpriteRenderer:

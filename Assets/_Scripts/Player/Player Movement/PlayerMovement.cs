@@ -20,6 +20,8 @@ public class PlayerMovement : MonoBehaviour, IMover
     private Vector2 movementVector;
     private float speed;
 
+    private float originalSpeed;
+
     private void Awake()
     {
         movementMethod = GetComponent<IMoveable>();
@@ -28,6 +30,8 @@ public class PlayerMovement : MonoBehaviour, IMover
             Debug.LogError("The player does not have an IMovable attached to it");
 
         CanSprint = true;
+
+        originalSpeed = walkSpeed;
     }
 
     private void Update()
@@ -47,6 +51,7 @@ public class PlayerMovement : MonoBehaviour, IMover
             OnPlayerMove?.Invoke();
     }
 
+    public float GetOriginalMovementSpeed() => originalSpeed;
     public float GetMovementSpeed() => speed;
 
     public void SetMovementSpeed(float _newSpeed)

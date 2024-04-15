@@ -972,7 +972,7 @@ GameObject:
   - component: {fileID: 1701329587557083023}
   - component: {fileID: 1701329587557083008}
   - component: {fileID: 1701329587557083009}
-  - component: {fileID: 1701329587557083022}
+  - component: {fileID: 1173484109952487420}
   m_Layer: 5
   m_Name: Crafting Recipe Item
   m_TagString: Untagged
@@ -1040,7 +1040,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &1701329587557083022
+--- !u!114 &1173484109952487420
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1049,7 +1049,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1701329587557083020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 693008c16f9b5a64b99be34cf21c90be, type: 3}
+  m_Script: {fileID: 11500000, guid: e45bfcbb2b4fd4540ba7c7fa94bd667c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <ResultImage>k__BackingField: {fileID: 1701329586684848560}

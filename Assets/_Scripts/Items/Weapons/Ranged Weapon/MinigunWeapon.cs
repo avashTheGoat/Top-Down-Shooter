@@ -9,7 +9,7 @@ public class MinigunWeapon : RangedWeapon
             InvokeOnReload();
 
             attackCooldownTimer = GetResetAttackTimer();
-            reloadTimer = RELOAD_TIME;
+            reloadTimer = ReloadTime;
             didReload = true;
 
             return;
@@ -44,7 +44,7 @@ public class MinigunWeapon : RangedWeapon
         attackCooldownTimer = GetResetAttackTimer();
     }
 
-    protected override void Reload() => ammo = maxAmmo;
+    protected override void Reload() => ammo = MaxAmmo;
 
     protected override void Attack()
     {
@@ -54,7 +54,7 @@ public class MinigunWeapon : RangedWeapon
 
         ProjectileInfo _bullet = Instantiate(projectile);
         shotProjectiles.Add(_bullet);
-        _bullet.Init(weaponDamage, projectileSpeed, trans.position,
-        trans.localEulerAngles.z + _deltaAngle, projectileRange, TagsToIgnore);
+        _bullet.Init(Damage, ProjectileSpeed, trans.position,
+        trans.localEulerAngles.z + _deltaAngle, Range, TagsToIgnore);
     }
 }

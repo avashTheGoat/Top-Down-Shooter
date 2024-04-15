@@ -45,18 +45,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f83ea203b2db1af48b1868c9b5eb0975, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: Pistol
-  Description: Basic af
-  Image: {fileID: 0}
-  weaponDamage: 11
-  ATTACKS_PER_SECOND: 2
-  RELOAD_TIME: 1
-  maxAmmo: 15
+  itemName: Pistol
+  description: Basic weapon
+  image: {fileID: 0}
+  Damage: 11.5
+  AttacksPerSecond: 2.25
+  ReloadTime: 1.5
+  MaxAmmo: 15
   projectile: {fileID: 8252440497980988240, guid: c927d5c59e1b58b4ea1a1a2a37a54f25, type: 3}
-  projectileSpeed: 15.5
-  projectileRange: 4.25
-  minAngleChange: 0
-  maxAngleChange: 3
+  ProjectileSpeed: 22
+  Range: 0
+  MinAngleChange: 0
+  MaxAngleChange: 2
+  TotalDeltaAngle: 0
+  NumBullets: 1
 --- !u!212 &1368183166115280645
 SpriteRenderer:
   m_ObjectHideFlags: 0

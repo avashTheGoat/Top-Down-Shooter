@@ -45,20 +45,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d485096bb3ca945b6065b39c8671bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: Shotgun
-  Description: Classic shotgun
-  Image: {fileID: 21300000, guid: ff59ac963a6cd974e835f1e824168436, type: 3}
-  weaponDamage: 17
-  ATTACKS_PER_SECOND: 0.7
-  RELOAD_TIME: 3
-  maxAmmo: 2
+  itemName: Shotgun
+  description: Pew pew
+  image: {fileID: 21300000, guid: ff59ac963a6cd974e835f1e824168436, type: 3}
+  Damage: 18.75
+  AttacksPerSecond: 0.6
+  ReloadTime: 3
+  MaxAmmo: 2
   projectile: {fileID: 8252440497980988240, guid: 9aaa848e7ea16ee4fbd7ddc606679d3f, type: 3}
-  projectileSpeed: 19
-  projectileRange: 3.5
-  minAngleChange: 0
-  maxAngleChange: 1.5
-  totalDeltaAngle: 30
-  numBullets: 3
+  ProjectileSpeed: 27
+  Range: 0
+  MinAngleChange: 0
+  MaxAngleChange: 1.5
+  TotalDeltaAngle: 30
+  NumBullets: 3
 --- !u!212 &3104220439187664239
 SpriteRenderer:
   m_ObjectHideFlags: 0

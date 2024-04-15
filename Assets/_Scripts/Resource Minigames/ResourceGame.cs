@@ -1,13 +1,12 @@
 using UnityEngine;
-using System.Collections.Generic;
 using System;
 
 public abstract class ResourceGame : MonoBehaviour
 {
     public event Action OnSuccessfulStart;
     public event Action<string> OnUnableToStartGame;
-    public event Action<Inventory> OnGameSuccessfullyComplete;
-    public event Action<Inventory, string> OnGameUnsuccessfullyComplete;
+    public event Action<Inventory<ResourceSO>> OnGameSuccessfullyComplete;
+    public event Action<Inventory<ResourceSO>, string> OnGameUnsuccessfullyComplete;
 
     [field: SerializeField] public Canvas GameUI { get; private set; }
 
@@ -47,6 +46,6 @@ public abstract class ResourceGame : MonoBehaviour
 
     protected void InvokeOnSuccessfulStart() => OnSuccessfulStart?.Invoke();
     protected void InvokeOnUnableToStartGame(string _message) => OnUnableToStartGame?.Invoke(_message);
-    protected void InvokeOnGameSuccessfullyComplete(Inventory _droppedResources) => OnGameSuccessfullyComplete?.Invoke(_droppedResources);
-    protected void InvokeOnGameUnsuccessfullyComplete(Inventory _droppedResources, string _message) => OnGameUnsuccessfullyComplete?.Invoke(_droppedResources, _message);
+    protected void InvokeOnGameSuccessfullyComplete(Inventory<ResourceSO> _droppedResources) => OnGameSuccessfullyComplete?.Invoke(_droppedResources);
+    protected void InvokeOnGameUnsuccessfullyComplete(Inventory<ResourceSO> _droppedResources, string _message) => OnGameUnsuccessfullyComplete?.Invoke(_droppedResources, _message);
 }

@@ -3,21 +3,35 @@ using System.Collections.Generic;
 
 public class PlayerInventory : MonoBehaviour
 {
-    public Inventory Inventory { get; private set; } = new();
+    public Inventory<ResourceSO> ResourceInventory { get; private set; } = new();
+    public Inventory<Item> ItemInventory { get; private set; } = new();
 
-    [SerializeField] private List<ResourceAmount> initialInventory = new();
-    [SerializeField] private List<ResourceAmount> serializedInventoryRepresentation = new();
+    [Header("Resource Inventory")]
+    [SerializeField] private List<ResourceAmount> initialResourceInventory = new();
+    [SerializeField] private List<ResourceAmount> serializedResourceInventoryRepresentation = new();
+    [Space(15)]
+
+    [Header("Item Inventory")]
+    [SerializeField] private List<ItemAmount> initialItemInventory = new();
+    [SerializeField] private List<ItemAmount> serializedItemInventoryRepresentation = new();
 
     private void Awake()
     {
-        foreach (ResourceAmount _resourceAmount in initialInventory)
-            Inventory.Add(_resourceAmount.Resource, _resourceAmount.Amount);
+        foreach (ResourceAmount _resourceAmount in initialResourceInventory)
+            ResourceInventory.Add(_resourceAmount.Resource, _resourceAmount.Amount);
+
+        foreach (ItemAmount _itemAmount in initialItemInventory)
+            ItemInventory.Add(_itemAmount.Item, _itemAmount.Amount);
     }
 
     private void Update()
     {
-        serializedInventoryRepresentation = new();
-        foreach (KeyValuePair<ResourceSO, int> _resourceAmount in Inventory.GetInventory())
-            serializedInventoryRepresentation.Add(new ResourceAmount(_resourceAmount.Key, _resourceAmount.Value));
+        serializedResourceInventoryRepresentation = new();
+        foreach (KeyValuePair<ResourceSO, int> _resourceAmount in ResourceInventory.GetInventory())
+            serializedResourceInventoryRepresentation.Add(new ResourceAmount(_resourceAmount.Key, _resourceAmount.Value));
+
+        serializedItemInventoryRepresentation = new();
+        foreach (KeyValuePair<Item, int> _resourceAmount in ItemInventory.GetInventory())
+            serializedItemInventoryRepresentation.Add(new ItemAmount(_resourceAmount.Key, _resourceAmount.Value));
     }
 }

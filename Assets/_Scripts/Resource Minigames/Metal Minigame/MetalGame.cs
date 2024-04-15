@@ -29,7 +29,7 @@ public class MetalGame : ResourceGame
     private ParticleSystem.MainModule harvestedMetalParticleSettings;
 
     private List<RectTransform> spawnedMetals = new();
-    private Inventory droppedResources = new();
+    private Inventory<ResourceSO> droppedResources = new();
 
     protected override void Awake()
     {

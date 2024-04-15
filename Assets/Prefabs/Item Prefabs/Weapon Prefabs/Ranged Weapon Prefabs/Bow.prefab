@@ -97,18 +97,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7465696f61e7f994e82963725a096a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: Bow
-  Description: A bow
-  Image: {fileID: 0}
-  weaponDamage: 18
-  ATTACKS_PER_SECOND: 0.8
-  RELOAD_TIME: 3
-  maxAmmo: 3
+  itemName: Bow
+  description: Cool weapon
+  image: {fileID: 0}
+  Damage: 20.5
+  AttacksPerSecond: 0.9
+  ReloadTime: 3
+  MaxAmmo: 3
   projectile: {fileID: 8252440497980988240, guid: 6114bd76810530949856f34626aab870, type: 3}
-  projectileSpeed: 18
-  projectileRange: 8
-  minAngleChange: 0
-  maxAngleChange: 2
+  ProjectileSpeed: 29
+  Range: 0
+  MinAngleChange: 0
+  MaxAngleChange: 2.5
+  TotalDeltaAngle: 0
+  NumBullets: 1
   maxChargeTime: 1.25
   minChargeTimeToShoot: 0.5
   maxDamagePercentCurve:

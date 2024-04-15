@@ -18,7 +18,7 @@ public class PlayerWeaponReloadReciever : MonoBehaviour
     private void Start()
     {
         rangedWeaponProvider = (IProvider<RangedWeapon>)rangedWeaponProviderComponent;
-        weaponsSwitcher.OnWeaponSwitch += ResetCursor;
+        weaponsSwitcher.OnWeaponSwitch += (_, __) => ResetCursor();
 
         reloadParent = reload.transform.parent.gameObject;
     }
@@ -30,14 +30,14 @@ public class PlayerWeaponReloadReciever : MonoBehaviour
             if (subscribedRangedWeapons.Contains(_rangedWeapon))
                 continue;
 
-            _rangedWeapon.OnReload += () =>
+            _rangedWeapon.OnReload += _ =>
             {
                 defaultCrosshair.gameObject.SetActive(false);
 
                 reloadParent.gameObject.SetActive(true);
                 reload.SetRangedWeapon(_rangedWeapon);
             };
-            _rangedWeapon.OnReloadComplete += ResetCursor;
+            _rangedWeapon.OnReloadComplete += _ => ResetCursor();
 
             subscribedRangedWeapons.Add(_rangedWeapon);
         }
