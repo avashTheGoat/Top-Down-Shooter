@@ -53,7 +53,7 @@ public class ShotgunWeapon : RangedWeapon
         base.Attack();
 
         float _deltaAngle = TotalDeltaAngle / 2;
-        for (int i = 0; i < NumBullets; i++)
+        for (int i = 0; i < NumProjectiles; i++)
         {
             float _netAngleChane = _deltaAngle + GetRandAngleChange();
 
@@ -62,7 +62,7 @@ public class ShotgunWeapon : RangedWeapon
             _bullet.Init(Damage, ProjectileSpeed, trans.position,
             trans.localEulerAngles.z + _netAngleChane, Range, TagsToIgnore);
 
-            _deltaAngle -= TotalDeltaAngle / (NumBullets - 1);
+            _deltaAngle -= TotalDeltaAngle / (NumProjectiles - 1);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class WeaponMod : Item
 {
-	[SerializeField] private WeaponModSettings modSettings;
+	[field: SerializeField] public WeaponModSettings ModSettings { get; private set; }
 
 	[Header("Type Restrictions")]
 	[Tooltip("If false, this modification is only for ranged weapons, but if true, this modification is only for melee weapons.")]
@@ -26,19 +26,19 @@ public class WeaponMod : Item
 
 	private void ApplyModSettings(Weapon _target)
 	{
-		_target.AttacksPerSecond *= modSettings.AttacksPerSecondMulti;
-		_target.Damage *= modSettings.DamageMulti;
+		_target.AttacksPerSecond *= ModSettings.AttacksPerSecondMulti;
+		_target.Damage *= ModSettings.DamageMulti;
 
 		if (_target is RangedWeapon _rangedWeapon)
 		{
-			_rangedWeapon.MinAngleChange /= modSettings.AccuracyMulti;
-			_rangedWeapon.MaxAngleChange /= modSettings.AccuracyMulti;
+			_rangedWeapon.MinAngleChange /= ModSettings.AccuracyMulti;
+			_rangedWeapon.MaxAngleChange /= ModSettings.AccuracyMulti;
 
-			_rangedWeapon.ReloadTime *= modSettings.ReloadTimeMulti;
-			_rangedWeapon.Range *= modSettings.ProjectileRangeMulti;
-			_rangedWeapon.ProjectileSpeed *= modSettings.ProjectileSpeedMulti;
-			_rangedWeapon.NumBullets += modSettings.NumBulletsIncrease;
-			_rangedWeapon.MaxAmmo = Mathf.RoundToInt(_rangedWeapon.MaxAmmo * modSettings.MaxBulletsMulti);
+			_rangedWeapon.ReloadTime *= ModSettings.ReloadTimeMulti;
+			_rangedWeapon.Range *= ModSettings.ProjectileRangeMulti;
+			_rangedWeapon.ProjectileSpeed *= ModSettings.ProjectileSpeedMulti;
+			_rangedWeapon.NumProjectiles += ModSettings.NumProjectilesShotIncrease;
+			_rangedWeapon.MaxAmmo = Mathf.RoundToInt(_rangedWeapon.MaxAmmo * ModSettings.MaxAmmoMulti);
 		}
 	}
 

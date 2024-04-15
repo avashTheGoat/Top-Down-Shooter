@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7351704492928737629}
   - component: {fileID: 4776851643973141854}
+  - component: {fileID: -607934810171952678}
   m_Layer: 0
   m_Name: Bigger Magazine
   m_TagString: Untagged
@@ -44,10 +45,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50a6674ba237d6249abc3a0a0093e437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Bigger Mag
-  description: Increases weapon magazine, making reloading slower
+  itemName: Bigger Magazine
+  description: A bigger magazine. Doesn't work with bows.
   image: {fileID: 0}
-  modSettings: {fileID: 11400000, guid: 73c06f56dbf33e44c9d4fa73b6f689af, type: 2}
+  <ModSettings>k__BackingField: {fileID: 11400000, guid: 73c06f56dbf33e44c9d4fa73b6f689af, type: 2}
   isForMeleeWeapon: 0
-  disallowedTypes: []
+  disallowedTypes:
+  - {fileID: -607934810171952678}
   allowedTypes: []
+--- !u!114 &-607934810171952678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205559560805583164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7465696f61e7f994e82963725a096a68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: 
+  description: 
+  image: {fileID: 0}
+  Damage: 0
+  AttacksPerSecond: 0
+  ReloadTime: 0
+  MaxAmmo: 0
+  projectile: {fileID: 0}
+  ProjectileSpeed: 0
+  Range: 0
+  MinAngleChange: 0
+  MaxAngleChange: 0
+  TotalDeltaAngle: 0
+  NumProjectiles: 1
+  maxChargeTime: 0
+  minChargeTimeToShoot: 0
+  maxDamagePercentCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  maxProjectileSpeedPercentCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  maxRangePercentCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

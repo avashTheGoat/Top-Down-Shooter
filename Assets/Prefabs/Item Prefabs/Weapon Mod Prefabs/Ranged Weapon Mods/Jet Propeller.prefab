@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Jet Propeller
-  description: Uses jets to speed up bullets, increasing their damage and range.
+  description: Uses jet technology to achieve harder-hitting and faster bullets.
   image: {fileID: 0}
-  modSettings: {fileID: 11400000, guid: 21ed1c4067077d642b6f4acd32001cc1, type: 2}
+  <ModSettings>k__BackingField: {fileID: 11400000, guid: 21ed1c4067077d642b6f4acd32001cc1, type: 2}
   isForMeleeWeapon: 0
   disallowedTypes: []
   allowedTypes: []

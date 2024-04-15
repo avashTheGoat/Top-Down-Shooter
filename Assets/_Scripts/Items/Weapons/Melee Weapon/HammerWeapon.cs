@@ -31,5 +31,5 @@ public class HammerWeapon : MeleeWeapon
         base.Attack();
     }
 
-    public Vector2 GetAttackAOECenter() => attackAOE.bounds.center;
+    public Vector2 GetAttackAOECenter() => AttackAOE.bounds.center;
 }

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 53968fb9d1c698644b90c200fa6e5129, type: 3}
-  m_Name: Triple Barrel Shotgun Mod
+  m_Name: Quadruple Barrel Shotgun Mod
   m_EditorClassIdentifier: 
   damageMulti: 1.1
   attacksPerSecondMulti: 1

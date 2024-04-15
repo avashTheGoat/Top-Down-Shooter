@@ -32,7 +32,7 @@ public abstract class RangedWeapon : Weapon
     [Min(0f)]
     public float TotalDeltaAngle = 0f;
     [Min(1)]
-    public int NumBullets = 1;
+    public int NumProjectiles = 1;
 
     public float Ammo => ammo;
     public float CurReloadTimeLeft => reloadTimer;

@@ -2,26 +2,39 @@ using UnityEngine;
 
 public class CraftingMenuReciever : MonoBehaviour
 {
-    [SerializeField] private CraftingMenuManager craftingMenu;
-    [SerializeField] private CraftingMenuUIManager craftingMenuUI;
+    [SerializeField] private MenuManager[] craftingMenu;
+    [SerializeField] private CraftingMenuUIManager[] craftingMenuUI;
 
     [Header("Player")]
     [SerializeField] private PlayerWeaponsManager playerWeapons;
     [SerializeField] private PlayerInventory playerInventory;
     [SerializeField] private PlayerWeaponsSwitcher switcherForTestingWeaponMod;
 
+    private void Awake()
+    {
+        if (craftingMenu.Length != craftingMenuUI.Length)
+            throw new System.ArgumentException("The lengths of craftingMenu and craftingMenuUI are not the same.");
+    }
+
     private void Start()
     {
-        craftingMenu.WhileCraftingOpen += () => PlayerInteractionManager.EnableUiMode();
-        craftingMenu.OnCraftingClose += () => PlayerInteractionManager.DisableUiMode();
-
-        craftingMenuUI.OnCraft += _item =>
+        for (int i = 0; i < craftingMenu.Length; i++)
         {
-            if (_item is Weapon _weapon)
-                playerWeapons.AddWeapon(_weapon);
+            craftingMenu[i].WhileMenuOpen += () => PlayerInteractionManager.EnableUiMode();
+            craftingMenu[i].OnMenuClose += () => PlayerInteractionManager.DisableUiMode();
 
-            else if (_item is WeaponMod _mod)
-                _mod.ApplyMod(switcherForTestingWeaponMod.ActiveWeapon);
-        };
+            craftingMenuUI[i].OnCraft += _recipe =>
+            {
+                foreach (ResourceAmount _resourceAmount in _recipe.CraftingRequirements)
+                    playerInventory.ResourceInventory.Remove(_resourceAmount.Resource, _resourceAmount.Amount);
+
+                if (_recipe.Result is Weapon _weapon)
+                    playerWeapons.AddWeapon(_weapon);
+
+                else if (_recipe.Result is WeaponMod _mod)
+                    if (!_mod.ApplyMod(switcherForTestingWeaponMod.ActiveWeapon))
+                        Debug.LogWarning("Mod not applied successfully.");
+            };
+        }
     }
 }

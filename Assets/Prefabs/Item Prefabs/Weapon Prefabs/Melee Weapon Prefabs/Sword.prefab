@@ -51,7 +51,7 @@ MonoBehaviour:
   image: {fileID: 0}
   Damage: 14
   AttacksPerSecond: 1
-  attackAOE: {fileID: 2496917111966815067}
+  <AttackAOE>k__BackingField: {fileID: 2496917111966815067}
 --- !u!212 &2496917111802942993
 SpriteRenderer:
   m_ObjectHideFlags: 0

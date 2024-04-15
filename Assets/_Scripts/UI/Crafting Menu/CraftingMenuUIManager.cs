@@ -1,58 +1,93 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using System;
 using System.Collections.Generic;
 
 public class CraftingMenuUIManager : MonoBehaviour
 {
-    public event Action<Item> OnCraft;
+    public event Action<CraftingRecipeSO> OnCraft;
 
+    [Header("Dependencies")]
     [SerializeField] private PlayerInventory playerInventory;
+    [SerializeField] private TabsUI tabsManager;
+    [SerializeField] private Component statsProviderComponent;
+    [Space(15)]
 
     [Header("Prefabs")]
-    [SerializeField] private CraftingRecipeUIManager craftingRecipePrefab;
+    [SerializeField] private ItemUI craftingThumbnailPrefab;
+    [SerializeField] private ItemCraftingUI itemInfoUiPrefab;
+    [SerializeField] private TextMeshProUGUI statTextPrefab;
     [Space(15)]
 
     [Header("Content Info")]
     [SerializeField] private List<CraftingRecipeSO> craftingRecipes;
-    [SerializeField] private RectTransform craftingMenuItems;
+    [SerializeField] private RectTransform itemThumbnails;
+    [SerializeField] private RectTransform itemInfos;
 
-    private List<CraftingRecipeUIManager> craftingRecipeUIs = new();
+    private List<ItemCraftingUI> spawnedItemInfos = new();
+
+    private IItemStatsProvider statsProvider;
+
+    private void Awake()
+    {
+        if (statsProviderComponent is not IItemStatsProvider)
+            throw new ArgumentException("Must provide a component that is an IProvider<string>.");
+
+        statsProvider = (IItemStatsProvider)statsProviderComponent;
+    }
 
     private void Start()
     {
         foreach (CraftingRecipeSO _craftingRecipe in craftingRecipes)
         {
-            CraftingRecipeUIManager _craftingUI = Instantiate(craftingRecipePrefab, craftingMenuItems);
-            _craftingUI.ResultImage.sprite = _craftingRecipe.Result.Image;
-            _craftingUI.ResultName.text = _craftingRecipe.Result.Name;
-            _craftingUI.ResultDescription.text = _craftingRecipe.Result.Description;
+            ItemUI _itemThumbnail = Instantiate(craftingThumbnailPrefab, itemThumbnails);
+            _itemThumbnail.ItemImage.sprite = _craftingRecipe.Result.Image;
+            _itemThumbnail.ItemName.text = _craftingRecipe.Result.Name;
 
-            _craftingUI.SetCraftingRecipe(_craftingRecipe);
-            _craftingUI.SetButtonInteractionBasedOnCraftability(playerInventory.ResourceInventory);
+            ItemCraftingUI _itemInfo = Instantiate(itemInfoUiPrefab, itemInfos);
+            _itemInfo.ItemUI.ItemImage.sprite = _craftingRecipe.Result.Image;
+            _itemInfo.ItemUI.ItemDescription.text = _craftingRecipe.Result.Description;
+            _itemInfo.ItemUI.ItemName.text = _craftingRecipe.Result.Name;
 
-            // removes resources from inventory & updates all buttons if an item is crafted
-            _craftingUI.OnRecipeCraft += _recipe =>
+            _itemInfo.RequirementsManager.SetCraftingRecipe(_craftingRecipe);
+            _itemInfo.RequirementsManager.PopulateWithCraftingRequirements(_itemInfo.ItemRequirementsUI);
+            _itemInfo.RequirementsManager.SetButtonInteractionBasedOnCraftability
+            (
+                playerInventory.ResourceInventory, _itemInfo.CraftButton
+            );
+
+            List<string> _stats = statsProvider.ProvideStats(_craftingRecipe.Result);
+            foreach (string _stat in _stats)
             {
-                craftingRecipeUIs.RemoveAll(_craftingRecipe => _craftingRecipe == null);
+                TextMeshProUGUI _text = Instantiate(statTextPrefab, _itemInfo.ItemStatsUI);
+                _text.text = _stat;
+            }
 
-                foreach (ResourceAmount _resourceAmount in _recipe.CraftingRequirements)
-                    playerInventory.ResourceInventory.Remove(_resourceAmount.Resource, _resourceAmount.Amount);
+            tabsManager.AddTab(_itemInfo.gameObject, _itemThumbnail.GetComponent<Button>());
 
-                foreach (CraftingRecipeUIManager _craftingRecipeUI in craftingRecipeUIs)
-                    _craftingRecipeUI.SetButtonInteractionBasedOnCraftability(playerInventory.ResourceInventory);
-            };
+            _itemInfo.CraftButton.onClick.AddListener(() =>
+            {
+                _itemThumbnail.gameObject.SetActive(false);
+                _itemInfo.gameObject.SetActive(false);
 
-            _craftingUI.OnRecipeCraft += _ => OnCraft?.Invoke(_craftingUI.CraftingRecipe.Result);
+                UpdateAllCraftingButtons();
 
-            craftingRecipeUIs.Add(_craftingUI);
+                OnCraft?.Invoke(_craftingRecipe);
+            });
         }
     }
 
-    private void OnEnable()
-    {
-        craftingRecipeUIs.RemoveAll(_craftingRecipe => _craftingRecipe == null);
+    private void OnEnable() => UpdateAllCraftingButtons();
 
-        foreach (CraftingRecipeUIManager _craftingRecipeUI in craftingRecipeUIs)
-            _craftingRecipeUI.SetButtonInteractionBasedOnCraftability(playerInventory.ResourceInventory);
+    private void UpdateAllCraftingButtons()
+    {
+        foreach (ItemCraftingUI _spawnedItemInfo in spawnedItemInfos)
+        {
+            _spawnedItemInfo.RequirementsManager.SetButtonInteractionBasedOnCraftability
+            (
+                playerInventory.ResourceInventory, _spawnedItemInfo.CraftButton
+            );
+        }
     }
 }

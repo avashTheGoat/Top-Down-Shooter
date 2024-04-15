@@ -46,13 +46,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Sniper Barrel
-  description: Increases bullet speed and damage but reduces reload speed and attack
-    speed
+  description: Transforms any weapon (other than a minigun) into a sniper
   image: {fileID: 0}
-  modSettings: {fileID: 11400000, guid: a755c90461c3a4f488a64bd5be4de2d7, type: 2}
+  <ModSettings>k__BackingField: {fileID: 11400000, guid: a755c90461c3a4f488a64bd5be4de2d7, type: 2}
   isForMeleeWeapon: 0
   disallowedTypes:
   - {fileID: -2142308989739697750}
+  allowedTypes: []
 --- !u!114 &-2142308989739697750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,3 +77,5 @@ MonoBehaviour:
   Range: 0
   MinAngleChange: 0
   MaxAngleChange: 0
+  TotalDeltaAngle: 0
+  NumProjectiles: 1

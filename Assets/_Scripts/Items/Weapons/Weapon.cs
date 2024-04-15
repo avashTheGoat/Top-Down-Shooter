@@ -9,7 +9,7 @@ public abstract class Weapon : Item
 
     public Transform Wielder { get; private set; }
 
-    public List<string> TagsToIgnore { get; private set; } = new();
+    public List<string> TagsToIgnore { get; protected set; } = new();
 
     [Header("Attacking")]
     public float Damage;

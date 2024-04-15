@@ -58,7 +58,7 @@ MonoBehaviour:
   MinAngleChange: 0
   MaxAngleChange: 1.5
   TotalDeltaAngle: 30
-  NumBullets: 3
+  NumProjectiles: 3
 --- !u!212 &3104220439187664239
 SpriteRenderer:
   m_ObjectHideFlags: 0

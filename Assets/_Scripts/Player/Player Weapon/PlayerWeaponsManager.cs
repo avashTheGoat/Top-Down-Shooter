@@ -34,8 +34,9 @@ public class PlayerWeaponsManager : MonoBehaviour, IProvider<Weapon>, IProvider<
     public void AddWeapon(Weapon _weapon)
     {
         Weapon _weaponObject = Instantiate(_weapon, trans);
-        playerWeaponInitializer.InitializeWeapon(_weaponObject);
         playerWeaponInitializer.ApplyWeaponTransformChange(_weaponObject);
+        playerWeaponInitializer.InitializeWeapon(_weaponObject);
+        playerWeaponInitializer.InitializeTagsToIgnore(_weaponObject);
         _weaponObject.gameObject.SetActive(false);
 
         PlayerWeapons.Add(_weaponObject);

@@ -10,8 +10,8 @@ public class WeaponModSettings : ScriptableObject
     public float ReloadTimeMulti => reloadTimeMulti;
     public float ProjectileRangeMulti => projectileRangeMulit;
     public float ProjectileSpeedMulti => projectileSpeedMulti;
-    public int NumBulletsIncrease => numBulletsIncrease;
-    public float MaxBulletsMulti => maxBulletsMulti;
+    public int NumProjectilesShotIncrease => numBulletsIncrease;
+    public float MaxAmmoMulti => maxBulletsMulti;
 
     [SerializeField] private float damageMulti = 1f;
     [SerializeField] private float attacksPerSecondMulti = 1f;

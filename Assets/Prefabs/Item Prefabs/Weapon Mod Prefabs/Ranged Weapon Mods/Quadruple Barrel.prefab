@@ -46,10 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Quadruple Barrel
-  description: Only for shotgun. Adds an extra bullet, and the bullets do more damage
-    and are faster. Reloading is slower
+  description: Only for shotgun
   image: {fileID: 0}
-  modSettings: {fileID: 11400000, guid: 3ee49b6c52c98f44d899ebb02a95f2df, type: 2}
+  <ModSettings>k__BackingField: {fileID: 11400000, guid: 3ee49b6c52c98f44d899ebb02a95f2df, type: 2}
   isForMeleeWeapon: 0
   disallowedTypes: []
   allowedTypes:
@@ -79,4 +78,4 @@ MonoBehaviour:
   MinAngleChange: 0
   MaxAngleChange: 0
   TotalDeltaAngle: 0
-  NumBullets: 1
+  NumProjectiles: 1
