@@ -17,7 +17,8 @@ public class MinigunProjectileHitReciever : MonoBehaviour
 
         foreach (ProjectileHit _minigunBulletHit in minigunBulletHits)
         {
-            if (subscribedMinigunBulletHits.Contains(_minigunBulletHit)) continue;
+            if (subscribedMinigunBulletHits.ContainsReference(_minigunBulletHit))
+                continue;
             subscribedMinigunBulletHits.Add(_minigunBulletHit);
 
             _minigunBulletHit.OnObjectCollision += DamageIfDamageable;

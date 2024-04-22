@@ -54,11 +54,11 @@ MonoBehaviour:
   MaxAmmo: 50
   projectile: {fileID: 8252440497980988240, guid: 9802881ba44263f46b8930c93848aa5b, type: 3}
   ProjectileSpeed: 32
-  Range: 0
+  Range: 6
   MinAngleChange: 0
   MaxAngleChange: 8.35
   TotalDeltaAngle: 0
-  NumBullets: 1
+  NumProjectiles: 1
 --- !u!212 &2897679329776139301
 SpriteRenderer:
   m_ObjectHideFlags: 0

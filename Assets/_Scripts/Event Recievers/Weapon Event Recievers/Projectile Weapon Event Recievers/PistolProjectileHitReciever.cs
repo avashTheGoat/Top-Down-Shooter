@@ -17,7 +17,8 @@ public class PistolProjectileHitReciever : MonoBehaviour
 
         foreach (ProjectileHit _pistolBulletHit in pistolBulletHits)
         {
-            if (subscribedPistolBulletHits.Contains(_pistolBulletHit)) continue;
+            if (subscribedPistolBulletHits.ContainsReference(_pistolBulletHit))
+                continue;
             subscribedPistolBulletHits.Add(_pistolBulletHit);
 
             _pistolBulletHit.OnObjectCollision += DamageIfDamageable;

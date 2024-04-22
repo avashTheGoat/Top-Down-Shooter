@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CraftingMenuReciever : MonoBehaviour
+public class CraftingMenuReceiver : MonoBehaviour
 {
     [SerializeField] private MenuManager[] craftingMenu;
     [SerializeField] private CraftingMenuUIManager[] craftingMenuUI;

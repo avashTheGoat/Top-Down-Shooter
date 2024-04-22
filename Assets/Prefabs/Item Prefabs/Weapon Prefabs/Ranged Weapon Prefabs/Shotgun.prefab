@@ -54,7 +54,7 @@ MonoBehaviour:
   MaxAmmo: 2
   projectile: {fileID: 8252440497980988240, guid: 9aaa848e7ea16ee4fbd7ddc606679d3f, type: 3}
   ProjectileSpeed: 27
-  Range: 0
+  Range: 3
   MinAngleChange: 0
   MaxAngleChange: 1.5
   TotalDeltaAngle: 30

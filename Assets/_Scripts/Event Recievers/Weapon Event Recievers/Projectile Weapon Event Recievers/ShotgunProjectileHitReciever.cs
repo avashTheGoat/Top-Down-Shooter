@@ -17,7 +17,8 @@ public class ShotgunProjectileHitReciever : MonoBehaviour
 
         foreach (ProjectileHit _shotgunBulletHit in shotgunBulletHits)
         {
-            if (subscribedShotgunBulletHits.Contains(_shotgunBulletHit)) continue;
+            if (subscribedShotgunBulletHits.ContainsReference(_shotgunBulletHit))
+                continue;
             subscribedShotgunBulletHits.Add(_shotgunBulletHit);
 
             _shotgunBulletHit.OnObjectCollision += Debug;

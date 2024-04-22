@@ -71,10 +71,12 @@ public class CraftingMenuUIManager : MonoBehaviour
                 _itemThumbnail.gameObject.SetActive(false);
                 _itemInfo.gameObject.SetActive(false);
 
-                UpdateAllCraftingButtons();
-
                 OnCraft?.Invoke(_craftingRecipe);
+
+                UpdateAllCraftingButtons();
             });
+
+            spawnedItemInfos.Add(_itemInfo);
         }
     }
 

@@ -17,7 +17,8 @@ public class SwordAttackReciever : MonoBehaviour
 
         foreach (SwordWeapon _sword in swords)
         {
-            if (subscribedSwords.Contains(_sword)) continue;
+            if (subscribedSwords.ContainsReference(_sword))
+                continue;
             subscribedSwords.Add(_sword);
 
             _sword.OnAttack += DamageObjectsInCollider;

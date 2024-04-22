@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class InventoryReciever : MonoBehaviour
+public class InventoryReceiver : MonoBehaviour
 {
     [SerializeField] private PlayerInventoryManager playerInventory;
 

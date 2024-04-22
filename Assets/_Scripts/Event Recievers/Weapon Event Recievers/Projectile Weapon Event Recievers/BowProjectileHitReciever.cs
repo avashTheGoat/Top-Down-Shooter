@@ -17,14 +17,15 @@ public class BowProjectileHitReciever : MonoBehaviour
 
         foreach (ProjectilePierce _bowArrowPierce in bowArrowPierces)
         {
-            if (subscribedBowArrowPierces.Contains(_bowArrowPierce)) continue;
+            if (subscribedBowArrowPierces.ContainsReference(_bowArrowPierce))
+                continue;
             subscribedBowArrowPierces.Add(_bowArrowPierce);
 
             _bowArrowPierce.OnObjectCollision += ArrowHitLogic;
         }
     }
 
-    private void ArrowHitLogic(GameObject _arrow,  GameObject _hitObject, float _damageAmount)
+    private void ArrowHitLogic(GameObject _arrow, GameObject _hitObject, float _damageAmount)
     {
         if (_hitObject.TryGetComponent(out IDamageable _damageable))
         {

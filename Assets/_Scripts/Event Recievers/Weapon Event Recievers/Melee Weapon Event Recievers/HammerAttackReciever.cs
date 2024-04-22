@@ -24,7 +24,8 @@ public class HammerAttackReciever : MonoBehaviour
 
         foreach (HammerWeapon _hammer in hammers)
         {
-            if (subscribedHammers.Contains(_hammer)) continue;
+            if (subscribedHammers.ContainsReference(_hammer))
+                continue;
             subscribedHammers.Add(_hammer);
 
             _hammer.OnAttack += DamageObjectsInCollider;

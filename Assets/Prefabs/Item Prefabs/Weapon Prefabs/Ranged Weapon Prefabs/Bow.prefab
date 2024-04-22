@@ -106,11 +106,11 @@ MonoBehaviour:
   MaxAmmo: 3
   projectile: {fileID: 8252440497980988240, guid: 6114bd76810530949856f34626aab870, type: 3}
   ProjectileSpeed: 29
-  Range: 0
+  Range: 9
   MinAngleChange: 0
   MaxAngleChange: 2.5
   TotalDeltaAngle: 0
-  NumBullets: 1
+  NumProjectiles: 1
   maxChargeTime: 1.25
   minChargeTimeToShoot: 0.5
   maxDamagePercentCurve:
