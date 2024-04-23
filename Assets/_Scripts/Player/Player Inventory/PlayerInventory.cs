@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class PlayerInventory : MonoBehaviour
+public class PlayerInventory : MonoBehaviour, IProvider<Inventory<Item>>, IProvider<Inventory<Resource>>
 {
-    public Inventory<ResourceSO> ResourceInventory { get; private set; } = new();
+    public Inventory<Resource> ResourceInventory { get; private set; } = new();
     public Inventory<Item> ItemInventory { get; private set; } = new();
 
     [Header("Resource Inventory")]
@@ -27,11 +27,15 @@ public class PlayerInventory : MonoBehaviour
     private void Update()
     {
         serializedResourceInventoryRepresentation = new();
-        foreach (KeyValuePair<ResourceSO, int> _resourceAmount in ResourceInventory.GetInventory())
+        foreach (KeyValuePair<Resource, int> _resourceAmount in ResourceInventory.GetInventory())
             serializedResourceInventoryRepresentation.Add(new ResourceAmount(_resourceAmount.Key, _resourceAmount.Value));
 
         serializedItemInventoryRepresentation = new();
         foreach (KeyValuePair<Item, int> _resourceAmount in ItemInventory.GetInventory())
             serializedItemInventoryRepresentation.Add(new ItemAmount(_resourceAmount.Key, _resourceAmount.Value));
     }
+
+    Inventory<Resource> IProvider<Inventory<Resource>>.Provide() => ResourceInventory;
+
+    Inventory<Item> IProvider<Inventory<Item>>.Provide() => ItemInventory;
 }

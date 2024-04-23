@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class PlayerWeaponsManager : MonoBehaviour, IProvider<Weapon>, IProvider<RangedWeapon>, IProvider<MeleeWeapon>
+public class PlayerWeaponsManager : MonoBehaviour, IProvider<List<Weapon>>, IProvider<List<RangedWeapon>>, IProvider<List<MeleeWeapon>>
 {
     [field: SerializeField] public List<Weapon> PlayerWeapons { get; private set; } = new();
 
@@ -42,11 +42,11 @@ public class PlayerWeaponsManager : MonoBehaviour, IProvider<Weapon>, IProvider<
         PlayerWeapons.Add(_weaponObject);
     }
 
-    public List<Weapon> GetWeapons() => ((IProvider<Weapon>)this).Provide();
-    public List<RangedWeapon> GetRangedWeapons() => ((IProvider<RangedWeapon>)this).Provide();
-    public List<MeleeWeapon> GetMeleeWeapons() => ((IProvider<MeleeWeapon>)this).Provide();
+    public List<Weapon> GetWeapons() => ((IProvider<List<Weapon>>)this).Provide();
+    public List<RangedWeapon> GetRangedWeapons() => ((IProvider<List<RangedWeapon>>)this).Provide();
+    public List<MeleeWeapon> GetMeleeWeapons() => ((IProvider<List<MeleeWeapon>>)this).Provide();
 
-    List<Weapon> IProvider<Weapon>.Provide()
+    List<Weapon> IProvider<List<Weapon>>.Provide()
     {
         List<Weapon> _weapons = new();
         PlayerWeapons.ForEach(_weapon =>
@@ -60,7 +60,7 @@ public class PlayerWeaponsManager : MonoBehaviour, IProvider<Weapon>, IProvider<
         return _weapons;
     }
 
-    List<MeleeWeapon> IProvider<MeleeWeapon>.Provide()
+    List<MeleeWeapon> IProvider<List<MeleeWeapon>>.Provide()
     {
         List<MeleeWeapon> _weapons = new();
         PlayerWeapons.ForEach(_weapon =>
@@ -75,7 +75,7 @@ public class PlayerWeaponsManager : MonoBehaviour, IProvider<Weapon>, IProvider<
         return _weapons;
     }
 
-    List<RangedWeapon> IProvider<RangedWeapon>.Provide()
+    List<RangedWeapon> IProvider<List<RangedWeapon>>.Provide()
     {
         List<RangedWeapon> _weapons = new();
         PlayerWeapons.ForEach(_weapon =>

@@ -24,6 +24,15 @@ public class WeaponMod : Item
 		return true;
 	}
 
+	public bool UnapplyMod(Weapon _target)
+    {
+		if (!IsWeaponCorrectType(_target))
+			return false;
+
+		UnapplyModSettings(_target);
+		return true;
+	}
+
 	private void ApplyModSettings(Weapon _target)
 	{
 		_target.AttacksPerSecond *= ModSettings.AttacksPerSecondMulti;
@@ -39,6 +48,24 @@ public class WeaponMod : Item
 			_rangedWeapon.ProjectileSpeed *= ModSettings.ProjectileSpeedMulti;
 			_rangedWeapon.NumProjectiles += ModSettings.NumProjectilesShotIncrease;
 			_rangedWeapon.MaxAmmo = Mathf.RoundToInt(_rangedWeapon.MaxAmmo * ModSettings.MaxAmmoMulti);
+		}
+	}
+
+	private void UnapplyModSettings(Weapon _target)
+    {
+		_target.AttacksPerSecond /= ModSettings.AttacksPerSecondMulti;
+		_target.Damage /= ModSettings.DamageMulti;
+
+		if (_target is RangedWeapon _rangedWeapon)
+		{
+			_rangedWeapon.MinAngleChange *= ModSettings.AccuracyMulti;
+			_rangedWeapon.MaxAngleChange *= ModSettings.AccuracyMulti;
+
+			_rangedWeapon.ReloadTime /= ModSettings.ReloadTimeMulti;
+			_rangedWeapon.Range /= ModSettings.ProjectileRangeMulti;
+			_rangedWeapon.ProjectileSpeed /= ModSettings.ProjectileSpeedMulti;
+			_rangedWeapon.NumProjectiles -= ModSettings.NumProjectilesShotIncrease;
+			_rangedWeapon.MaxAmmo = (int)Mathf.Floor(_rangedWeapon.MaxAmmo / ModSettings.MaxAmmoMulti);
 		}
 	}
 

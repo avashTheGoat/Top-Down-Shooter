@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Jet Propeller Mod Recipe
   m_EditorClassIdentifier: 
   <CraftingRequirements>k__BackingField:
-  - Resource: {fileID: 11400000, guid: 507d9061e38fe914cbc420036caea538, type: 2}
+  - Resource: {fileID: -6230983682229027591, guid: 186d6cd1ef7bbc841bf3d0df0106833b, type: 3}
     Amount: 10
   <Result>k__BackingField: {fileID: 4776851643973141854, guid: f046ac5dd37cd5746b2e887720f5eda6, type: 3}

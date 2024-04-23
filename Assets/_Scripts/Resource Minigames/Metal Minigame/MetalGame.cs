@@ -29,7 +29,7 @@ public class MetalGame : ResourceGame
     private ParticleSystem.MainModule harvestedMetalParticleSettings;
 
     private List<RectTransform> spawnedMetals = new();
-    private Inventory<ResourceSO> droppedResources = new();
+    private Inventory<Resource> droppedResources = new();
 
     protected override void Awake()
     {
@@ -82,7 +82,7 @@ public class MetalGame : ResourceGame
             int _numMetals = Random.Range(MinNumMetals, MaxNumMetals + 1);
             for (int i = 0; i < _numMetals; i++)
             {
-                ResourceSourceInfo _resourceSourceToSpawn = GetRandomResourceSourceInfo();
+                ResourceSourceInfoSO _resourceSourceToSpawn = GetRandomResourceSourceInfo();
                 GameObject _spawnedObject = Instantiate(_resourceSourceToSpawn.ResourceObject, Vector2.zero, Quaternion.identity, GameUI.transform);
                 _spawnedObject.transform.SetSiblingIndex(gameUiSpawnIndex);
 

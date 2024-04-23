@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Purple Metal Source
   m_EditorClassIdentifier: 
   <ResourceObject>k__BackingField: {fileID: 787742772800518988, guid: f2cc58b18cfccaf4d97439ae626905ae, type: 3}
-  <Resource>k__BackingField: {fileID: 11400000, guid: 507d9061e38fe914cbc420036caea538, type: 2}
+  <Resource>k__BackingField: {fileID: -6230983682229027591, guid: 186d6cd1ef7bbc841bf3d0df0106833b, type: 3}
   <MinAmount>k__BackingField: 3
   <MaxAmount>k__BackingField: 7
   spawnChance: 50

@@ -6,7 +6,6 @@ public abstract class Weapon : Item
 {
     public event Action<GameObject> OnAttack;
 
-
     public Transform Wielder { get; private set; }
 
     public List<string> TagsToIgnore { get; protected set; } = new();

@@ -42,7 +42,7 @@ public class PistolProjectileHitReciever : MonoBehaviour
         pistolBulletHits.Clear();
         weaponProviders.RemoveAll(_weaponProvider => _weaponProvider == null);
 
-        foreach (IProvider<RangedWeapon> _weaponProvider in weaponProviders)
+        foreach (IProvider<List<RangedWeapon>> _weaponProvider in weaponProviders)
         {
             foreach (RangedWeapon _rangedWeapon in _weaponProvider.Provide())
             {

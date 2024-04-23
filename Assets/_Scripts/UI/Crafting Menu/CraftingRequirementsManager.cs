@@ -15,14 +15,14 @@ public class CraftingRequirementsManager : MonoBehaviour
         foreach (ResourceAmount _resourceAmount in craftingRecipe.CraftingRequirements)
         {
             CraftingRequirementUI _requirement = Instantiate(requirementsPrefab, _target);
-            _requirement.RequirementImage.sprite = _resourceAmount.Resource.ResourceImage;
+            _requirement.RequirementImage.sprite = _resourceAmount.Resource.Image;
             _requirement.RequirementCount.SetCount(_resourceAmount.Amount);
         }
     }
 
     public void SetCraftingRecipe(CraftingRecipeSO _recipe) => craftingRecipe = _recipe;
 
-    public bool SetButtonInteractionBasedOnCraftability(Inventory<ResourceSO> _inventory, Button _button)
+    public bool SetButtonInteractionBasedOnCraftability(Inventory<Resource> _inventory, Button _button)
     {
         _button.interactable = true;
         foreach (ResourceAmount _resourceAmount in craftingRecipe.CraftingRequirements)

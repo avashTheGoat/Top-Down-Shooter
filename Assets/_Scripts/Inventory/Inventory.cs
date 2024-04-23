@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
-public class Inventory<T>
+public class Inventory<T> where T : Item
 {
     public event Action<T, int> OnItemAdd;
     public event Action<T, int> OnItemRemove;
@@ -62,17 +62,17 @@ public class Inventory<T>
         return _deltaAmount;
     }
 
-    public int Remove(T _resource) => Remove(_resource, 1);
+    public int Remove(T _item) => Remove(_item, 1);
 
-    public int Get(T _resource)
+    public int Get(T _item)
     {
-        if (!inventory.ContainsKey(_resource))
+        if (!inventory.ContainsKey(_item))
             return -1;
 
-        return inventory[_resource];
+        return inventory[_item];
     }
 
-    public bool Contains(T _resource) => inventory.ContainsKey(_resource);
+    public bool Contains(T _item) => inventory.ContainsKey(_item);
 
     public Dictionary<T, int> GetInventory() => inventory;
 }

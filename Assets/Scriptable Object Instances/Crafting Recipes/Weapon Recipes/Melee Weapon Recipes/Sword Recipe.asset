@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Sword Recipe
   m_EditorClassIdentifier: 
   <CraftingRequirements>k__BackingField:
-  - Resource: {fileID: 11400000, guid: 507d9061e38fe914cbc420036caea538, type: 2}
+  - Resource: {fileID: -6230983682229027591, guid: 186d6cd1ef7bbc841bf3d0df0106833b, type: 3}
     Amount: 15
   <Result>k__BackingField: {fileID: 2496917111802942992, guid: 8b07568dc8b2af64a929777b8d93b2d1, type: 3}

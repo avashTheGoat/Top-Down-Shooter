@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Hammer Recipe
   m_EditorClassIdentifier: 
   <CraftingRequirements>k__BackingField:
-  - Resource: {fileID: 11400000, guid: 507d9061e38fe914cbc420036caea538, type: 2}
+  - Resource: {fileID: -6230983682229027591, guid: 186d6cd1ef7bbc841bf3d0df0106833b, type: 3}
     Amount: 25
   <Result>k__BackingField: {fileID: 4163144566826951537, guid: 4f3e0333b5fcc0d44b3087c873dd0de1, type: 3}

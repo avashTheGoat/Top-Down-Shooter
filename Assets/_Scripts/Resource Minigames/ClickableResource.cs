@@ -11,7 +11,7 @@ public class ClickableResource : MonoBehaviour, IDamageable, IKillable
     public event Action<float, GameObject> OnDamage;
     public event Action<float, GameObject> OnHeal;
 
-    public ResourceSO Resource;
+    public Resource Resource;
 
     public int MinResourceAmount { get; private set; }
     public int MaxResourceAmount { get; private set; }

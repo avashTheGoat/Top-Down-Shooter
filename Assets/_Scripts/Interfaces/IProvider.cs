@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-public interface IProvider<T>
+﻿public interface IProvider<T>
 {
-    public List<T> Provide();
+    public T Provide();
 }

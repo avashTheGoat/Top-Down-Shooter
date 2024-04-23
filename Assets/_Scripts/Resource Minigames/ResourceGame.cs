@@ -5,13 +5,13 @@ public abstract class ResourceGame : MonoBehaviour
 {
     public event Action OnSuccessfulStart;
     public event Action<string> OnUnableToStartGame;
-    public event Action<Inventory<ResourceSO>> OnGameSuccessfullyComplete;
-    public event Action<Inventory<ResourceSO>, string> OnGameUnsuccessfullyComplete;
+    public event Action<Inventory<Resource>> OnGameSuccessfullyComplete;
+    public event Action<Inventory<Resource>, string> OnGameUnsuccessfullyComplete;
 
     [field: SerializeField] public Canvas GameUI { get; private set; }
 
     [Header("Resource Spawning")]
-    [SerializeField] protected ResourceSourceInfo[] possibleResourceSources;
+    [SerializeField] protected ResourceSourceInfoSO[] possibleResourceSources;
 
     protected virtual void Awake()
     {
@@ -25,11 +25,11 @@ public abstract class ResourceGame : MonoBehaviour
 
     public abstract void StartGame();
 
-    protected ResourceSourceInfo GetRandomResourceSourceInfo()
+    protected ResourceSourceInfoSO GetRandomResourceSourceInfo()
     {
         int _spawnSeed = UnityEngine.Random.Range(1, 101);
         int _min = 0;
-        ResourceSourceInfo _enemySpawningInfo = possibleResourceSources[0];
+        ResourceSourceInfoSO _enemySpawningInfo = possibleResourceSources[0];
         for (int i = 0; i < possibleResourceSources.Length; i++)
         {
             if (_spawnSeed > _min && _spawnSeed < _min + possibleResourceSources[i].SpawnChance)
@@ -46,6 +46,6 @@ public abstract class ResourceGame : MonoBehaviour
 
     protected void InvokeOnSuccessfulStart() => OnSuccessfulStart?.Invoke();
     protected void InvokeOnUnableToStartGame(string _message) => OnUnableToStartGame?.Invoke(_message);
-    protected void InvokeOnGameSuccessfullyComplete(Inventory<ResourceSO> _droppedResources) => OnGameSuccessfullyComplete?.Invoke(_droppedResources);
-    protected void InvokeOnGameUnsuccessfullyComplete(Inventory<ResourceSO> _droppedResources, string _message) => OnGameUnsuccessfullyComplete?.Invoke(_droppedResources, _message);
+    protected void InvokeOnGameSuccessfullyComplete(Inventory<Resource> _droppedResources) => OnGameSuccessfullyComplete?.Invoke(_droppedResources);
+    protected void InvokeOnGameUnsuccessfullyComplete(Inventory<Resource> _droppedResources, string _message) => OnGameUnsuccessfullyComplete?.Invoke(_droppedResources, _message);
 }

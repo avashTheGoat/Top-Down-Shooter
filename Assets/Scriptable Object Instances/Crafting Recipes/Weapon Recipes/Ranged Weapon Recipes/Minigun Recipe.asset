@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Minigun Recipe
   m_EditorClassIdentifier: 
   <CraftingRequirements>k__BackingField:
-  - Resource: {fileID: 11400000, guid: 507d9061e38fe914cbc420036caea538, type: 2}
+  - Resource: {fileID: -6230983682229027591, guid: 186d6cd1ef7bbc841bf3d0df0106833b, type: 3}
     Amount: 60
   <Result>k__BackingField: {fileID: 2897679329776139302, guid: afbedaad16e35c6409a9b7fa1518f476, type: 3}

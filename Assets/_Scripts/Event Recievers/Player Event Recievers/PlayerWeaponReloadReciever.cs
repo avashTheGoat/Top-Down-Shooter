@@ -4,20 +4,20 @@ using System.Collections.Generic;
 
 public class PlayerWeaponReloadReciever : MonoBehaviour
 {
-    [SerializeField] private Component rangedWeaponProviderComponent;
+    [SerializeField] private Component rangedWeaponsProviderComponent;
     [SerializeField] private PlayerWeaponsSwitcher weaponsSwitcher;
 
     [SerializeField] private PlayerWeaponReloadUI reload;
     [SerializeField] private Image defaultCrosshair;
 
     private List<RangedWeapon> subscribedRangedWeapons = new();
-    private IProvider<RangedWeapon> rangedWeaponProvider;
+    private IProvider<List<RangedWeapon>> rangedWeaponsProvider;
 
     private GameObject reloadParent;
 
     private void Start()
     {
-        rangedWeaponProvider = (IProvider<RangedWeapon>)rangedWeaponProviderComponent;
+        rangedWeaponsProvider = (IProvider<List<RangedWeapon>>)rangedWeaponsProviderComponent;
         weaponsSwitcher.OnWeaponSwitch += (_, __) => ResetCursor();
 
         reloadParent = reload.transform.parent.gameObject;
@@ -25,7 +25,7 @@ public class PlayerWeaponReloadReciever : MonoBehaviour
 
     private void Update()
     {
-        foreach (RangedWeapon _rangedWeapon in rangedWeaponProvider.Provide())
+        foreach (RangedWeapon _rangedWeapon in rangedWeaponsProvider.Provide())
         {
             if (subscribedRangedWeapons.Contains(_rangedWeapon))
                 continue;
