@@ -39,7 +39,7 @@ public class ResourceMinigamesReciever : MonoBehaviour
 
     private void AddResourcesToPlayerInventory(Inventory<Resource> _inventory)
     {
-        foreach (Resource _resource in _inventory.GetInventory().Keys)
+        foreach (Resource _resource in _inventory.GetDictionary().Keys)
             playerInventory.ResourceInventory.Add(_resource, _inventory.Get(_resource));
     }
 }

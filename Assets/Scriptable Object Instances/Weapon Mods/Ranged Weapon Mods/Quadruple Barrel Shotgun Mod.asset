@@ -15,7 +15,8 @@ MonoBehaviour:
   damageMulti: 1.1
   attacksPerSecondMulti: 1
   accuracyMulti: 1.25
-  reloadTimeMulti: 0.8
+  reloadTimeMulti: 1.125
   projectileRangeMulit: 1
   projectileSpeedMulti: 1.1
   numBulletsIncrease: 1
+  maxBulletsMulti: 1

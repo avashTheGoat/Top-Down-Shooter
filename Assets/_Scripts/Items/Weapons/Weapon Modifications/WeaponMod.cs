@@ -32,6 +32,37 @@ public class WeaponMod : Item
 		UnapplyModSettings(_target);
 		return true;
 	}
+	
+	public bool IsWeaponCorrectType(Weapon _weapon)
+	{
+		if (_weapon is MeleeWeapon && !isForMeleeWeapon)
+			return false;
+
+		if (_weapon is RangedWeapon && isForMeleeWeapon)
+			return false;
+
+		if (disallowedTypes.Count == 0)
+        {
+			if (allowedTypes.Count == 0)
+				return true;
+
+			foreach (Weapon _allowedType in allowedTypes)
+			{
+				if (_weapon.GetType().Equals(_allowedType.GetType()))
+					return true;
+			}
+
+			return false;
+		}
+
+		foreach (Weapon _disallowedType in disallowedTypes)
+		{
+            if (_weapon.GetType().Equals(_disallowedType.GetType()))
+				return false;
+		}
+
+		return true;
+	}
 
 	private void ApplyModSettings(Weapon _target)
 	{
@@ -65,38 +96,8 @@ public class WeaponMod : Item
 			_rangedWeapon.Range /= ModSettings.ProjectileRangeMulti;
 			_rangedWeapon.ProjectileSpeed /= ModSettings.ProjectileSpeedMulti;
 			_rangedWeapon.NumProjectiles -= ModSettings.NumProjectilesShotIncrease;
-			_rangedWeapon.MaxAmmo = (int)Mathf.Floor(_rangedWeapon.MaxAmmo / ModSettings.MaxAmmoMulti);
+			_rangedWeapon.MaxAmmo = Mathf.RoundToInt(_rangedWeapon.MaxAmmo / ModSettings.MaxAmmoMulti);
 		}
 	}
 
-	private bool IsWeaponCorrectType(Weapon _weapon)
-	{
-		if (_weapon is MeleeWeapon && !isForMeleeWeapon)
-			return false;
-
-		if (_weapon is RangedWeapon && isForMeleeWeapon)
-			return false;
-
-		if (disallowedTypes.Count == 0)
-        {
-			if (allowedTypes.Count == 0)
-				return true;
-
-			foreach (Weapon _allowedType in allowedTypes)
-			{
-				if (_weapon.GetType().Equals(_allowedType.GetType()))
-					return true;
-			}
-
-			return false;
-		}
-
-		foreach (Weapon _disallowedType in disallowedTypes)
-		{
-            if (_weapon.GetType().Equals(_disallowedType.GetType()))
-				return false;
-		}
-
-		return true;
-	}
 }

@@ -14,6 +14,7 @@ public class PlayerSprintUI : MonoBehaviour
     [Min(0)]
     [SerializeField] private float timeForSprintToFadeOut;
 
+    private UIEffects uiEffects;
     private CanvasGroup sprintBarParentCanvasGroup;
     private GameObject sprintBarParent;
 
@@ -22,12 +23,14 @@ public class PlayerSprintUI : MonoBehaviour
 
     private void Awake()
     {
+        uiEffects = new(this);
+
         sprintBarParent = sprintBar.transform.parent.parent.gameObject;
         sprintBarParentCanvasGroup = sprintBarParent.GetComponent<CanvasGroup>();
         sprintBarParentCanvasGroup.alpha = 0f;
 
         sprintFadeOutTimer = new(timeForSprintToFadeOut);
-        sprintFadeOutTimer.OnComplete += () => UIEffectsManager.Instance.FadeOut(sprintBarParentCanvasGroup, fadeOutTime);
+        sprintFadeOutTimer.OnComplete += () => uiEffects.FadeOut(sprintBarParentCanvasGroup, fadeOutTime);
     }
 
     private void Start()
@@ -41,7 +44,7 @@ public class PlayerSprintUI : MonoBehaviour
         if (playerSprint.Stamina < prevStamina)
         {
             if (!IsSprintBarVisible())
-                UIEffectsManager.Instance.FadeIn(sprintBarParentCanvasGroup, fadeInTime);
+                uiEffects.FadeIn(sprintBarParentCanvasGroup, fadeInTime);
 
             sprintFadeOutTimer.Reset();
         }

@@ -18,19 +18,23 @@ public class EnemyWavesReciever : MonoBehaviour
     [SerializeField] private float fullyVisibleDurationAllWavesComplete;
     [SerializeField] private float fadeOutDurationAllWavesComplete;
 
+    private UIEffects uiEffects;
+
+    private void Awake() => uiEffects = new(this);
+
     private void Start()
     {
         enemyWaves.OnWaveStart += _waveNum =>
         {
             waveText.GetComponent<TextMeshProUGUI>().text = $"Wave {_waveNum}";
-            UIEffectsManager.Instance.FadeInAndOut(waveText, fadeInDurationWaveComplete,
+            uiEffects.FadeInAndOut(waveText, fadeInDurationWaveComplete,
             fullyVisibleDurationWaveComplete, fadeOutDurationWaveComplete);
         };
 
         enemyWaves.OnAllWavesComplete += () => 
         {
             nightSurviveText.GetComponent<TextMeshProUGUI>().text = $"Night {enemyWavesManager.NightNum} survived";
-            UIEffectsManager.Instance.FadeInAndOut(nightSurviveText, fadeInDurationAllWavesComplete,
+            uiEffects.FadeInAndOut(nightSurviveText, fadeInDurationAllWavesComplete,
             fullyVisibleDurationAllWavesComplete, fadeOutDurationAllWavesComplete);
         };
     }

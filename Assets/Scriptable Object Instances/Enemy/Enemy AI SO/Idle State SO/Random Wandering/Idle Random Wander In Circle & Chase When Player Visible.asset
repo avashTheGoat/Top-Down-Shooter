@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minWanderRange: 3
   maxWanderRange: 7.5
-  minWanderSpeed: 0.5
-  maxWanderSpeed: 1.5
+  minWanderSpeedMultiplier: 0.15
+  maxWanderSpeedMultiplier: 0.3
   minTimeBetweenWandering: 2.5
   maxTimeBetweenWandering: 4.5
   minDifferenceInX: 0.35

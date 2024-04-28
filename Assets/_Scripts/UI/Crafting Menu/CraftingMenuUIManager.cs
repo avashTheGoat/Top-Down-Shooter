@@ -42,13 +42,10 @@ public class CraftingMenuUIManager : MonoBehaviour
         foreach (CraftingRecipeSO _craftingRecipe in craftingRecipes)
         {
             ItemUI _itemThumbnail = Instantiate(craftingThumbnailPrefab, itemThumbnails);
-            _itemThumbnail.ItemImage.sprite = _craftingRecipe.Result.Image;
-            _itemThumbnail.ItemName.text = _craftingRecipe.Result.Name;
+            _itemThumbnail.SetItem(_craftingRecipe.Result);
 
             ItemCraftingUI _itemInfo = Instantiate(itemInfoUiPrefab, itemInfos);
-            _itemInfo.ItemUI.ItemImage.sprite = _craftingRecipe.Result.Image;
-            _itemInfo.ItemUI.ItemDescription.text = _craftingRecipe.Result.Description;
-            _itemInfo.ItemUI.ItemName.text = _craftingRecipe.Result.Name;
+            _itemInfo.ItemUI.SetItem(_craftingRecipe.Result);
 
             _itemInfo.RequirementsManager.SetCraftingRecipe(_craftingRecipe);
             _itemInfo.RequirementsManager.PopulateWithCraftingRequirements(_itemInfo.ItemRequirementsUI);

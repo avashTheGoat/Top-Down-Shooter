@@ -8,7 +8,6 @@ public class CraftingMenuReceiver : MonoBehaviour
     [Header("Player")]
     [SerializeField] private PlayerWeaponsManager playerWeapons;
     [SerializeField] private PlayerInventory playerInventory;
-    [SerializeField] private PlayerWeaponsSwitcher switcherForTestingWeaponMod;
 
     private void Awake()
     {
@@ -32,8 +31,7 @@ public class CraftingMenuReceiver : MonoBehaviour
                     playerWeapons.AddWeapon(_weapon);
 
                 else if (_recipe.Result is WeaponMod _mod)
-                    if (!_mod.ApplyMod(switcherForTestingWeaponMod.ActiveWeapon))
-                        Debug.LogWarning("Mod not applied successfully.");
+                    playerInventory.WeaponModInventory.Add(_mod);
             };
         }
     }

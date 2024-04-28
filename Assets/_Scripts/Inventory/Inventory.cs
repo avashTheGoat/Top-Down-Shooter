@@ -11,16 +11,25 @@ public class Inventory<T> where T : Item
 
     public Inventory() { inventory = new(); }
 
-    public Inventory(List<T> initialResources, List<int> initialResourceAmounts)
+    public Inventory(List<T> _initialItems, List<int> _initialItemAmounts)
     {
-        if (initialResources == null || initialResourceAmounts == null)
+        if (_initialItems == null || _initialItemAmounts == null)
             return;
 
-        if (initialResources.Count != initialResourceAmounts.Count)
+        if (_initialItems.Count != _initialItemAmounts.Count)
             throw new ArgumentException("initialResouces count and initialResourceAmounts count must be the same.");
 
-        for (int i = 0; i < initialResourceAmounts.Count; i++)
-            inventory.Add(initialResources[i], initialResourceAmounts[i]);
+        for (int i = 0; i < _initialItemAmounts.Count; i++)
+            inventory.Add(_initialItems[i], _initialItemAmounts[i]);
+    }
+
+    public Inventory(Dictionary<T, int> _initialInventory)
+    {
+        if (_initialInventory == null)
+            throw new ArgumentNullException(nameof(_initialInventory));
+
+        foreach (KeyValuePair<T, int> _itemAmount in _initialInventory)
+            inventory.Add(_itemAmount.Key, _itemAmount.Value);
     }
 
     public bool Add(T _item, int _amount)
@@ -74,5 +83,7 @@ public class Inventory<T> where T : Item
 
     public bool Contains(T _item) => inventory.ContainsKey(_item);
 
-    public Dictionary<T, int> GetInventory() => inventory;
+    public Dictionary<T, int> GetDictionary() => inventory;
+
+    public Inventory<T> Clone() => new(inventory);
 }

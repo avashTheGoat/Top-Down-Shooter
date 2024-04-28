@@ -64,22 +64,31 @@ MonoBehaviour:
   - enemySpawningInfos:
     - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
       weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
-      spawnChance: 87
-    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
-      weaponPrefab: {fileID: 1368183166115280648, guid: d682db0fd5908d147841961961bb118e, type: 3}
-      spawnChance: 13
-  - enemySpawningInfos:
-    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
+      spawnChance: 77
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 8abc6237c4a7cfb48a611bacea4b63e1, type: 3}
       weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
-      spawnChance: 80
-    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
-      weaponPrefab: {fileID: 1368183166115280648, guid: d682db0fd5908d147841961961bb118e, type: 3}
-      spawnChance: 20
+      spawnChance: 8
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 0400d47ae8b778c4faf2be405a773710, type: 3}
+      weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
+      spawnChance: 15
   - enemySpawningInfos:
-    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
-      weaponPrefab: {fileID: 1368183166115280648, guid: d682db0fd5908d147841961961bb118e, type: 3}
-      spawnChance: 30
     - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
       weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
       spawnChance: 70
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 8abc6237c4a7cfb48a611bacea4b63e1, type: 3}
+      weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
+      spawnChance: 15
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 0400d47ae8b778c4faf2be405a773710, type: 3}
+      weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
+      spawnChance: 15
+  - enemySpawningInfos:
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
+      weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
+      spawnChance: 70
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 8abc6237c4a7cfb48a611bacea4b63e1, type: 3}
+      weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
+      spawnChance: 18
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 0400d47ae8b778c4faf2be405a773710, type: 3}
+      weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
+      spawnChance: 12
   IsEndless: 0

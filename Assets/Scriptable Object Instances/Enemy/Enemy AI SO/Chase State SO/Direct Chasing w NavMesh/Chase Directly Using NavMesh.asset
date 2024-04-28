@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b015e1c961f91ef43a2cb2b58fa688c2, type: 3}
   m_Name: Chase Directly Using NavMesh
   m_EditorClassIdentifier: 
-  chaseSpeed: 3
-  minTimeToWanderAfterDetectionExit: 3
-  maxTimeToWanderAfterDetectionExit: 5
   numRaycasts: 18
   maxDistanceFromPlayerToChase: 15
+  chaseSpeedMultiplier: 1
+  minTimeToWanderAfterDetectionExit: 3
+  maxTimeToWanderAfterDetectionExit: 5
