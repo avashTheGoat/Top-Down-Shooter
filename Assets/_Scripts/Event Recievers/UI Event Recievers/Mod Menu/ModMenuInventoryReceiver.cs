@@ -44,30 +44,15 @@ public class ModMenuInventoryReceiver : MonoBehaviour
         };
     }
 
-    private void Start()
-    {
-        openButton.onClick.AddListener(() =>
-        {
-            inventoryUIManager.UpdateInventory(modInventoryUI, UpdateNewUI);
+    private void Start() => openButton.onClick.AddListener(() => inventoryUIManager.UpdateInventory(modInventoryUI, UpdateNewUI));
 
-            int _childCount = modInventoryUI.childCount;
-            for (int i = 0; i < _childCount; i++)
-            {
-                DragDropUI _dragDrop = modInventoryUI.GetChild(i).GetComponent<DragDropUI>();
-                SubscribeToDragDrop(_dragDrop);
-            }
-        });
-    }
-
-    private void SubscribeToDragDrop(DragDropUI _dragDrop, bool _isNew = false)
+    private void SubscribeToDragDrop(DragDropUI _dragDrop)
     {
         _dragDrop.OnDragStart += _ =>
         {
-            playerInventory.WeaponModInventory.Remove((WeaponMod)_dragDrop.GetComponent<ItemInventoryUI>().ItemUI.Item);
-
             _dragDrop.Trans.SetParent(draggingItemsParent);
-            inventoryUIManager.UpdateInventory(modInventoryUI, _newItemAction: UpdateNewUI);
         };
+        _dragDrop.OnDragStart += RemoveFromInventory;
 
         _dragDrop.OnDrop += _ =>
         {
@@ -81,7 +66,10 @@ public class ModMenuInventoryReceiver : MonoBehaviour
                 {
                     WeaponMod _mod = (WeaponMod)_itemSlot.Item;
                     if (_mod.IsWeaponCorrectType(_modsUI.Weapon))
+                    {
+                        _dragDrop.OnDragStart -= RemoveFromInventory;
                         return;
+                    }
 
                     else
                     {
@@ -114,11 +102,20 @@ public class ModMenuInventoryReceiver : MonoBehaviour
         };
     }
 
+    private void RemoveFromInventory(DragDropUI _dragDrop)
+    {
+        playerInventory.WeaponModInventory.Remove((WeaponMod)_dragDrop.GetComponent<ItemInventoryUI>().ItemUI.Item);
+
+        print("Inventory: " + playerInventory.WeaponModInventory.GetDictionary().Stringify());
+
+        inventoryUIManager.UpdateInventory(modInventoryUI, _newItemAction: UpdateNewUI);
+    }
+
     private void UpdateNewUI(ItemInventoryUI _ui, Item _item, int _)
     {
         _ui.GetComponent<DragDropUI>().SetCanvas(canvas);
         _ui.GetComponent<ItemInventoryUI>().ItemUI.SetItem(_item);
 
-        SubscribeToDragDrop(_ui.GetComponent<DragDropUI>(), true);
+        SubscribeToDragDrop(_ui.GetComponent<DragDropUI>());
     }
 }

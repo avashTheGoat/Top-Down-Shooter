@@ -43,6 +43,13 @@ public class TabsUI : MonoBehaviour
         _tabOpenButton.onClick.AddListener(() => SwitchTab(tabs.IndexOf(_tab)));
     }
 
+    public void Clear()
+    {
+        tabs = new();
+        buttons = new();
+        openTabIndex = 0;
+    }
+
     public void SwitchTab(int _tabIndex)
     {
         if (tabs[openTabIndex] != null)

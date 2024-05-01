@@ -51,8 +51,6 @@ public class EnemyIdleRandomPointInCircleChaseWhenPlayerVisibleOrAttacked : Enem
 
     public override void DoUpdateLogic()
     {
-        MonoBehaviour.print("Initial speed is " + initialSpeed);
-
         if (IsPlayerVisible())
         {
             stateMachine.TransitionToState(stateMachine.ChaseState);
@@ -113,7 +111,7 @@ public class EnemyIdleRandomPointInCircleChaseWhenPlayerVisibleOrAttacked : Enem
 
                 else if (Mathf.Abs(trans.position.y - agent.destination.y) < minDifferenceInY)
                 {
-                    MonoBehaviour.print("change in y is less than desired amount");
+                    // MonoBehaviour.print("change in y is less than desired amount");
 
                     Vector2 _newMovementVector = _movementVector + new Vector2(0, 1);
                     _newMovementVector.Normalize();
@@ -124,7 +122,7 @@ public class EnemyIdleRandomPointInCircleChaseWhenPlayerVisibleOrAttacked : Enem
 
                     _successfulDestination = IsSuccessfulDestination(_finalPosition);
 
-                    MonoBehaviour.print("Is successful destination set in y: " + _successfulDestination);
+                    // MonoBehaviour.print("Is successful destination set in y: " + _successfulDestination);
 
                     if (!_successfulDestination)
                     {

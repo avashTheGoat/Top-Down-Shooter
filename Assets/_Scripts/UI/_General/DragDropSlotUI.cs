@@ -45,7 +45,6 @@ public class DragDropSlotUI : MonoBehaviour, IDropHandler
             return;
 
         CurrentItem.OnDrop -= HandleItemMoveFromSlot;
-        CurrentItem.OnEndDrag(null, () => CurrentItem = null);
     }
 
     private void HandleItemMoveFromSlot(DragDropUI _dragDropUI)

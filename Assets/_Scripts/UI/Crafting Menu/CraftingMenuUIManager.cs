@@ -9,6 +9,7 @@ public class CraftingMenuUIManager : MonoBehaviour
     public event Action<CraftingRecipeSO> OnCraft;
 
     [Header("Dependencies")]
+    [SerializeField] private DayNightManager dayNightManager;
     [SerializeField] private PlayerInventory playerInventory;
     [SerializeField] private TabsUI tabsManager;
     [SerializeField] private Component statsProviderComponent;
@@ -20,10 +21,16 @@ public class CraftingMenuUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI statTextPrefab;
     [Space(15)]
 
-    [Header("Content Info")]
+    [Header("Instantiated Prefab Locations")]
+    [SerializeField] private RectTransform itemThumbnailsParent;
+    [SerializeField] private RectTransform itemInfosParent;
+    [Space(15)]
+    
+    [Header("Settings")]
     [SerializeField] private List<CraftingRecipeSO> craftingRecipes;
-    [SerializeField] private RectTransform itemThumbnails;
-    [SerializeField] private RectTransform itemInfos;
+    [SerializeField] private bool doCraftsRefreshDaily = false;
+    [SerializeField] private int numRecipesDaily;
+    [SerializeField] private bool areSameRecipesAllowed = true;
 
     private List<ItemCraftingUI> spawnedItemInfos = new();
 
@@ -39,12 +46,30 @@ public class CraftingMenuUIManager : MonoBehaviour
 
     private void Start()
     {
-        foreach (CraftingRecipeSO _craftingRecipe in craftingRecipes)
+        SetCraftingRecipes();
+
+        if (doCraftsRefreshDaily)
+            dayNightManager.OnNightEnd += SetCraftingRecipes;
+    }
+
+    private void SetCraftingRecipes()
+    {
+        itemThumbnailsParent.DestroyChildren();
+        itemInfosParent.DestroyChildren();
+
+        tabsManager.Clear();
+
+        List<CraftingRecipeSO> _chosenRecipes = craftingRecipes;
+
+        if (doCraftsRefreshDaily)
+            _chosenRecipes = RandomHelper.Choices(craftingRecipes, numRecipesDaily, areSameRecipesAllowed);
+
+        foreach (CraftingRecipeSO _craftingRecipe in _chosenRecipes)
         {
-            ItemUI _itemThumbnail = Instantiate(craftingThumbnailPrefab, itemThumbnails);
+            ItemUI _itemThumbnail = Instantiate(craftingThumbnailPrefab, itemThumbnailsParent);
             _itemThumbnail.SetItem(_craftingRecipe.Result);
 
-            ItemCraftingUI _itemInfo = Instantiate(itemInfoUiPrefab, itemInfos);
+            ItemCraftingUI _itemInfo = Instantiate(itemInfoUiPrefab, itemInfosParent);
             _itemInfo.ItemUI.SetItem(_craftingRecipe.Result);
 
             _itemInfo.RequirementsManager.SetCraftingRecipe(_craftingRecipe);
