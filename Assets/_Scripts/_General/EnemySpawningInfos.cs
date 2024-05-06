@@ -1,5 +1,12 @@
+using System.Collections.Generic;
+
 [System.Serializable]
 public struct EnemySpawningInfos
 {
-    public EnemySpawningInfo[] enemySpawningInfos;
+    public List<EnemySpawningInfo> SpawningInfos;
+
+    public EnemySpawningInfos(List<EnemySpawningInfo> _infos)
+    {
+        SpawningInfos = _infos;
+    }
 }

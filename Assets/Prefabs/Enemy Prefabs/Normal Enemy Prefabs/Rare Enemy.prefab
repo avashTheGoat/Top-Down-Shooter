@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -130,7 +130,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3
-  m_Acceleration: 1
+  m_Acceleration: 3
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
@@ -184,6 +184,9 @@ MonoBehaviour:
   idleStateLogic: {fileID: 11400000, guid: 927d482a84283604a8a3a15fcce1861b, type: 2}
   chaseStateLogic: {fileID: 11400000, guid: 04e61f093858ce447805722388f8a28e, type: 2}
   attackStateLogic: {fileID: 11400000, guid: 85210a28798eede4cb57c93c8e37c519, type: 2}
+  spriteRenderer: {fileID: 3282975925898905839}
+  leftMovingSprite: {fileID: 21300000, guid: 401332b9dbe40c44cac8dccaf1054cb4, type: 3}
+  rightMovingSprite: {fileID: 21300000, guid: 9e7b4a987ce12814386ab26082c17589, type: 3}
 --- !u!114 &8051712671086722257
 MonoBehaviour:
   m_ObjectHideFlags: 0

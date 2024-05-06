@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a6f9b9a8ff7690468c2d5b56b52da79, type: 3}
-  m_Name: Night 1 Spawning Info
+  m_Name: Test Boss
   m_EditorClassIdentifier: 
   NumEnemiesAtWave:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 2.0432587
-      value: 9.038513
+      time: 1
+      value: 1
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -41,40 +41,32 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 3.4730747
-      outSlope: 3.4730747
+      value: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.33333334
+      outWeight: 0
     - serializedVersion: 3
-      time: 2.0183258
-      value: 7.009796
-      inSlope: 3.4730747
-      outSlope: 3.4730747
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   SpawnableEnemiesAtWave:
   - SpawningInfos:
-    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
+    - enemyPrefab: {fileID: 3282975925898905841, guid: 22fc343b1af2f414596149b040577939, type: 3}
       weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
       spawnChance: 100
-      isBoss: 0
-      bossName: 
-      isRequired: 0
-      isOnlyEnemyOfType: 0
-  - SpawningInfos:
-    - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
-      weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
-      spawnChance: 100
-      isBoss: 0
-      bossName: 
-      isRequired: 0
-      isOnlyEnemyOfType: 0
+      isBoss: 1
+      bossName: Epic Test Boss
+      isRequired: 1
+      isOnlyEnemyOfType: 1
   IsEndless: 0

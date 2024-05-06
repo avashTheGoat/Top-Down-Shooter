@@ -8,23 +8,39 @@ public abstract class EnemyChaseStateLogicBaseSO : ScriptableObject, IAttack, IR
     [SerializeField] private float maxDistanceFromPlayerToChase;
 
     protected EnemyStateMachine stateMachine;
-    protected Transform trans;
     protected NavMeshAgent agent;
+
+    protected Transform trans;
     protected Transform player;
+
+    protected Weapon weapon;
+
+    protected SpriteRenderer spriteRenderer;
+    protected Sprite leftMovingSprite;
+    protected Sprite rightMovingSprite;
+
     private LayerMask ignoreLayers;
 
     protected Weapon enemyWeapon;
 
     public EnemyChaseStateLogicBaseSO Initialize(EnemyStateMachine _stateMachine, Transform _transform,
-    NavMeshAgent _agent, Transform _player, LayerMask _ignoreLayers, Weapon _enemyWeapon)
+        NavMeshAgent _agent, Transform _player, LayerMask _ignoreLayers, Weapon _enemyWeapon,
+        SpriteRenderer _spriteRenderer, Sprite _leftMovingSprite, Sprite _rightMovingSprite)
     {
         stateMachine = _stateMachine;
-        trans = _transform;
         agent = _agent;
+        
+        trans = _transform;
         player = _player;
-        ignoreLayers = _ignoreLayers;
-
+        
         enemyWeapon = _enemyWeapon;
+
+        spriteRenderer = _spriteRenderer;
+        leftMovingSprite = _leftMovingSprite;
+        rightMovingSprite = _rightMovingSprite;
+        spriteRenderer.sprite = Random.Range(0, 2) == 0 ? leftMovingSprite : rightMovingSprite;
+
+        ignoreLayers = _ignoreLayers;
 
         return this;
     }
@@ -39,7 +55,15 @@ public abstract class EnemyChaseStateLogicBaseSO : ScriptableObject, IAttack, IR
         ResetValues();
     }
 
-    public abstract void DoUpdateLogic();
+    public virtual void DoUpdateLogic()
+    {
+        if (agent.velocity.x > 0)
+            spriteRenderer.sprite = rightMovingSprite;
+
+        else if (agent.velocity.x < 0)
+            spriteRenderer.sprite = leftMovingSprite;
+    }
+
     public abstract void DoPhysicsUpdateStateLogic();
     protected abstract void ResetValues();
 

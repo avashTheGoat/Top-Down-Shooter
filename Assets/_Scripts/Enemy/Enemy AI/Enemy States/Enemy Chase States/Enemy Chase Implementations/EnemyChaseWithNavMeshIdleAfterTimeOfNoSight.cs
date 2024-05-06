@@ -31,6 +31,8 @@ public class EnemyChaseWithNavMeshIdleAfterTimeOfNoSight : EnemyChaseStateLogicB
 
     public override void DoUpdateLogic()
     {
+        base.DoUpdateLogic();
+
         if (ShouldBeInAttackState())
         {
             stateMachine.TransitionToState(stateMachine.AttackState);

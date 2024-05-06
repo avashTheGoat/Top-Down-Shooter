@@ -5,9 +5,6 @@ using System;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [Header("Enemy References")]
-    [SerializeField] private EnemyWavesSpawner enemyWavesSpawner; 
-    
     [Header("Spawning Restrictions")]
     [SerializeField] private NavMeshSurface spawnableSurface;
     [SerializeField] private float minX;
@@ -30,14 +27,15 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake() => navMeshBounds = spawnableSurface.navMeshData.sourceBounds;
 
-    public List<Transform> SpawnEnemies(EnemySpawningInfo[] _enemies, int _numEnemies)
+    public List<Transform> SpawnEnemies(List<EnemySpawningInfo> _enemies, int _numEnemies,
+        Action<EnemySpawningInfo, int> _infoChooseAction = null, Action<GameObject> _spawnAction = null)
     {
         if (_enemies == null)
         {
             throw new ArgumentNullException(nameof(_enemies), "The enemies spawning info array should not be null.");
         }
 
-        if (_enemies.Length == 0)
+        if (_enemies.Count == 0)
         {
             throw new ArgumentException("The enemies spawning info array should not have a length of 0.", nameof(_enemies));
         }
@@ -45,7 +43,7 @@ public class EnemySpawner : MonoBehaviour
         // validating EnemySpawingInfo[] parameter
         // may move this into main for loop to speed up spawning if required
         int _spawnChancesSum = 0;
-        for (int i = 0; i < _enemies.Length; i++)
+        for (int i = 0; i < _enemies.Count; i++)
         {
             if (_enemies[i].EnemyPrefab == null)
                 throw new ArgumentNullException("One of the EnemySpawningInfo struct's EnemyPrefab " +
@@ -75,19 +73,23 @@ public class EnemySpawner : MonoBehaviour
         for (int i = 0; i < _numEnemies; i++)
         {
             Vector2 _spawnLocation = GetRandomSpawnPosition();
-            EnemySpawningInfo _enemySpawningInfo = GetSpawningInfo(UnityEngine.Random.Range(0, 101), _enemies);
+            (EnemySpawningInfo, int) _spawningInfoAndIndex = GetSpawningInfoAndIndex(UnityEngine.Random.Range(0, 101), _enemies);
 
-            GameObject _enemy = Instantiate(_enemySpawningInfo.EnemyPrefab);
+            _infoChooseAction?.Invoke(_spawningInfoAndIndex.Item1, _spawningInfoAndIndex.Item2);
+
+            GameObject _enemy = Instantiate(_spawningInfoAndIndex.Item1.EnemyPrefab);
             Transform _enemyTransform = _enemy.transform;
             _enemyTransform.position = _spawnLocation;
 
-            GameObject _weapon = Instantiate(_enemySpawningInfo.WeaponPrefab, _enemyTransform);
+            GameObject _weapon = Instantiate(_spawningInfoAndIndex.Item1.WeaponPrefab, _enemyTransform);
             _weapon.transform.rotation = Quaternion.identity;
             _weapon.SetActive(true);
 
             Weapon _weaponComponent = _weapon.GetComponent<Weapon>();
-            _enemy.GetComponent<EnemyStateMachine>().Init(_weaponComponent, enemyWavesSpawner);
+            _enemy.GetComponent<EnemyStateMachine>().Init(_weaponComponent);
             _enemy.GetComponent<EnemyWeaponManager>().Weapon = _weaponComponent;
+
+            _spawnAction?.Invoke(_enemy);
 
             _spawnedEnemies.Add(_enemy.transform);
         }
@@ -117,11 +119,12 @@ public class EnemySpawner : MonoBehaviour
         return _spawnLocation;
     }
 
-    private EnemySpawningInfo GetSpawningInfo(int _spawnSeed, EnemySpawningInfo[] _enemies)
+    private (EnemySpawningInfo, int) GetSpawningInfoAndIndex(int _spawnSeed, List<EnemySpawningInfo> _enemies)
     {
+        int i = 0;
         int _min = 0;
         EnemySpawningInfo _enemySpawningInfo = _enemies[0];
-        for (int i = 0; i < _enemies.Length; i++)
+        for (; i < _enemies.Count; i++)
         {
             if (_spawnSeed > _min && _spawnSeed < _min + _enemies[i].SpawnChance)
             {
@@ -132,6 +135,6 @@ public class EnemySpawner : MonoBehaviour
             _min += _enemies[i].SpawnChance;
         }
 
-        return _enemySpawningInfo;
+        return (_enemySpawningInfo, i);
     }
 }

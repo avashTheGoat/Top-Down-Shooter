@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class EnemyStateMachine : MonoBehaviour
 {
     [SerializeField] private LayerMask ignoreLayers;
@@ -9,6 +10,12 @@ public class EnemyStateMachine : MonoBehaviour
     [SerializeField] private EnemyIdleStateLogicBaseSO idleStateLogic;
     [SerializeField] private EnemyChaseStateLogicBaseSO chaseStateLogic;
     [SerializeField] private EnemyAttackStateLogicBaseSO attackStateLogic;
+    [Space(15)]
+
+    [Header("Sprites")]
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Sprite leftMovingSprite;
+    [SerializeField] private Sprite rightMovingSprite;
 
     #region States
     public BaseState CurrentState { get; private set; }
@@ -21,24 +28,24 @@ public class EnemyStateMachine : MonoBehaviour
     private Transform player;
     private Weapon weapon;
 
-    private Component enemyWaves;
-
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        player = PlayerProvider.GetPlayer();
-
         agent.updateRotation = false;
         agent.updateUpAxis = false;
 
-        IdleState = new EnemyIdleState(Instantiate(idleStateLogic).Initialize(this, transform, agent, player,
-        ((EnemyWavesSpawner)enemyWaves).SpawnedEnemies, weapon));
+        player = PlayerProvider.GetPlayer();
+
+        IdleState = new EnemyIdleState(Instantiate(idleStateLogic)
+            .Initialize(this, transform, agent, player, weapon, spriteRenderer, leftMovingSprite, rightMovingSprite));
 
         ChaseState = new EnemyChaseState(Instantiate(chaseStateLogic)
-        .Initialize(this, transform, agent, player, ignoreLayers, weapon));
+            .Initialize(this, transform, agent, player, ignoreLayers, weapon, spriteRenderer,
+            leftMovingSprite, rightMovingSprite));
 
         AttackState = new EnemyAttackState(Instantiate(attackStateLogic)
-        .Initialize(this, transform, agent, ignoreLayers, player, weapon));
+            .Initialize(this, transform, agent, ignoreLayers, player, weapon, spriteRenderer,
+            leftMovingSprite, rightMovingSprite));
 
         CurrentState = IdleState;
         IdleState.EnterState();
@@ -53,9 +60,5 @@ public class EnemyStateMachine : MonoBehaviour
         CurrentState.EnterState();
     }
 
-    public void Init(Weapon _weapon, EnemyWavesSpawner _enemyWaves)
-    {
-        weapon = _weapon;
-        enemyWaves = _enemyWaves;
-    }
+    public void Init(Weapon _weapon) => weapon = _weapon;
 }

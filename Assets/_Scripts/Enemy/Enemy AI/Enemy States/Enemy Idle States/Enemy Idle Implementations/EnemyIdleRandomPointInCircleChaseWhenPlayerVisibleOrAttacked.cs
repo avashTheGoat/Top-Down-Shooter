@@ -51,6 +51,8 @@ public class EnemyIdleRandomPointInCircleChaseWhenPlayerVisibleOrAttacked : Enem
 
     public override void DoUpdateLogic()
     {
+        base.DoUpdateLogic();
+
         if (IsPlayerVisible())
         {
             stateMachine.TransitionToState(stateMachine.ChaseState);

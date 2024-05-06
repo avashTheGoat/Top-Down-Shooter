@@ -13,6 +13,8 @@ public class EnemyAttackChaseVisiblePlayer : EnemyAttackStateLogicBaseSO
 
     public override void DoUpdateLogic()
     {
+        base.DoUpdateLogic();
+
         if (!ShouldBeInAttackState() || !IsPlayerVisible())
         {
             stateMachine.TransitionToState(stateMachine.ChaseState);

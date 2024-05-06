@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a6f9b9a8ff7690468c2d5b56b52da79, type: 3}
   m_Name: Night 3 Spawning Info
   m_EditorClassIdentifier: 
-  numEnemiesAtWaveCount:
+  NumEnemiesAtWave:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -45,7 +45,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  secsToSpawnEnemiesAtWaveCount:
+  SecsToSpawnEnemiesAtWave:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -69,15 +69,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  spawnableEnemiesAtWaveCount:
-  - enemySpawningInfos:
+  SpawnableEnemiesAtWave:
+  - SpawningInfos:
     - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
       weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
       spawnChance: 90
     - enemyPrefab: {fileID: 3282975925898905841, guid: 0400d47ae8b778c4faf2be405a773710, type: 3}
       weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
       spawnChance: 10
-  - enemySpawningInfos:
+  - SpawningInfos:
     - enemyPrefab: {fileID: 3282975925898905841, guid: 9615d01b268003a4eac9849730db28ca, type: 3}
       weaponPrefab: {fileID: 2496917111802943006, guid: 70a01a60401fb4549b2264379916f8ee, type: 3}
       spawnChance: 85

@@ -1,27 +1,36 @@
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections.Generic;
 
 public abstract class EnemyIdleStateLogicBaseSO : ScriptableObject, IAttack, IReload
 {
     protected EnemyStateMachine stateMachine;
-    protected Transform trans;
     protected NavMeshAgent agent;
+
+    protected Transform trans;
     protected Transform player;
-    protected List<Transform> enemies;
 
-    protected Weapon enemyWeapon;
+    protected Weapon weapon;
 
-    public EnemyIdleStateLogicBaseSO Initialize(EnemyStateMachine _stateMachine, Transform _transform, NavMeshAgent _agent,
-    Transform _player, List<Transform> _enemies, Weapon _enemyWeapon)
+    protected SpriteRenderer spriteRenderer;
+    protected Sprite leftMovingSprite;
+    protected Sprite rightMovingSprite;
+
+    public EnemyIdleStateLogicBaseSO Initialize(EnemyStateMachine _stateMachine, Transform _transform,
+        NavMeshAgent _agent, Transform _player, Weapon _enemyWeapon, SpriteRenderer _spriteRenderer,
+        Sprite _leftMovingSprite, Sprite _rightMovingSprite)
     {
         stateMachine = _stateMachine;
-        trans = _transform;
         agent = _agent;
-        player = _player;
-        enemies = _enemies;
 
-        enemyWeapon = _enemyWeapon;
+        trans = _transform;
+        player = _player;
+
+        weapon = _enemyWeapon;
+
+        spriteRenderer = _spriteRenderer;
+        leftMovingSprite = _leftMovingSprite;
+        rightMovingSprite = _rightMovingSprite;
+        spriteRenderer.sprite = Random.Range(0, 2) == 0 ? leftMovingSprite : rightMovingSprite;
 
         return this;
     }
@@ -36,20 +45,28 @@ public abstract class EnemyIdleStateLogicBaseSO : ScriptableObject, IAttack, IRe
         ResetValues();
     }
 
-    public abstract void DoUpdateLogic();
+    public virtual void DoUpdateLogic()
+    {
+        if (agent.velocity.x > 0)
+            spriteRenderer.sprite = rightMovingSprite;
+
+        else if (agent.velocity.x < 0)
+            spriteRenderer.sprite = leftMovingSprite;
+    }
+
     public abstract void DoPhysicsUpdateStateLogic();
     protected abstract void ResetValues();
 
     protected void SetWeaponLogic()
     {
-        if (enemyWeapon is RangedWeapon)
+        if (weapon is RangedWeapon)
         {
-            RangedWeapon _enemyRangedWeapon = (RangedWeapon)enemyWeapon;
+            RangedWeapon _enemyRangedWeapon = (RangedWeapon)weapon;
             _enemyRangedWeapon.SetWeaponLogic(this, this);
         }
 
-        else if (enemyWeapon is MeleeWeapon)
-            enemyWeapon.SetWeaponLogic(this);
+        else if (weapon is MeleeWeapon)
+            weapon.SetWeaponLogic(this);
 
         else
             throw new System.Exception("Unrecognized weapon type.");

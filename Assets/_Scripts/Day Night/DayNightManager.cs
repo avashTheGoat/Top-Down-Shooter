@@ -67,7 +67,7 @@ public class DayNightManager : MonoBehaviour
                 if (subscribedEnemies.Contains(_enemy))
                     continue;
 
-                _enemy.GetComponent<IKillable>().OnKill += _ => UpdateNightTime();
+                _enemy.GetComponent<IKillable>().OnKill += _ => UpdateNightTime(null);
                 subscribedEnemies.Add(_enemy);
             }
         }
@@ -120,7 +120,7 @@ public class DayNightManager : MonoBehaviour
         dayNightCycle.SetDayPercentProgress(NIGHT_END + _dayProgress);
     }
 
-    private void UpdateNightTime()
+    private void UpdateNightTime(GameObject _)
     {
         float _totalNightProgress = GetNightProgress();
         newNightTimeProgress = (NIGHT_START + _totalNightProgress) % (1f + Mathf.Epsilon);

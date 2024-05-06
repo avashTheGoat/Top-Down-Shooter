@@ -15,21 +15,37 @@ public abstract class EnemyAttackStateLogicBaseSO : ScriptableObject, IAttack, I
     #endregion
 
     protected EnemyStateMachine stateMachine;
-    protected Transform trans;
     protected NavMeshAgent agent;
+
+    protected Transform trans;
     protected Transform player;
-    protected Weapon enemyWeapon;
+
+    protected Weapon weapon;
+
+    protected SpriteRenderer spriteRenderer;
+    protected Sprite leftMovingSprite;
+    protected Sprite rightMovingSprite;
+
     private LayerMask ignoreLayers;
 
-    public EnemyAttackStateLogicBaseSO Initialize(EnemyStateMachine _stateMachine, Transform _transform, NavMeshAgent _agent,
-    LayerMask _ignoreLayers, Transform _player, Weapon _enemyWeapon)
+    public EnemyAttackStateLogicBaseSO Initialize(EnemyStateMachine _stateMachine, Transform _transform,
+        NavMeshAgent _agent, LayerMask _ignoreLayers, Transform _player, Weapon _enemyWeapon,
+        SpriteRenderer _spriteRenderer, Sprite _leftMovingSprite, Sprite _rightMovingSprite)
     #nullable disable
     {
         stateMachine = _stateMachine;
-        trans = _transform;
         agent = _agent;
+        
+        trans = _transform;
         player = _player;
-        enemyWeapon = _enemyWeapon;;
+        
+        weapon = _enemyWeapon;;
+
+        spriteRenderer = _spriteRenderer;
+        leftMovingSprite = _leftMovingSprite;
+        rightMovingSprite = _rightMovingSprite;
+        spriteRenderer.sprite = Random.Range(0, 2) == 0 ? leftMovingSprite : rightMovingSprite;
+
         ignoreLayers = _ignoreLayers;
 
         return this;
@@ -45,7 +61,14 @@ public abstract class EnemyAttackStateLogicBaseSO : ScriptableObject, IAttack, I
         ResetValues();
     }
 
-    public abstract void DoUpdateLogic();
+    public virtual void DoUpdateLogic()
+    {
+        if (agent.velocity.x > 0)
+            spriteRenderer.sprite = rightMovingSprite;
+
+        else if (agent.velocity.x < 0)
+            spriteRenderer.sprite = leftMovingSprite;
+    }
 
     public abstract void DoPhysicsUpdateStateLogic();
 
@@ -53,18 +76,18 @@ public abstract class EnemyAttackStateLogicBaseSO : ScriptableObject, IAttack, I
 
     protected bool ShouldBeInAttackState()
     {
-        if (enemyWeapon is RangedWeapon)
+        if (weapon is RangedWeapon)
         {
-            RangedWeapon _rangedWeapon = enemyWeapon as RangedWeapon;
+            RangedWeapon _rangedWeapon = weapon as RangedWeapon;
 
             if (player != null)
                 return Vector2.Distance(player.position, _rangedWeapon.transform.position) <= _rangedWeapon.Range
                     && IsPlayerVisible();
         }
 
-        else if (enemyWeapon is MeleeWeapon)
+        else if (weapon is MeleeWeapon)
         {
-            MeleeWeapon _meleeWeapon = enemyWeapon as MeleeWeapon;
+            MeleeWeapon _meleeWeapon = weapon as MeleeWeapon;
 
             if (player != null)
                 return _meleeWeapon.GetGameObjectsInAttackAOE().Contains(player.gameObject);
@@ -77,14 +100,14 @@ public abstract class EnemyAttackStateLogicBaseSO : ScriptableObject, IAttack, I
     
     protected void SetWeaponLogic()
     {
-        if (enemyWeapon is RangedWeapon)
+        if (weapon is RangedWeapon)
         {
-            RangedWeapon _enemyRangedWeapon = (RangedWeapon) enemyWeapon;
+            RangedWeapon _enemyRangedWeapon = (RangedWeapon) weapon;
             _enemyRangedWeapon.SetWeaponLogic(this, this);
         }
 
-        else if (enemyWeapon is MeleeWeapon)
-            enemyWeapon.SetWeaponLogic(this);
+        else if (weapon is MeleeWeapon)
+            weapon.SetWeaponLogic(this);
 
         else
             throw new System.Exception("Unrecognized weapon type.");
