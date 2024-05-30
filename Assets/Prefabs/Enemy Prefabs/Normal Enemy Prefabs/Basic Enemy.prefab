@@ -314,7 +314,6 @@ MonoBehaviour:
   ignoreLayers:
     serializedVersion: 2
     m_Bits: 192
-  agent: {fileID: 0}
   idleStateLogic: {fileID: 11400000, guid: 927d482a84283604a8a3a15fcce1861b, type: 2}
   chaseStateLogic: {fileID: 11400000, guid: 04e61f093858ce447805722388f8a28e, type: 2}
   attackStateLogic: {fileID: 11400000, guid: 85210a28798eede4cb57c93c8e37c519, type: 2}

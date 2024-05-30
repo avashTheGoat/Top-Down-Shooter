@@ -10604,7 +10604,6 @@ MonoBehaviour:
   dayNightManager: {fileID: 514646602}
   wavesSpawner: {fileID: 2128747353}
   enemies:
-  - {fileID: 11400000, guid: 6c6dd1d3ad8dad449a3c65d9fbfa9ef4, type: 2}
   - {fileID: 11400000, guid: fdadf658d29060a45be5ab6fe806f09b, type: 2}
   - {fileID: 11400000, guid: ca92c0d70453ef343a1904fe3639ccaf, type: 2}
   - {fileID: 11400000, guid: 222fc2fbe1b8c3b46a44312e4e030e3b, type: 2}

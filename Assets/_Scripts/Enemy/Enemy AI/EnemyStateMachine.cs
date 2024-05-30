@@ -28,12 +28,15 @@ public class EnemyStateMachine : MonoBehaviour
     private Transform player;
     private Weapon weapon;
 
-    private void Start()
+    private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
+    }
 
+    private void Start()
+    {
         player = PlayerProvider.GetPlayer();
 
         IdleState = new EnemyIdleState(Instantiate(idleStateLogic)
