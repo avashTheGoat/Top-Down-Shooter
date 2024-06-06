@@ -1,35 +1,43 @@
-using System.Collections.Generic;
 using UnityEngine;
 using NavMeshPlus.Components;
 using System;
+using System.Collections.Generic;
 
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Spawning Restrictions")]
-    [SerializeField] private NavMeshSurface spawnableSurface;
-    [SerializeField] private float minX;
-    [SerializeField] private float maxX;
-    [SerializeField] private float minY;
-    [SerializeField] private float maxY;
-    [Space(15)]
-
-    [Header("Player Spawning Restriction")]
-    [SerializeField] private Transform player;
+    [SerializeField] private NavMeshSurface navMeshSurface;
     [Tooltip("The minimum distance from the player a point needs to be to be a valid spawn location")]
     [SerializeField] private float minDistanceFromPlayerToSpawn;
+    [Space(15)]
+
+    [Header("Spawning w/ Pre-Defined Boundaries")]
+    [SerializeField] private Vector2 bottomLeft;
+    [SerializeField] private Vector2 topRight;
+    [SerializeField] private bool shouldUseDefinedBoundaries;
     [Space(15)]
 
     [Header("Spawning Attempts")]
     [SerializeField] private int maxSpawnAttempts;
     [SerializeField] private Vector2[] worstCaseSpawnLocations;
 
+    [SerializeField] private bool isForMinigame;
+
     private Bounds navMeshBounds;
 
-    private void Awake() => navMeshBounds = spawnableSurface.navMeshData.sourceBounds;
+    private void Awake()
+    {
+        navMeshBounds = navMeshSurface.navMeshData.sourceBounds;
+        navMeshBounds.RotateAroundX(270f);
+    }
 
     public List<Transform> SpawnEnemies(List<EnemySpawningInfo> _enemies, int _numEnemies,
         Action<EnemySpawningInfo, int> _infoChooseAction = null, Action<GameObject> _spawnAction = null)
     {
+        Transform _player;
+        if (!PlayerProvider.TryGetPlayer(out _player))
+            return new();
+
         if (_enemies == null)
         {
             throw new ArgumentNullException(nameof(_enemies), "The enemies spawning info array should not be null.");
@@ -72,7 +80,8 @@ public class EnemySpawner : MonoBehaviour
         List<Transform> _spawnedEnemies = new();
         for (int i = 0; i < _numEnemies; i++)
         {
-            Vector2 _spawnLocation = GetRandomSpawnPosition();
+            Vector2 _spawnLocation = GetRandomSpawnPosition(_player);
+
             (EnemySpawningInfo, int) _spawningInfoAndIndex = GetSpawningInfoAndIndex(UnityEngine.Random.Range(0, 101), _enemies);
 
             _infoChooseAction?.Invoke(_spawningInfoAndIndex.Item1, _spawningInfoAndIndex.Item2);
@@ -91,29 +100,33 @@ public class EnemySpawner : MonoBehaviour
 
             _spawnAction?.Invoke(_enemy);
 
-            _spawnedEnemies.Add(_enemy.transform);
+            _spawnedEnemies.Add(_enemyTransform);
         }
 
         return _spawnedEnemies;
     }
 
-    private Vector2 GetRandomSpawnPosition()
+    private Vector2 GetRandomSpawnPosition(Transform _player)
     {
-        Vector2 _spawnLocation = new Vector2(UnityEngine.Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
-        if (!navMeshBounds.Contains(_spawnLocation))
-            _spawnLocation = navMeshBounds.ClosestPoint(_spawnLocation);
+        Vector2 _spawnLocation;
+        if (shouldUseDefinedBoundaries)
+            _spawnLocation = navMeshBounds.GetRandPointInBounds(bottomLeft, topRight);
+        else
+            _spawnLocation = navMeshBounds.GetRandPointInBounds();
 
         int _spawnAttempts = 1;
-        while (_spawnAttempts < maxSpawnAttempts && Vector2.Distance(player.position, _spawnLocation) < minDistanceFromPlayerToSpawn)
+        while (_spawnAttempts < maxSpawnAttempts && Vector2.Distance(_player.position, _spawnLocation) < minDistanceFromPlayerToSpawn)
         {
-            _spawnLocation = new Vector2(UnityEngine.Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
-            _spawnLocation = navMeshBounds.ClosestPoint(_spawnLocation);
+            if (shouldUseDefinedBoundaries)
+                _spawnLocation = navMeshBounds.GetRandPointInBounds(bottomLeft, topRight);
+            else
+                _spawnLocation = navMeshBounds.GetRandPointInBounds();
 
             _spawnAttempts++;
         }
 
         // if too close to player despite trying other spawn locations
-        if (Vector2.Distance(player.position, _spawnLocation) < minDistanceFromPlayerToSpawn)
+        if (Vector2.Distance(_player.position, _spawnLocation) < minDistanceFromPlayerToSpawn)
             _spawnLocation = worstCaseSpawnLocations[UnityEngine.Random.Range(0, worstCaseSpawnLocations.Length)];
 
         return _spawnLocation;

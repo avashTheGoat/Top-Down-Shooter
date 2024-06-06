@@ -16,7 +16,7 @@ public class EnemyStateMachine : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Sprite leftMovingSprite;
     [SerializeField] private Sprite rightMovingSprite;
-
+    
     #region States
     public BaseState CurrentState { get; private set; }
     public EnemyIdleState IdleState { get; private set; }
@@ -51,7 +51,7 @@ public class EnemyStateMachine : MonoBehaviour
             leftMovingSprite, rightMovingSprite));
 
         CurrentState = IdleState;
-        IdleState.EnterState();
+        CurrentState.EnterState();
     }
 
     private void Update() => CurrentState.UpdateState();

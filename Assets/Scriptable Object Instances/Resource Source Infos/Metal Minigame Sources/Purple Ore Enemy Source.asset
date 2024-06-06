@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ab44a1c3bd0c3141b55a99d39c0bd40, type: 3}
+  m_Name: Purple Ore Enemy Source
+  m_EditorClassIdentifier: 
+  <ResourceObject>k__BackingField: {fileID: 2774555433474165890, guid: efc737188b9ccf44b82a3201cc4108dd, type: 3}
+  <ResourceDropped>k__BackingField: {fileID: -6230983682229027591, guid: 186d6cd1ef7bbc841bf3d0df0106833b, type: 3}
+  <MinAmountDropped>k__BackingField: 2
+  <MaxAmountDropped>k__BackingField: 5
+  spawnChance: 50

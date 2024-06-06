@@ -36,6 +36,17 @@ public struct EnemySpawningInfo
     [SerializeField] private bool isRequired;
     [SerializeField] private bool isOnlyEnemyOfType;
 
+    public EnemySpawningInfo(GameObject _enemyPrefab, GameObject _weaponPrefab)
+    {
+        enemyPrefab = _enemyPrefab;
+        weaponPrefab = _weaponPrefab;
+        spawnChance = 100;
+        isBoss = false;
+        bossName = "";
+        isRequired = false;
+        isOnlyEnemyOfType = false;
+    }
+
     public void SetSpawnChance(int _newSpawnChance)
     {
         if (_newSpawnChance <= 0)

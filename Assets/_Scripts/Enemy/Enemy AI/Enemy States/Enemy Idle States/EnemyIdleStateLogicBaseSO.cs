@@ -35,15 +35,9 @@ public abstract class EnemyIdleStateLogicBaseSO : ScriptableObject, IAttack, IRe
         return this;
     }
 
-    public virtual void DoEnterStateLogic()
-    {
-        ResetValues();
-    }
+    public virtual void DoEnterStateLogic() => ResetValues();
 
-    public virtual void DoExitStateLogic()
-    {
-        ResetValues();
-    }
+    public virtual void DoExitStateLogic() => ResetValues();
 
     public virtual void DoUpdateLogic()
     {
@@ -55,6 +49,7 @@ public abstract class EnemyIdleStateLogicBaseSO : ScriptableObject, IAttack, IRe
     }
 
     public abstract void DoPhysicsUpdateStateLogic();
+
     protected abstract void ResetValues();
 
     protected void SetWeaponLogic()

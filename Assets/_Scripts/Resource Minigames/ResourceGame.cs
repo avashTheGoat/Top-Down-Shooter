@@ -8,7 +8,7 @@ public abstract class ResourceGame : MonoBehaviour
     public event Action<Inventory<Resource>> OnGameSuccessfullyComplete;
     public event Action<Inventory<Resource>, string> OnGameUnsuccessfullyComplete;
 
-    [field: SerializeField] public Canvas GameUI { get; private set; }
+    [field: SerializeField] public GameObject Game { get; private set; }
 
     [Header("Resource Spawning")]
     [SerializeField] protected ResourceSourceInfoSO[] possibleResourceSources;

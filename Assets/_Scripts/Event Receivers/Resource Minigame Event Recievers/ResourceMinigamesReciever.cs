@@ -23,17 +23,14 @@ public class ResourceMinigamesReciever : MonoBehaviour
             (
                 timeSlowMultiplier, dayNightManager.DayTimeSecondsLength * percentOfDayLeft
             );
-            _game.OnSuccessfulStart += () => PlayerInteractionManager.EnableUiMode();
 
             _game.OnGameSuccessfullyComplete += AddResourcesToPlayerInventory;
             _game.OnGameSuccessfullyComplete += _ => dayNightManager.DeactivateMinigameMode();
-            _game.OnGameSuccessfullyComplete += _ => PlayerInteractionManager.DisableUiMode();
-            _game.OnGameSuccessfullyComplete += _ => _game.GameUI.enabled = false;
+            _game.OnGameSuccessfullyComplete += _ => _game.Game.SetActive(false);
 
             _game.OnGameUnsuccessfullyComplete += (_inventory, _) => AddResourcesToPlayerInventory(_inventory);
             _game.OnGameUnsuccessfullyComplete += (_, __) => dayNightManager.DeactivateMinigameMode();
-            _game.OnGameUnsuccessfullyComplete += (_, __) => PlayerInteractionManager.DisableUiMode();
-            _game.OnGameUnsuccessfullyComplete += (_, __) => _game.GameUI.enabled = false;
+            _game.OnGameUnsuccessfullyComplete += (_, __) => _game.Game.SetActive(false);
         }
     }
 

@@ -1,11 +1,23 @@
 using UnityEngine;
 using System.Collections.Generic;
+using NavMeshPlus.Components;
 
 public class MetalGame : ResourceGame
 {
     public Timer GameTimer { get; private set; }
 
-    [SerializeField] private int gameUiSpawnIndex;
+    [Header("Dependencies")]
+    [SerializeField] private NavMeshSurface surface;
+    [SerializeField] private EnemySpawner enemySpawner;
+    [Space(15)]
+
+    [Header("Prefabs")]
+    [SerializeField] private GameObject metalWeaponPrefab;
+    [Space(15)]
+
+    [Header("Setting")]
+    [SerializeField] private GameObject mainSetting;
+    [Space(15)]
 
     [Header("Spawning Min/Max")]
     [SerializeField] private int MinNumMetals;
@@ -13,8 +25,6 @@ public class MetalGame : ResourceGame
     [Space(15)]
 
     [Header("Spawning Location Restrictions")]
-    [SerializeField] private Vector2 lowerLeftSpawnBound;
-    [SerializeField] private Vector2 upperRightSpawnBound;
     [SerializeField] private float minMetalDistance;
     [SerializeField] private int maxSpawnTries;
     [SerializeField] private List<Vector2> worstCaseSpawnLocations;
@@ -22,19 +32,14 @@ public class MetalGame : ResourceGame
 
     [SerializeField] private float maxTime;
 
-    [SerializeField] private ParticleSystem harvestedMetalParticles;
-
-    [SerializeField] private float pickaxeDamage;
-
-    private ParticleSystem.MainModule harvestedMetalParticleSettings;
-
-    private List<RectTransform> spawnedMetals = new();
+    private List<Transform> spawnedMetals = new();
     private Inventory<Resource> droppedResources = new();
+
+    private Vector2 preGamePlayerLocation;
 
     protected override void Awake()
     {
         base.Awake();
-        harvestedMetalParticleSettings = harvestedMetalParticles.main;
         GameTimer = new(maxTime);
     }
 
@@ -46,22 +51,36 @@ public class MetalGame : ResourceGame
 
         if (IsGameOverSuccessfully())
         {
+            if (PlayerProvider.TryGetPlayer(out Transform _player))
+                _player.position = preGamePlayerLocation;
+
             InvokeOnGameSuccessfullyComplete(droppedResources);
 
+            Game.SetActive(false);
+            mainSetting.SetActive(true);
+            
             GameTimer.Reset();
             spawnedMetals = new();
             droppedResources = new();
+
             return;
         }
 
         if (GameTimer.GetRemainingTime() == 0f)
         {
+            if (PlayerProvider.TryGetPlayer(out Transform _player))
+                _player.position = preGamePlayerLocation;
+
             InvokeOnGameUnsuccessfullyComplete(droppedResources, "You ran out of time!");
 
-            GameUI.transform.DestroyChildren(_gameObject => spawnedMetals.Contains(_gameObject.GetComponent<RectTransform>()));
+            Game.transform.DestroyChildren(_gameObject => spawnedMetals.Contains(_gameObject.GetComponent<Transform>()));
+            Game.SetActive(false);
+            mainSetting.SetActive(true);
+
             GameTimer.Reset();
             spawnedMetals = new();
             droppedResources = new();
+
             return;
         }
 
@@ -72,92 +91,48 @@ public class MetalGame : ResourceGame
     {
         if (PlayerProvider.TryGetPlayer(out Transform _player))
         {
-            // if player doesn't have pickaxe, invoke OnUnableToPlay
-
             InvokeOnSuccessfulStart();
-            PlayerInteractionManager.DisableCursor();
 
-            GameUI.enabled = true;
+            Game.SetActive(true);
+            mainSetting.SetActive(false);
+
+            preGamePlayerLocation = _player.position;
 
             int _numMetals = Random.Range(MinNumMetals, MaxNumMetals + 1);
             for (int i = 0; i < _numMetals; i++)
             {
                 ResourceSourceInfoSO _resourceSourceToSpawn = GetRandomResourceSourceInfo();
-                GameObject _spawnedObject = Instantiate(_resourceSourceToSpawn.ResourceObject, Vector2.zero, Quaternion.identity, GameUI.transform);
-                _spawnedObject.transform.SetSiblingIndex(gameUiSpawnIndex);
 
-                RectTransform _trans = _spawnedObject.GetComponent<RectTransform>();
-                _trans.localPosition = GetRandomValidSpawnPos();
-                spawnedMetals.Add(_trans);
+                List<EnemySpawningInfo> _metalToSpawn = new List<EnemySpawningInfo>();
+                _metalToSpawn.Add(new EnemySpawningInfo(_resourceSourceToSpawn.ResourceObject, metalWeaponPrefab));
 
-                ClickableResource _clickableResource = _spawnedObject.GetComponent<ClickableResource>();
-                _clickableResource.SetMinResourceAmount(_resourceSourceToSpawn.MinAmount);
-                _clickableResource.SetMaxResourceAmount(_resourceSourceToSpawn.MaxAmount);
-                _clickableResource.Resource = _resourceSourceToSpawn.Resource;
+                GameObject _spawnedMetalEnemy = enemySpawner.SpawnEnemies(_metalToSpawn, 1)[0].gameObject;
 
-                _clickableResource.OnClick += DamageResource;
-                _clickableResource.OnKill += HarvestResource;
+                _spawnedMetalEnemy.GetComponent<ResourceSourceInfo>().ResourceSource = _resourceSourceToSpawn;
+                spawnedMetals.Add(_spawnedMetalEnemy.transform);
+
+                IDamageable _damage = _spawnedMetalEnemy.GetComponent<IDamageable>();
+                IKillable _kill = _spawnedMetalEnemy.GetComponent<IKillable>();
+
+                _damage.OnDamage += DamageResource;
+                _kill.OnKill += HarvestResource;
             }
         }
     }
 
-    #region ClickableResource Listeners
-    private void HarvestResource(GameObject _clickableResourceObject)
+    #region Listeners
+    private void HarvestResource(GameObject _metalEnemy)
     {
-        ClickableResource _clickableResource = _clickableResourceObject.GetComponent<ClickableResource>();
+        ResourceSourceInfoSO _resourceSource = _metalEnemy.GetComponent<ResourceSourceInfo>().ResourceSource;
 
-        int _numMetalsHarvested = Random.Range(_clickableResource.MinResourceAmount, _clickableResource.MaxResourceAmount + 1);
-        droppedResources.Add(_clickableResource.Resource, _numMetalsHarvested);
+        int _numMetalsHarvested = Random.Range(_resourceSource.MinAmountDropped, _resourceSource.MaxAmountDropped + 1);
+        droppedResources.Add(_resourceSource.ResourceDropped, _numMetalsHarvested);
 
-/*        harvestedMetalParticleSettings.maxParticles = _numMetalsHarvested;
-
-        harvestedMetalParticles.transform.position = clickableResource.transform.position;
-        harvestedMetalParticles.Play();
-*/
-        Destroy(_clickableResource.gameObject);
+        Destroy(_metalEnemy);
     }
 
-    private void DamageResource(ClickableResource _clickableResource) => _clickableResource.Damage(pickaxeDamage);
-    #endregion
-
-    #region Spawning Methods
-    private Vector2 GetRandomSpawnPos()
-    {
-        float _randX = Random.Range(lowerLeftSpawnBound.x, upperRightSpawnBound.x);
-        float _randY = Random.Range(lowerLeftSpawnBound.y, upperRightSpawnBound.y);
-        return new Vector2(_randX, _randY);
-    }
-
-    private Vector2 GetRandomValidSpawnPos()
-    {
-        int _numTries = 1;
-
-        Vector2 _spawnPos = GetRandomSpawnPos();
-        bool _isValid = IsPosValidSpawn(_spawnPos);
-        while (!_isValid && _numTries <= maxSpawnTries)
-        {
-            _spawnPos = GetRandomSpawnPos();
-            _isValid = IsPosValidSpawn(_spawnPos);
-
-            _numTries++;
-        }
-
-        if (!_isValid)
-            _spawnPos = worstCaseSpawnLocations[Random.Range(0, worstCaseSpawnLocations.Count)];
-
-        return _spawnPos;
-    }
-
-    private bool IsPosValidSpawn(Vector2 _pos)
-    {
-        foreach (Transform _metal in spawnedMetals)
-        {
-            if (Vector2.Distance(_metal.localPosition, _pos) < minMetalDistance)
-                return false;
-        }
-
-        return true;
-    }
+    // spawn particles, etc.
+    private void DamageResource(float _, GameObject __) { }
     #endregion
 
     private bool IsGameOverSuccessfully()
