@@ -8,14 +8,14 @@ public class EnemyChaseIfNearbyEnemyChasingController : MonoBehaviour
 
     private void Update()
     {
-        foreach (Transform _enemy in enemyWaves.SpawnedEnemies)
+        foreach (GameObject _enemy in enemyWaves.SpawnedEnemies)
         {
             EnemyStateMachine _stateMachine = _enemy.GetComponent<EnemyStateMachine>();
 
             if (_stateMachine.CurrentState == _stateMachine.IdleState)
                 continue;
 
-            foreach (Transform _comparingEnemy in enemyWaves.SpawnedEnemies)
+            foreach (GameObject _comparingEnemy in enemyWaves.SpawnedEnemies)
             {
                 if (_enemy == _comparingEnemy)
                     continue;
@@ -24,7 +24,7 @@ public class EnemyChaseIfNearbyEnemyChasingController : MonoBehaviour
                 if (_comparingStateMachine.CurrentState != _comparingStateMachine.IdleState)
                     continue;
 
-                if (Vector2.Distance(_enemy.position, _comparingEnemy.position) <= maxDistanceToStartChase)
+                if (Vector2.Distance(_enemy.transform.position, _comparingEnemy.transform.position) <= maxDistanceToStartChase)
                     _comparingStateMachine.TransitionToState(_comparingStateMachine.ChaseState);
             }
         }

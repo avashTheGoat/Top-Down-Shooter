@@ -31,7 +31,6 @@ public class DayNightManager : MonoBehaviour
     private float newNightTimeProgress;
     private bool hasNightTimeCoroutineBeenStarted = false;
     private IEnumerator nightLerpEnumerator;
-    private List<Transform> subscribedEnemies = new();
 
     #region Minigame Daytime Slowing
     private float slownessMultiplier;
@@ -57,19 +56,10 @@ public class DayNightManager : MonoBehaviour
         {
             isFirstDayTime = true;
 
-            // guards against OnDayEnd subscribers taking too long to activate enemy wave
-            // and also useful for testing
             if (!enemyWaves.isActiveAndEnabled)
                 return;
 
-            foreach (Transform _enemy in enemyWaves.SpawnedEnemies)
-            {
-                if (subscribedEnemies.Contains(_enemy))
-                    continue;
-
-                _enemy.GetComponent<IKillable>().OnKill += _ => UpdateNightTime(null);
-                subscribedEnemies.Add(_enemy);
-            }
+            enemyWaves.OnEnemySpawn += _enemy => _enemy.GetComponent<IKillable>().OnKill += UpdateNightTime;
         }
 
         else
@@ -83,8 +73,6 @@ public class DayNightManager : MonoBehaviour
                 OnNightEnd?.Invoke();
 
                 dayTimeTimer.Reset();
-                subscribedEnemies = new();
-
                 hasNightTimeCoroutineBeenStarted = false;
                 isFirstDayTime = false;
             }

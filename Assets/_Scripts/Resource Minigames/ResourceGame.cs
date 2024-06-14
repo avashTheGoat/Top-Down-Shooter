@@ -44,6 +44,25 @@ public abstract class ResourceGame : MonoBehaviour
         return _enemySpawningInfo;
     }
 
+    protected ResourceSourceInfoSO GetRandomResourceSourceInfo(ResourceSourceInfoSO[] _resourceSourcesPool)
+    {
+        int _spawnSeed = UnityEngine.Random.Range(1, 101);
+        int _min = 0;
+        ResourceSourceInfoSO _enemySpawningInfo = possibleResourceSources[0];
+        for (int i = 0; i < possibleResourceSources.Length; i++)
+        {
+            if (_spawnSeed > _min && _spawnSeed < _min + possibleResourceSources[i].SpawnChance)
+            {
+                _enemySpawningInfo = _resourceSourcesPool[i];
+                break;
+            }
+
+            _min += possibleResourceSources[i].SpawnChance;
+        }
+
+        return _enemySpawningInfo;
+    }
+
     protected void InvokeOnSuccessfulStart() => OnSuccessfulStart?.Invoke();
     protected void InvokeOnUnableToStartGame(string _message) => OnUnableToStartGame?.Invoke(_message);
     protected void InvokeOnGameSuccessfullyComplete(Inventory<Resource> _droppedResources) => OnGameSuccessfullyComplete?.Invoke(_droppedResources);

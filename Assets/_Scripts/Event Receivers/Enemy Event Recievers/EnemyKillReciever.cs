@@ -48,7 +48,7 @@ public class EnemyKillReciever : MonoBehaviour
     private List<EnemyKill> GetEnemyKills()
     {
         List<EnemyKill> _enemyKills = new();
-        enemyWaves.SpawnedEnemies.ForEach((_enemy) => { _enemyKills.Add(_enemy.GetComponent<EnemyKill>()); });
+        enemyWaves.SpawnedEnemies.ForEach(_enemy => _enemyKills.Add(_enemy.GetComponent<EnemyKill>()));
 
         return _enemyKills;
     }

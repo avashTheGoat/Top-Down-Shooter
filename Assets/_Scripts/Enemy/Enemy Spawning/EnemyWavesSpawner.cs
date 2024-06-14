@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-public class EnemyWavesSpawner : MonoBehaviour
+public class EnemyWavesSpawner : MonoBehaviour, IProvider<List<GameObject>>
 {
     public event Action<int> OnWaveStart;
     public event Action<int> OnWaveComplete;
@@ -12,11 +12,11 @@ public class EnemyWavesSpawner : MonoBehaviour
     public event Action<GameObject> OnEnemySpawn;
     public event Action<GameObject, string> OnBossSpawn;
 
-    public List<Transform> SpawnedEnemies
+    public List<GameObject> SpawnedEnemies
     {
         get
         {
-            spawnedEnemies.RemoveAll((_enemy) =>  _enemy == null);
+            spawnedEnemies.RemoveAll(_enemy =>  _enemy == null);
             return spawnedEnemies;
         }
     }
@@ -44,7 +44,7 @@ public class EnemyWavesSpawner : MonoBehaviour
 
     private int totalEnemies;
     private int wave = 1;
-    private List<Transform> spawnedEnemies = new();
+    private List<GameObject> spawnedEnemies = new();
 
     private float enemiesPerSecond;
     private float enemySpawnTimer = 0f;
@@ -75,7 +75,7 @@ public class EnemyWavesSpawner : MonoBehaviour
 
         if (enemySpawnTimer * enemiesPerSecond >= 1 && numSpawnedEnemies < numEnemiesAtWaveCount.Evaluate(wave))
         {
-            Transform _spawnedEnemy = null;
+            GameObject _spawnedEnemy = null;
             
             bool _isBoss = false;
             string _bossName = "";
@@ -338,4 +338,6 @@ public class EnemyWavesSpawner : MonoBehaviour
         totalEnemies = 0;
         requiredEnemies = new();
     }
+
+    public List<GameObject> Provide() => SpawnedEnemies;
 }
