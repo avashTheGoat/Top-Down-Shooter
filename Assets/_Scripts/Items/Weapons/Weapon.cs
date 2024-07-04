@@ -6,13 +6,16 @@ public abstract class Weapon : Item
 {
     public event Action<GameObject> OnAttack;
 
-    public Transform Wielder { get; private set; }
-
     public List<string> TagsToIgnore { get; protected set; } = new();
+    
+    public Transform Wielder { get; private set; }
+    
+    public float Damage => damage;
+    public float AttacksPerSecond => attacksPerSecond;
 
     [Header("Attacking")]
-    public float Damage;
-    public float AttacksPerSecond;
+    [SerializeField] protected float damage;
+    [SerializeField] protected float attacksPerSecond;
     [Space(15)]
 
     protected IAttack attackLogic;
@@ -66,6 +69,22 @@ public abstract class Weapon : Item
         
     }
 
-    protected float GetResetAttackTimer() => attackCooldownTimer = 1 / AttacksPerSecond;
+    public virtual void SetDamage(float _newDamage)
+    {
+        if (_newDamage < 0)
+            throw new ArgumentException("Damage cannot be negative.");
+
+        damage = _newDamage;
+    }
+
+    public virtual void SetAttacksPerSecond(float _newAttacksPerSecond)
+    {
+        if (_newAttacksPerSecond < 0)
+            throw new ArgumentException("Attacks per second cannot be negative.");
+
+        attacksPerSecond = _newAttacksPerSecond;
+    }
+
+    protected float GetResetAttackTimer() => attackCooldownTimer = 1 / attacksPerSecond;
     protected void InvokeOnWeaponAttack() => OnAttack?.Invoke(gameObject);
 }

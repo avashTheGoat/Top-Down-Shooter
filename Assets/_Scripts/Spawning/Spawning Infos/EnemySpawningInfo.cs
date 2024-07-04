@@ -7,7 +7,7 @@ public struct EnemySpawningInfo
     #region Accessors
     [HideInInspector] public GameObject EnemyPrefab => enemyPrefab;
     [HideInInspector] public GameObject WeaponPrefab => weaponPrefab;
-    
+
     [HideInInspector] public int SpawnChance => spawnChance;
 
     [HideInInspector] public bool IsBoss => isBoss;
@@ -36,13 +36,23 @@ public struct EnemySpawningInfo
     [SerializeField] private bool isRequired;
     [SerializeField] private bool isOnlyEnemyOfType;
 
+    public EnemySpawningInfo(GameObject _enemyPrefab, GameObject _weaponPrefab, int _spawnChance = 100)
+    {
+        enemyPrefab = _enemyPrefab;
+        weaponPrefab = _weaponPrefab;
+        spawnChance = _spawnChance;
+        isBoss = false;
+        bossName = "";
+        isRequired = false;
+        isOnlyEnemyOfType = false;
+    }
+
     public void SetSpawnChance(int _newSpawnChance)
     {
         if (_newSpawnChance <= 0)
             throw new ArgumentOutOfRangeException(nameof(_newSpawnChance));
 
         spawnChance = _newSpawnChance;
-        MonoBehaviour.print("Set to " + _newSpawnChance);
     }
 
     public override int GetHashCode()

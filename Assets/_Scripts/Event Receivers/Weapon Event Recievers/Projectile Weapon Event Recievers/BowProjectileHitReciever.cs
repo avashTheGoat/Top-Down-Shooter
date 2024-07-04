@@ -8,7 +8,7 @@ public class BowProjectileHitReciever : MonoBehaviour
     private List<ProjectilePierce> bowArrowPierces = new();
     private List<ProjectilePierce> subscribedBowArrowPierces = new();
 
-    private void Awake() => UpdateBowArrowHits();
+    private void Start() => UpdateBowArrowHits();
 
     private void Update()
     {

@@ -14,29 +14,45 @@ public class PlayerInteractionManager : MonoBehaviour
         weaponsSwitcher = GetComponent<PlayerWeaponsSwitcher>();
     }
 
-    public static void DisableMovement() => movement.enabled = false;
-    public static void DisableWeapons() => weaponsManager.PlayerWeapons.ForEach(_weapon => _weapon.enabled = false);
-    public static void DisableWeaponSwitching() => weaponsSwitcher.enabled = false;
-    public static void EnableCursor() => Cursor.visible = true;
+    public static void SetMovement(bool _isEnabled)
+    {
+        if (movement == null)
+            return;
+
+        movement.enabled = _isEnabled;
+    }
+
+    public static void SetWeapons(bool _isEnabled)
+    {
+        if (weaponsManager == null)
+            return;
+
+        weaponsManager.PlayerWeapons.ForEach(_weapon => _weapon.enabled = _isEnabled);
+    }
+
+    public static void SetWeaponSwitching(bool _canSwitch)
+    {
+        if (weaponsSwitcher == null)
+            return;
+
+        weaponsSwitcher.enabled = _canSwitch;
+    }
+
+    public static void SetCursor(bool _isVisible) => Cursor.visible = _isVisible;
 
     public static void EnableUiMode()
     {
-        DisableMovement();
-        DisableWeapons();
-        DisableWeaponSwitching();
-        EnableCursor();
+        SetMovement(false);
+        SetWeapons(false);
+        SetWeaponSwitching(false);
+        SetCursor(true);
     }
-
-    public static void EnableMovement() => movement.enabled = true;
-    public static void EnableWeapons() => weaponsManager.PlayerWeapons.ForEach(_weapon => _weapon.enabled = true);
-    public static void EnableWeaponSwitching() => weaponsSwitcher.enabled = true;
-    public static void DisableCursor() => Cursor.visible = false;
 
     public static void DisableUiMode()
     {
-        EnableMovement();
-        EnableWeapons();
-        EnableWeaponSwitching();
-        DisableCursor();
+        SetMovement(true);
+        SetWeapons(true);
+        SetWeaponSwitching(true);
+        SetCursor(false);
     }
 }

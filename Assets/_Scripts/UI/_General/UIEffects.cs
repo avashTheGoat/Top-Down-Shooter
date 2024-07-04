@@ -4,63 +4,67 @@ using System.Collections;
 
 public class UIEffects
 {
-    public event Action<RectTransform> OnEffectComplete;
+    public event Action OnEffectComplete;
 
     private readonly MonoBehaviour coroutineStarter;
+    private readonly CanvasGroup canvasGroup;
 
-    public UIEffects(MonoBehaviour _coroutineStarter)
+    public UIEffects(MonoBehaviour _coroutineStarter, CanvasGroup _canvasGroup)
     {
         coroutineStarter = _coroutineStarter;
+        canvasGroup = _canvasGroup;
     }
 
-    public void FadeIn(CanvasGroup _fadeTarget, float _fadeInDuration)
+    public void FadeIn(float _fadeInSecs, float _secsDelay = 0)
     {
-        IEnumerator _fadeCoroutine = Co_Fade(_fadeTarget, _fadeInDuration, 1f);
+        IEnumerator _fadeCoroutine = Co_Fade(_fadeInSecs, 1f, _secsDelay);
         coroutineStarter.StartCoroutine(_fadeCoroutine);
     }
 
-    public void FadeOut(CanvasGroup _fadeTarget, float _fadeInDuration)
+    public void FadeOut(float _fadeOutSecs, float _secsDelay = 0)
     {
-        IEnumerator _fadeCoroutine = Co_Fade(_fadeTarget, _fadeInDuration, 0f);
+        IEnumerator _fadeCoroutine = Co_Fade(_fadeOutSecs, 0f, _secsDelay);
         coroutineStarter.StartCoroutine(_fadeCoroutine);
     }
 
-    public void FadeInAndOut(CanvasGroup _fadeTarget, float _fadeInDuration,
-    float _fullyVisibleDuration, float _fadeOutDuration)
+    public void FadeInAndOut(float _fadeInSecs, float _fullyVisibleSecs, float _fadeOutSecs, float _secsDelay = 0)
     {
-        IEnumerator _fadeInOutCoroutine = Co_FadeInOut(_fadeTarget, _fadeInDuration, _fullyVisibleDuration, _fadeOutDuration);
+        IEnumerator _fadeInOutCoroutine = Co_FadeInOut(_fadeInSecs, _fullyVisibleSecs, _fadeOutSecs, _secsDelay);
         coroutineStarter.StartCoroutine(_fadeInOutCoroutine);
     }
 
-    private IEnumerator Co_Fade(CanvasGroup _fadeTarget, float _fadeDuration, float _alphaTarget, bool _invokeEffectComplete = true)
+    private IEnumerator Co_Fade(float _fadeSecs, float _alphaTarget, float _secsDelay, bool _invokeEffectComplete = true)
     {
-        float _time = 0f;
-        float _startAlpha = _fadeTarget.alpha;
+        yield return new WaitForSeconds(_secsDelay);
 
-        while (_time / _fadeDuration < 1f)
+        float _time = 0f;
+        float _startAlpha = canvasGroup.alpha;
+
+        while (_time / _fadeSecs < 1f)
         {
-            if (_fadeTarget == null)
+            if (canvasGroup == null)
                 break;
 
-            _fadeTarget.alpha = Mathf.Lerp(_startAlpha, _alphaTarget, _time / _fadeDuration);
+            canvasGroup.alpha = Mathf.Lerp(_startAlpha, _alphaTarget, _time / _fadeSecs);
             _time += Time.deltaTime;
 
             yield return null;
         }
 
-        _fadeTarget.alpha = _alphaTarget;
+        canvasGroup.alpha = _alphaTarget;
 
         if (_invokeEffectComplete)
-            OnEffectComplete?.Invoke(_fadeTarget.GetComponent<RectTransform>());
+            OnEffectComplete?.Invoke();
     }
 
-    private IEnumerator Co_FadeInOut(CanvasGroup _fadeTarget, float _fadeInDuration,
-    float _fullyVisibleDuration, float _fadeOutDuration)
+    private IEnumerator Co_FadeInOut(float _fadeInDuration, float _fullyVisibleDuration, float _fadeOutDuration,
+                                     float _secsDelay, bool _invokeEffectComplete = true)
     {
-        yield return Co_Fade(_fadeTarget, _fadeInDuration, 1f, _invokeEffectComplete: false);
+        yield return Co_Fade(_fadeInDuration, 1f, _secsDelay, _invokeEffectComplete: false);
         yield return new WaitForSeconds(_fullyVisibleDuration);
-        yield return Co_Fade(_fadeTarget, _fadeOutDuration, 0f, _invokeEffectComplete: false);
+        yield return Co_Fade(_fadeOutDuration, 0f, 0f, _invokeEffectComplete: false);
 
-        OnEffectComplete?.Invoke(_fadeTarget.GetComponent<RectTransform>());
+        if (_invokeEffectComplete)
+            OnEffectComplete?.Invoke();
     }
 }

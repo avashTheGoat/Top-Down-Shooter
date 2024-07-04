@@ -1,19 +1,22 @@
-using TMPro;
 using UnityEngine;
+using TMPro;
 
-[RequireComponent(typeof(TextMeshProUGUI))]
-public class DayTimeTimerUI : MonoBehaviour
+[RequireComponent(typeof(TextMeshProUGUI), typeof(CanvasGroup))]
+public class DayTimeTimerUI : Fadeable
 {
+    [Header("Dependencies")]
     [SerializeField] private DayNightManager dayNightManager;
+    [Space(15)]
 
     private TextMeshProUGUI text;
 
-    private void Awake() => text = GetComponent<TextMeshProUGUI>();
-
-    private void Start()
+    protected override void Awake()
     {
-        dayNightManager.SubscribeToDayTimerOnTick(_timer => text.text = ((int)_timer.GetRemainingTime()).ToString());
-        dayNightManager.OnDayEnd += () => text.enabled = false;
-        dayNightManager.OnNightEnd += () => text.enabled = true;
+        base.Awake();
+
+        text = GetComponent<TextMeshProUGUI>();
+        canvasGroup.alpha = 1;
     }
+
+    private void Start() => dayNightManager.SubscribeToDayTimerOnTick(_timer => text.text = ((int)_timer.GetRemainingTime()).ToString());
 }

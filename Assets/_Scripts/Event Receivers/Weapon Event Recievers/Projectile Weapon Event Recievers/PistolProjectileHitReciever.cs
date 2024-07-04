@@ -8,7 +8,7 @@ public class PistolProjectileHitReciever : MonoBehaviour
     private List<ProjectileHit> pistolBulletHits = new();
     private List<ProjectileHit> subscribedPistolBulletHits = new();
 
-    private void Awake() => UpdatePistolBulletHits();
+    private void Start() => UpdatePistolBulletHits();
 
     private void Update()
     {

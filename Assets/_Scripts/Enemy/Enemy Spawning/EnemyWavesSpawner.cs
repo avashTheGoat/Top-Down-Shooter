@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-public class EnemyWavesSpawner : MonoBehaviour
+public class EnemyWavesSpawner : MonoBehaviour, IProvider<List<GameObject>>
 {
     public event Action<int> OnWaveStart;
     public event Action<int> OnWaveComplete;
@@ -12,11 +12,11 @@ public class EnemyWavesSpawner : MonoBehaviour
     public event Action<GameObject> OnEnemySpawn;
     public event Action<GameObject, string> OnBossSpawn;
 
-    public List<Transform> SpawnedEnemies
+    public List<GameObject> SpawnedEnemies
     {
         get
         {
-            spawnedEnemies.RemoveAll((_enemy) =>  _enemy == null);
+            spawnedEnemies.RemoveAll(_enemy =>  _enemy == null);
             return spawnedEnemies;
         }
     }
@@ -44,7 +44,7 @@ public class EnemyWavesSpawner : MonoBehaviour
 
     private int totalEnemies;
     private int wave = 1;
-    private List<Transform> spawnedEnemies = new();
+    private List<GameObject> spawnedEnemies = new();
 
     private float enemiesPerSecond;
     private float enemySpawnTimer = 0f;
@@ -75,7 +75,7 @@ public class EnemyWavesSpawner : MonoBehaviour
 
         if (enemySpawnTimer * enemiesPerSecond >= 1 && numSpawnedEnemies < numEnemiesAtWaveCount.Evaluate(wave))
         {
-            Transform _spawnedEnemy = null;
+            GameObject _spawnedEnemy = null;
             
             bool _isBoss = false;
             string _bossName = "";
@@ -135,6 +135,65 @@ public class EnemyWavesSpawner : MonoBehaviour
             NextWave();
     }
 
+    public void SetWavesSettings(AnimationCurve _numEnemiesAtWaveCount, AnimationCurve _secsToSpawnEnemiesAtWaveCount,
+                                 EnemySpawningInfos[] _spawnableEnemiesAtWaveCount, bool _isEndless)
+    {
+        numEnemiesAtWaveCount = _numEnemiesAtWaveCount;
+        secsToEnemiesAtWaveCount = _secsToSpawnEnemiesAtWaveCount;
+        isEndless = _isEndless;
+
+        numEnemiesAtWaveCount.preWrapMode = WrapMode.Clamp;
+        numEnemiesAtWaveCount.postWrapMode = WrapMode.Clamp;
+        secsToEnemiesAtWaveCount.preWrapMode = WrapMode.Clamp;
+        secsToEnemiesAtWaveCount.postWrapMode = WrapMode.Clamp;
+
+        enemiesPerSecond = numEnemiesAtWaveCount.Evaluate(wave) / secsToEnemiesAtWaveCount.Evaluate(wave);
+
+        spawnableEnemiesForEachWave = new();
+        // copying so that enemy spawning infos can be removed
+        foreach (EnemySpawningInfos _waveSpawnableEnemies in _spawnableEnemiesAtWaveCount)
+        {
+            EnemySpawningInfos _infosCopy = new();
+            _infosCopy.SpawningInfos = new();
+
+            spawnableEnemiesForEachWave.Add(_infosCopy);
+            foreach (EnemySpawningInfo _enemySpawningInfo in _waveSpawnableEnemies.SpawningInfos)
+                _infosCopy.SpawningInfos.Add(_enemySpawningInfo.Copy());
+        }
+
+        UpdateRequiredEnemies(1);
+
+        if (isEndless)
+            return;
+
+        float _prevNumEnemies = -1;
+        for (int wave = 1; wave <= spawnableEnemiesForEachWave.Count; wave++)
+        {
+            if (_prevNumEnemies == numEnemiesAtWaveCount.Evaluate(wave))
+                break;
+
+            _prevNumEnemies = numEnemiesAtWaveCount.Evaluate(wave);
+            totalEnemies += Mathf.CeilToInt(_prevNumEnemies);
+        }
+    }
+
+    public void ResetObj()
+    {
+        wave = 1;
+        haveAllWavesBeenCompleted = false;
+
+        enemySpawnTimer = 0f;
+        numSpawnedEnemies = 0;
+        enemiesPerSecond = 0f;
+
+        TotalNumSpawnedEnemies = 0;
+        NumKilledEnemies = 0;
+        totalEnemies = 0;
+        
+        requiredEnemies = new();
+        spawnedEnemies = new();
+    }
+
     private void NextWave()
     {
         wave++;
@@ -172,8 +231,6 @@ public class EnemyWavesSpawner : MonoBehaviour
         requiredEnemies = requiredEnemies.OrderBy(_ => _rng.Next()).ToList();
 
         //UpdateSpawningInfoChances(requiredEnemies);
-
-        print(requiredEnemies.Stringify(_info => _info.SpawnChance.ToString()));
     }
 
     private void UpdateSpawningInfoChances(EnemySpawningInfos _spawningInfos)
@@ -288,54 +345,5 @@ public class EnemyWavesSpawner : MonoBehaviour
         print(_spawningInfos.Stringify(_info => _info.SpawnChance.ToString()));
     }
 
-    public void SetWavesSettings(AnimationCurve _numEnemiesAtWaveCount, AnimationCurve _secsToSpawnEnemiesAtWaveCount,
-        EnemySpawningInfos[] _spawnableEnemiesAtWaveCount, bool _isEndless)
-    {
-        numEnemiesAtWaveCount = _numEnemiesAtWaveCount;
-        secsToEnemiesAtWaveCount = _secsToSpawnEnemiesAtWaveCount;
-        isEndless = _isEndless;
-
-        numEnemiesAtWaveCount.preWrapMode = WrapMode.Clamp;
-        numEnemiesAtWaveCount.postWrapMode = WrapMode.Clamp;
-        secsToEnemiesAtWaveCount.preWrapMode = WrapMode.Clamp;
-        secsToEnemiesAtWaveCount.postWrapMode = WrapMode.Clamp;
-
-        enemiesPerSecond = numEnemiesAtWaveCount.Evaluate(wave) / secsToEnemiesAtWaveCount.Evaluate(wave);
-
-        spawnableEnemiesForEachWave = new();
-        // copying so that enemy spawning infos can be removed
-        foreach (EnemySpawningInfos _waveSpawnableEnemies in _spawnableEnemiesAtWaveCount)
-        {
-            EnemySpawningInfos _infosCopy = new();
-            _infosCopy.SpawningInfos = new();
-
-            spawnableEnemiesForEachWave.Add(_infosCopy);
-            foreach (EnemySpawningInfo _enemySpawningInfo in _waveSpawnableEnemies.SpawningInfos)
-                _infosCopy.SpawningInfos.Add(_enemySpawningInfo.Copy());
-        }
-
-        if (isEndless)
-            return;
-
-        float _prevNumEnemies = -1;
-        for (int wave = 1; wave <= spawnableEnemiesForEachWave.Count; wave++)
-        {
-            if (_prevNumEnemies == numEnemiesAtWaveCount.Evaluate(wave))
-                break;
-
-            _prevNumEnemies = numEnemiesAtWaveCount.Evaluate(wave);
-            totalEnemies += Mathf.CeilToInt(_prevNumEnemies);
-        }
-    }
-
-    public void ResetObj()
-    {
-        wave = 1;
-        enemySpawnTimer = 0f;
-        numSpawnedEnemies = 0;
-        TotalNumSpawnedEnemies = 0;
-        NumKilledEnemies = 0;
-        totalEnemies = 0;
-        requiredEnemies = new();
-    }
+    public List<GameObject> Provide() => SpawnedEnemies;
 }

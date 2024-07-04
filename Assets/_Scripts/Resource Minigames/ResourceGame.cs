@@ -8,7 +8,7 @@ public abstract class ResourceGame : MonoBehaviour
     public event Action<Inventory<Resource>> OnGameSuccessfullyComplete;
     public event Action<Inventory<Resource>, string> OnGameUnsuccessfullyComplete;
 
-    [field: SerializeField] public Canvas GameUI { get; private set; }
+    [field: SerializeField] public GameObject Game { get; private set; }
 
     [Header("Resource Spawning")]
     [SerializeField] protected ResourceSourceInfoSO[] possibleResourceSources;
@@ -35,6 +35,25 @@ public abstract class ResourceGame : MonoBehaviour
             if (_spawnSeed > _min && _spawnSeed < _min + possibleResourceSources[i].SpawnChance)
             {
                 _enemySpawningInfo = possibleResourceSources[i];
+                break;
+            }
+
+            _min += possibleResourceSources[i].SpawnChance;
+        }
+
+        return _enemySpawningInfo;
+    }
+
+    protected ResourceSourceInfoSO GetRandomResourceSourceInfo(ResourceSourceInfoSO[] _resourceSourcesPool)
+    {
+        int _spawnSeed = UnityEngine.Random.Range(1, 101);
+        int _min = 0;
+        ResourceSourceInfoSO _enemySpawningInfo = possibleResourceSources[0];
+        for (int i = 0; i < possibleResourceSources.Length; i++)
+        {
+            if (_spawnSeed > _min && _spawnSeed < _min + possibleResourceSources[i].SpawnChance)
+            {
+                _enemySpawningInfo = _resourceSourcesPool[i];
                 break;
             }
 

@@ -8,7 +8,7 @@ public class ShotgunProjectileHitReciever : MonoBehaviour
     private List<ProjectileHit> shotgunBulletHits = new();
     private List<ProjectileHit> subscribedShotgunBulletHits = new();
 
-    private void Awake() => UpdateShotgunBulletHits();
+    private void Start() => UpdateShotgunBulletHits();
 
     private void Update()
     {
@@ -21,13 +21,10 @@ public class ShotgunProjectileHitReciever : MonoBehaviour
                 continue;
             subscribedShotgunBulletHits.Add(_shotgunBulletHit);
 
-            _shotgunBulletHit.OnObjectCollision += Debug;
             _shotgunBulletHit.OnObjectCollision += DamageIfDamageable;
             _shotgunBulletHit.OnObjectCollision += DestroyBullet;
         }
     }
-
-    private void Debug(GameObject __, GameObject hitObject, float _) => print($"Shotgun bullet hit something. Name is {hitObject.name}");
 
     private void DamageIfDamageable(GameObject _, GameObject hitObject, float damageAmount)
     {

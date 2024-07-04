@@ -48,17 +48,17 @@ MonoBehaviour:
   itemName: Shotgun
   description: Pew pew
   image: {fileID: 21300000, guid: ff59ac963a6cd974e835f1e824168436, type: 3}
-  Damage: 18.75
-  AttacksPerSecond: 0.6
-  ReloadTime: 3
-  MaxAmmo: 2
+  damage: 18.75
+  attacksPerSecond: 0.6
+  reloadTime: 3
+  maxAmmo: 2
   projectile: {fileID: 8252440497980988240, guid: 9aaa848e7ea16ee4fbd7ddc606679d3f, type: 3}
-  ProjectileSpeed: 27
-  Range: 3
-  MinAngleChange: 0
-  MaxAngleChange: 1.5
-  TotalDeltaAngle: 30
-  NumProjectiles: 3
+  projectileSpeed: 27
+  range: 3
+  minAngleChange: 0
+  maxAngleChange: 1.5
+  totalDeltaAngle: 30
+  numProjectiles: 3
 --- !u!212 &3104220439187664239
 SpriteRenderer:
   m_ObjectHideFlags: 0

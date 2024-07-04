@@ -9,7 +9,7 @@ public class PistolWeapon : RangedWeapon
             InvokeOnReload();
 
             attackCooldownTimer = GetResetAttackTimer();
-            reloadTimer = ReloadTime;
+            reloadTimer = reloadTime;
             didReload = true;
 
             return;
@@ -44,7 +44,7 @@ public class PistolWeapon : RangedWeapon
         attackCooldownTimer = GetResetAttackTimer();
     }
 
-    protected override void Reload() => ammo = MaxAmmo;
+    protected override void Reload() => ammo = maxAmmo;
 
     protected override void Attack()
     {
@@ -54,7 +54,7 @@ public class PistolWeapon : RangedWeapon
 
         ProjectileInfo _bullet = Instantiate(projectile);
         shotProjectiles.Add(_bullet);
-        _bullet.Init(Damage, ProjectileSpeed, trans.position,
-        trans.localEulerAngles.z + _deltaAngle, Range, TagsToIgnore);
+        _bullet.Init(damage, projectileSpeed, trans.position,
+        trans.localEulerAngles.z + _deltaAngle, range, TagsToIgnore);
     }
 }

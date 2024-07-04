@@ -48,8 +48,8 @@ MonoBehaviour:
   itemName: Hands
   description: STOP HACKING
   image: {fileID: 0}
-  Damage: 7
-  AttacksPerSecond: 2
+  damage: 7
+  attacksPerSecond: 2
   <AttackAOE>k__BackingField: {fileID: 5257004405285867879}
 --- !u!1 &2496917111966815065
 GameObject:

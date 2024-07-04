@@ -12,36 +12,18 @@ public class ModMenuInventoryReceiver : MonoBehaviour
     [SerializeField] private PlayerInventory playerInventory;
     [Space(15)]
 
-    [Header("Wrong Weapon UI")]
-    [SerializeField] private MessageUI messagePrefab;
-    [Min(0f)]
-    [SerializeField] private float fadeInDuration;
-    [Min(0f)]
-    [SerializeField] private float fadeOutDuration;
-    [Space(15)]
-
     [Header("Prefabs")]
+    [SerializeField] private MessageUI messagePrefab;
     [SerializeField] private ItemInventoryUI itemSlotPrefab;
 
     private PlayerInventoryUI<WeaponMod> inventoryUIManager;
 
-    private UIEffects uiEffects;
-
     private void Awake()
     {
-        if (!itemSlotPrefab.TryGetComponent(out DragDropUI _dragDrop))
+        if (!itemSlotPrefab.TryGetComponent(out DragDropUI _))
             Debug.LogError("itemSlotPrefab should have a DragDropUI component on it.");
 
         inventoryUIManager = new(itemSlotPrefab, playerInventory, true);
-
-        uiEffects = new(this);
-        uiEffects.OnEffectComplete += _messageInstance =>
-        {
-            if (_messageInstance.GetComponent<CanvasGroup>().alpha != 0f)
-                return;
-
-            Destroy(_messageInstance.gameObject);
-        };
     }
 
     private void Start() => openButton.onClick.AddListener(() => inventoryUIManager.UpdateInventory(modInventoryUI, UpdateNewUI));
@@ -73,8 +55,6 @@ public class ModMenuInventoryReceiver : MonoBehaviour
 
                     else
                     {
-                        print("Slot " + _itemSlot.name + " has wrong type weapon mod.");
-
                         float _initialAlpha = messagePrefab.CanvasGroup.alpha;
                         messagePrefab.CanvasGroup.alpha = 0f;
 
@@ -82,9 +62,17 @@ public class ModMenuInventoryReceiver : MonoBehaviour
                         _messageUI.transform.SetAsLastSibling();
 
                         _messageUI.MessageText.text = $"This weapon mod cannot be attached to a {_modsUI.Weapon.Name.ToLower()}.";
-                        _messageUI.CloseButton.onClick.AddListener(() => uiEffects.FadeOut(_messageUI.CanvasGroup, fadeOutDuration));
+                        _messageUI.CloseButton.onClick.AddListener(() => _messageUI.Fadeable.FadeOut(0));
 
-                        uiEffects.FadeIn(_messageUI.CanvasGroup, fadeInDuration);
+                        _messageUI.Fadeable.FadeIn(0);
+
+                        _messageUI.Fadeable.OnFadeComplete += () =>
+                        {
+                            if (_messageUI.CanvasGroup.alpha != 0f)
+                                return;
+
+                            Destroy(_messageUI.gameObject);
+                        };
 
                         _itemSlot.SlotUI.RemoveItem();
 
@@ -105,9 +93,6 @@ public class ModMenuInventoryReceiver : MonoBehaviour
     private void RemoveFromInventory(DragDropUI _dragDrop)
     {
         playerInventory.WeaponModInventory.Remove((WeaponMod)_dragDrop.GetComponent<ItemInventoryUI>().ItemUI.Item);
-
-        print("Inventory: " + playerInventory.WeaponModInventory.GetDictionary().Stringify());
-
         inventoryUIManager.UpdateInventory(modInventoryUI, _newItemAction: UpdateNewUI);
     }
 

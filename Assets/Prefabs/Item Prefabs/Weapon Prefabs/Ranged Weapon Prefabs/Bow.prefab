@@ -100,17 +100,17 @@ MonoBehaviour:
   itemName: Bow
   description: Cool weapon
   image: {fileID: 0}
-  Damage: 20.5
-  AttacksPerSecond: 0.9
-  ReloadTime: 3
-  MaxAmmo: 3
+  damage: 20.5
+  attacksPerSecond: 0.9
+  reloadTime: 3
+  maxAmmo: 3
   projectile: {fileID: 8252440497980988240, guid: 6114bd76810530949856f34626aab870, type: 3}
-  ProjectileSpeed: 29
-  Range: 9
-  MinAngleChange: 0
-  MaxAngleChange: 2.5
-  TotalDeltaAngle: 0
-  NumProjectiles: 1
+  projectileSpeed: 29
+  range: 9
+  minAngleChange: 0
+  maxAngleChange: 2.5
+  totalDeltaAngle: 0
+  numProjectiles: 1
   maxChargeTime: 1.25
   minChargeTimeToShoot: 0.5
   maxDamagePercentCurve:
