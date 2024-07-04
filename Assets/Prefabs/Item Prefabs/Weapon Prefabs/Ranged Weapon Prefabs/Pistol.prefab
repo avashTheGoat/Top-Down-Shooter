@@ -48,17 +48,17 @@ MonoBehaviour:
   itemName: Pistol
   description: Basic weapon
   image: {fileID: 0}
-  Damage: 11.5
-  AttacksPerSecond: 2.25
-  ReloadTime: 1.5
-  MaxAmmo: 15
+  damage: 11.5
+  attacksPerSecond: 2.25
+  reloadTime: 1.5
+  maxAmmo: 15
   projectile: {fileID: 8252440497980988240, guid: c927d5c59e1b58b4ea1a1a2a37a54f25, type: 3}
-  ProjectileSpeed: 22
-  Range: 6
-  MinAngleChange: 0
-  MaxAngleChange: 2
-  TotalDeltaAngle: 0
-  NumProjectiles: 1
+  projectileSpeed: 22
+  range: 6
+  minAngleChange: 0
+  maxAngleChange: 2
+  totalDeltaAngle: 0
+  numProjectiles: 1
 --- !u!212 &1368183166115280645
 SpriteRenderer:
   m_ObjectHideFlags: 0

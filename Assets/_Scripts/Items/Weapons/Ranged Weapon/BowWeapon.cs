@@ -27,8 +27,8 @@ public class BowWeapon : RangedWeapon
     {
         base.Awake();
 
-        MAX_DAMAGE = Damage;
-        MAX_PROJECTILE_SPEED = ProjectileSpeed;
+        MAX_DAMAGE = damage;
+        MAX_PROJECTILE_SPEED = projectileSpeed;
         MAX_RANGE = Range;
     }
 
@@ -41,7 +41,7 @@ public class BowWeapon : RangedWeapon
             InvokeOnReload();
             
             attackCooldownTimer = GetResetAttackTimer();
-            reloadTimer = ReloadTime;
+            reloadTimer = reloadTime;
             didReload = true;
             
             return;
@@ -74,9 +74,9 @@ public class BowWeapon : RangedWeapon
 
                 chargeTimer = Mathf.Clamp(chargeTimer / maxChargeTime, 0f, 1f);
 
-                Damage = MAX_DAMAGE * maxDamagePercentCurve.Evaluate(chargeTimer);
-                ProjectileSpeed = MAX_PROJECTILE_SPEED * maxProjectileSpeedPercentCurve.Evaluate(chargeTimer);
-                Range = MAX_RANGE * maxRangePercentCurve.Evaluate(chargeTimer);
+                damage = MAX_DAMAGE * maxDamagePercentCurve.Evaluate(chargeTimer);
+                projectileSpeed = MAX_PROJECTILE_SPEED * maxProjectileSpeedPercentCurve.Evaluate(chargeTimer);
+                range = MAX_RANGE * maxRangePercentCurve.Evaluate(chargeTimer);
 
                 Attack();
 
@@ -104,7 +104,25 @@ public class BowWeapon : RangedWeapon
         OnBowCharge?.Invoke(maxChargeTime, chargeTimer);
     }
 
-    protected override void Reload() => ammo = MaxAmmo;
+    public override void SetDamage(float _newDamage)
+    {
+        base.SetDamage(_newDamage);
+        MAX_DAMAGE = _newDamage;
+    }
+
+    public override void SetProjectileSpeed(float _newProjectileSpeed)
+    {
+        base.SetProjectileSpeed(_newProjectileSpeed);
+        MAX_PROJECTILE_SPEED = _newProjectileSpeed;
+    }
+
+    public override void SetRange(float _newRange)
+    {
+        base.SetRange(_newRange);
+        MAX_RANGE = _newRange;
+    }
+
+    protected override void Reload() => ammo = maxAmmo;
     
     protected override void Attack()
     {
@@ -113,7 +131,7 @@ public class BowWeapon : RangedWeapon
         float _deltaAngle = GetRandAngleChange();
 
         ProjectileInfo _arrow = Instantiate(projectile);
-        _arrow.Init(Damage, ProjectileSpeed, trans.position,
+        _arrow.Init(damage, projectileSpeed, trans.position,
         trans.localEulerAngles.z + _deltaAngle, Range, TagsToIgnore);
 
         shotProjectiles.Add(_arrow);

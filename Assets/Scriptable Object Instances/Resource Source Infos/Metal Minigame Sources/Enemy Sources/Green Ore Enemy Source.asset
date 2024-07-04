@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ab44a1c3bd0c3141b55a99d39c0bd40, type: 3}
   m_Name: Green Ore Enemy Source
   m_EditorClassIdentifier: 
-  <ResourceObject>k__BackingField: {fileID: 2774555433474165890, guid: 828d5a46b1ba1ff43b8798c1c35ab68a, type: 3}
+  <ResourceObject>k__BackingField: {fileID: 2774555433474165890, guid: 5930e8b0ffe4ce14da66b49f982cf27d, type: 3}
   <ResourceDropped>k__BackingField: {fileID: -6230983682229027591, guid: 186d6cd1ef7bbc841bf3d0df0106833b, type: 3}
-  <MinAmountDropped>k__BackingField: 2
-  <MaxAmountDropped>k__BackingField: 5
+  <MinAmountDropped>k__BackingField: 3
+  <MaxAmountDropped>k__BackingField: 6
   spawnChance: 50

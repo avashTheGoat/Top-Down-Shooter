@@ -44,21 +44,18 @@ public class EnemyWavesManager : MonoBehaviour
         dayNightManager.OnDayEnd += () =>
         {
             EntireNightEnemySpawningInfos _curNightInfo = enemies[Mathf.Clamp(NightNum, 0, enemies.Length - 1)];
+            
+            wavesSpawner.ResetObj();
             wavesSpawner.SetWavesSettings
             (
                 _curNightInfo.NumEnemiesAtWave, _curNightInfo.SecsToSpawnEnemiesAtWave,
                 _curNightInfo.SpawnableEnemiesAtWave, _curNightInfo.IsEndless
             );
-
             wavesSpawner.enabled = true;
 
             NightNum++;
         };
 
-        dayNightManager.OnNightEnd += () =>
-        {
-            wavesSpawner.enabled = false;
-            wavesSpawner.ResetObj();
-        };
+        dayNightManager.OnNightEnd += () => wavesSpawner.enabled = false;
     }
 }

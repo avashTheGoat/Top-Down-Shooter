@@ -11,7 +11,7 @@ public class EnemyWeaponsProvider : MonoBehaviour, IProvider<List<Weapon>>, IPro
 
     private IProvider<List<GameObject>> enemiesProvider;
 
-    private void Start()
+    private void Awake()
     {
         if (enemiesProviderComponent is not IProvider<List<GameObject>>)
             Debug.LogError("Provided component must be a provider of a List of GameObjects.");

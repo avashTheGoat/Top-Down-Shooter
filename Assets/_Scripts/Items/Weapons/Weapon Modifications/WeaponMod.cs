@@ -66,38 +66,37 @@ public class WeaponMod : Item
 
 	private void ApplyModSettings(Weapon _target)
 	{
-		_target.AttacksPerSecond *= ModSettings.AttacksPerSecondMulti;
-		_target.Damage *= ModSettings.DamageMulti;
+		_target.SetAttacksPerSecond(_target.AttacksPerSecond * ModSettings.AttacksPerSecondMulti);
+		_target.SetDamage(_target.Damage * ModSettings.DamageMulti);
 
 		if (_target is RangedWeapon _rangedWeapon)
 		{
-			_rangedWeapon.MinAngleChange /= ModSettings.AccuracyMulti;
-			_rangedWeapon.MaxAngleChange /= ModSettings.AccuracyMulti;
+			_rangedWeapon.SetMinAngleChange(_rangedWeapon.MinAngleChange / ModSettings.AccuracyMulti);
+			_rangedWeapon.SetMaxAngleChange(_rangedWeapon.MaxAngleChange / ModSettings.AccuracyMulti);
 
-			_rangedWeapon.ReloadTime *= ModSettings.ReloadTimeMulti;
-			_rangedWeapon.Range *= ModSettings.ProjectileRangeMulti;
-			_rangedWeapon.ProjectileSpeed *= ModSettings.ProjectileSpeedMulti;
-			_rangedWeapon.NumProjectiles += ModSettings.NumProjectilesShotIncrease;
-			_rangedWeapon.MaxAmmo = Mathf.RoundToInt(_rangedWeapon.MaxAmmo * ModSettings.MaxAmmoMulti);
+			_rangedWeapon.SetReloadTime(_rangedWeapon.ReloadTime * ModSettings.ReloadTimeMulti);
+			_rangedWeapon.SetRange(_rangedWeapon.Range * ModSettings.ProjectileRangeMulti);
+			_rangedWeapon.SetProjectileSpeed(_rangedWeapon.ProjectileSpeed * ModSettings.ProjectileSpeedMulti);
+			_rangedWeapon.SetNumProjectiles(_rangedWeapon.NumProjectiles + ModSettings.NumProjectilesShotIncrease);
+			_rangedWeapon.SetMaxAmmo(Mathf.RoundToInt(_rangedWeapon.MaxAmmo * ModSettings.MaxAmmoMulti));
 		}
 	}
 
 	private void UnapplyModSettings(Weapon _target)
     {
-		_target.AttacksPerSecond /= ModSettings.AttacksPerSecondMulti;
-		_target.Damage /= ModSettings.DamageMulti;
+		_target.SetAttacksPerSecond(_target.AttacksPerSecond / ModSettings.AttacksPerSecondMulti);
+		_target.SetDamage(_target.Damage / ModSettings.DamageMulti);
 
 		if (_target is RangedWeapon _rangedWeapon)
 		{
-			_rangedWeapon.MinAngleChange *= ModSettings.AccuracyMulti;
-			_rangedWeapon.MaxAngleChange *= ModSettings.AccuracyMulti;
+			_rangedWeapon.SetMinAngleChange(_rangedWeapon.MinAngleChange * ModSettings.AccuracyMulti);
+			_rangedWeapon.SetMaxAngleChange(_rangedWeapon.MaxAngleChange * ModSettings.AccuracyMulti);
 
-			_rangedWeapon.ReloadTime /= ModSettings.ReloadTimeMulti;
-			_rangedWeapon.Range /= ModSettings.ProjectileRangeMulti;
-			_rangedWeapon.ProjectileSpeed /= ModSettings.ProjectileSpeedMulti;
-			_rangedWeapon.NumProjectiles -= ModSettings.NumProjectilesShotIncrease;
-			_rangedWeapon.MaxAmmo = Mathf.RoundToInt(_rangedWeapon.MaxAmmo / ModSettings.MaxAmmoMulti);
+			_rangedWeapon.SetReloadTime(_rangedWeapon.ReloadTime / ModSettings.ReloadTimeMulti);
+			_rangedWeapon.SetRange(_rangedWeapon.Range / ModSettings.ProjectileRangeMulti);
+			_rangedWeapon.SetProjectileSpeed(_rangedWeapon.ProjectileSpeed / ModSettings.ProjectileSpeedMulti);
+			_rangedWeapon.SetNumProjectiles(_rangedWeapon.NumProjectiles - ModSettings.NumProjectilesShotIncrease);
+			_rangedWeapon.SetMaxAmmo(Mathf.RoundToInt(_rangedWeapon.MaxAmmo / ModSettings.MaxAmmoMulti));
 		}
 	}
-
 }

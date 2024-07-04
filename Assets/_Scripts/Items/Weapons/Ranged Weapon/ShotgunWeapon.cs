@@ -11,7 +11,7 @@ public class ShotgunWeapon : RangedWeapon
             InvokeOnReload();
 
             attackCooldownTimer = GetResetAttackTimer();
-            reloadTimer = ReloadTime;
+            reloadTimer = reloadTime;
             didReload = true;
 
             return;
@@ -46,23 +46,23 @@ public class ShotgunWeapon : RangedWeapon
         attackCooldownTimer = GetResetAttackTimer();
     }
 
-    protected override void Reload() => ammo = MaxAmmo;
+    protected override void Reload() => ammo = maxAmmo;
 
     protected override void Attack()
     {
         base.Attack();
 
-        float _deltaAngle = TotalDeltaAngle / 2;
-        for (int i = 0; i < NumProjectiles; i++)
+        float _deltaAngle = totalDeltaAngle / 2;
+        for (int i = 0; i < numProjectiles; i++)
         {
             float _netAngleChane = _deltaAngle + GetRandAngleChange();
 
             ProjectileInfo _bullet = Instantiate(projectile);
             shotProjectiles.Add(_bullet);
-            _bullet.Init(Damage, ProjectileSpeed, trans.position,
-            trans.localEulerAngles.z + _netAngleChane, Range, TagsToIgnore);
+            _bullet.Init(damage, projectileSpeed, trans.position,
+            trans.localEulerAngles.z + _netAngleChane, range, TagsToIgnore);
 
-            _deltaAngle -= TotalDeltaAngle / (NumProjectiles - 1);
+            _deltaAngle -= totalDeltaAngle / (numProjectiles - 1);
         }
     }
 }

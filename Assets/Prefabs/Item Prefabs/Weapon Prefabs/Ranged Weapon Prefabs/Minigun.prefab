@@ -48,17 +48,17 @@ MonoBehaviour:
   itemName: Minigun
   description: Spammer weapon
   image: {fileID: 21300000, guid: 08905326f01c8fd4491a4f42acd12641, type: 3}
-  Damage: 4.5
-  AttacksPerSecond: 11
-  ReloadTime: 5.5
-  MaxAmmo: 50
+  damage: 4.5
+  attacksPerSecond: 11
+  reloadTime: 5.5
+  maxAmmo: 50
   projectile: {fileID: 8252440497980988240, guid: 9802881ba44263f46b8930c93848aa5b, type: 3}
-  ProjectileSpeed: 32
-  Range: 6
-  MinAngleChange: 0
-  MaxAngleChange: 8.35
-  TotalDeltaAngle: 0
-  NumProjectiles: 1
+  projectileSpeed: 32
+  range: 6
+  minAngleChange: 0
+  maxAngleChange: 8.35
+  totalDeltaAngle: 0
+  numProjectiles: 1
 --- !u!212 &2897679329776139301
 SpriteRenderer:
   m_ObjectHideFlags: 0

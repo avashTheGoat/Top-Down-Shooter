@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 // requires DayNightCycle to make night at "edges" of progress (ie. closer to 0/1)
 // and day at the middle of progress
@@ -10,15 +9,15 @@ public class DayNightManager : MonoBehaviour
     public event Action OnDayEnd;
     public event Action OnNightEnd;
 
-    [field: SerializeField] public float DayTimeSecondsLength { get; private set; } = 60f;
+    [field: SerializeField] public float DayTimeSecondsLength { get; private set; } = 30f;
+
+    [Header("Dependenices")]
+    [SerializeField] private DayNightCycle dayNightCycle;
+    [SerializeField] private EnemyWavesSpawner enemyWaves;
+    [Space(15)]
 
     [Header("Delta Night Time (when enemy dies/spawns)")]
     [SerializeField] private float deltaNightTimePerSec;
-    [Space(15)]
-
-    [Header("References")]
-    [SerializeField] private DayNightCycle dayNightCycle;
-    [SerializeField] private EnemyWavesSpawner enemyWaves;
     [Space(15)]
 
     [Header("Night Info")]
@@ -48,7 +47,11 @@ public class DayNightManager : MonoBehaviour
         dayTimeTimer.OnComplete += () => dayNightCycle.SetDayPercentProgress(NIGHT_START + Mathf.Epsilon);
     }
 
-    private void Start() => enemyWaves.OnEnemySpawn += UpdateNightTime;
+    private void Start()
+    {
+        enemyWaves.OnEnemySpawn += _enemy => _enemy.GetComponent<IKillable>().OnKill += UpdateNightTime;
+        enemyWaves.OnEnemySpawn += UpdateNightTime;
+    }
 
     private void Update()
     {
@@ -58,8 +61,6 @@ public class DayNightManager : MonoBehaviour
 
             if (!enemyWaves.isActiveAndEnabled)
                 return;
-
-            enemyWaves.OnEnemySpawn += _enemy => _enemy.GetComponent<IKillable>().OnKill += UpdateNightTime;
         }
 
         else
@@ -101,6 +102,15 @@ public class DayNightManager : MonoBehaviour
     }
 
     public void DeactivateMinigameMode() => shouldStayInTime = false;
+
+    public void SkipToNight()
+    {
+        if (IsNight())
+            Debug.LogError("Cannot skip to night when it is night.");
+
+        dayNightCycle.SetDayPercentProgress(NIGHT_START);
+        dayTimeTimer.Tick(dayTimeTimer.GetRemainingTime() + Mathf.Epsilon);
+    }
 
     private void UpdateDayTime(Timer _timer)
     {

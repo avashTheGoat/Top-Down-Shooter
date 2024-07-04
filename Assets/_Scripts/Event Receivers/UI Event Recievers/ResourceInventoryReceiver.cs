@@ -23,7 +23,7 @@ public class ResourceInventoryReceiver : MonoBehaviour
         playerInventoryManager.WhileInventoryOpen += () =>
         {
             PlayerInteractionManager.EnableUiMode();
-            PlayerInteractionManager.EnableMovement();
+            PlayerInteractionManager.SetMovement(true);
         };
 
         playerInventoryManager.OnInventoryOpen += () =>

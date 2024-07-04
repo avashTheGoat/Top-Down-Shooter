@@ -2,10 +2,9 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
-public class ResourceMinigamesReciever : MonoBehaviour
+public class ResourceMinigamesReceiver : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField] List<ResourceGame> games;
+    [Header("Dependencies")]
     [SerializeField] private PlayerInventory playerInventory;
     [SerializeField] private DayNightManager dayNightManager;
     [Space(15)]
@@ -14,6 +13,9 @@ public class ResourceMinigamesReciever : MonoBehaviour
     [SerializeField] private float timeSlowMultiplier = 0.25f;
     [Range(0f, 1f)]
     [SerializeField] private float percentOfDayLeft = 0.15f;
+    
+    [SerializeField] private List<ResourceGame> games;
+    [SerializeField] private List<GameObject> mainUI;
 
     private void Start()
     {
@@ -23,14 +25,29 @@ public class ResourceMinigamesReciever : MonoBehaviour
             (
                 timeSlowMultiplier, dayNightManager.DayTimeSecondsLength * percentOfDayLeft
             );
+            _game.OnSuccessfulStart += () =>
+            {
+                foreach (GameObject _ui in mainUI)
+                    _ui.SetActive(false);
+            };
 
             _game.OnGameSuccessfullyComplete += AddResourcesToPlayerInventory;
             _game.OnGameSuccessfullyComplete += _ => dayNightManager.DeactivateMinigameMode();
             _game.OnGameSuccessfullyComplete += _ => _game.Game.SetActive(false);
+            _game.OnGameSuccessfullyComplete += _ =>
+            {
+                foreach (GameObject _ui in mainUI)
+                    _ui.SetActive(true);
+            };
 
             _game.OnGameUnsuccessfullyComplete += (_inventory, _) => AddResourcesToPlayerInventory(_inventory);
-            _game.OnGameUnsuccessfullyComplete += (_, __) => dayNightManager.DeactivateMinigameMode();
-            _game.OnGameUnsuccessfullyComplete += (_, __) => _game.Game.SetActive(false);
+            _game.OnGameUnsuccessfullyComplete += (_, _) => dayNightManager.DeactivateMinigameMode();
+            _game.OnGameUnsuccessfullyComplete += (_, _) => _game.Game.SetActive(false);
+            _game.OnGameUnsuccessfullyComplete += (_, _) =>
+            {
+                foreach (GameObject _ui in mainUI)
+                    _ui.SetActive(true);
+            };
         }
     }
 

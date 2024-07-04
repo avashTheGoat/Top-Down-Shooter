@@ -401,7 +401,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 401332b9dbe40c44cac8dccaf1054cb4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f932dc864afc30b498c31d5e822faba1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -428,7 +428,7 @@ GameObject:
   - component: {fileID: 2774555433474165888}
   - component: {fileID: 4939467397049782805}
   - component: {fileID: 8394591539464066278}
-  - component: {fileID: -3954372726192384004}
+  - component: {fileID: 9046093743702277395}
   m_Layer: 7
   m_Name: Green Ore Enemy
   m_TagString: Enemy
@@ -514,7 +514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c114e119563676a43a4c47234f246fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 50
+  maxHealth: 40
 --- !u!114 &2774555433474165919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -577,7 +577,7 @@ MonoBehaviour:
   weaponSizeMultiplier: {x: 1, y: 1}
   tagsToIgnore:
   - Enemy
---- !u!114 &-3954372726192384004
+--- !u!114 &9046093743702277395
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -589,7 +589,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32236825ece0c394192685f57f645eb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ResourceSource: {fileID: 11400000, guid: 8a69705f9910d1c4f90331e7528d983e, type: 2}
+  ResourceSource: {fileID: 11400000, guid: 8b342e25e5a939c4cb3495cad0962ecc, type: 2}
 --- !u!1 &2774555433678521908
 GameObject:
   m_ObjectHideFlags: 0

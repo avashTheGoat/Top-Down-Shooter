@@ -1,21 +1,28 @@
 using UnityEngine;
-using System.Collections.Generic;
 using NavMeshPlus.Components;
+using System.Linq;
+using System.Collections.Generic;
 
 public class MetalGame : ResourceGame, IProvider<List<GameObject>>
 {
     public Timer GameTimer { get; private set; }
+    public Canvas GameUI => gameUI;
+
+    [Header("UI")]
+    [SerializeField] private Canvas gameUI;
+    [Space(15)]
 
     [SerializeField] private bool[] isPrefabEnemy;
     [Space(15)]
 
     [Header("Dependencies")]
     [SerializeField] private NavMeshSurface surface;
-    [SerializeField] private EnemySpawner enemySpawner;
+    [SerializeField] private EnemySpawner enemyMetalSpawner;
+    [SerializeField] private Spawner metalSpawner;
     [Space(15)]
 
     [Header("Prefabs")]
-    [SerializeField] private GameObject metalWeaponPrefab;
+    [SerializeField] private GameObject enemyMetalWeaponPrefab;
     [Space(15)]
 
     [Header("Setting")]
@@ -29,12 +36,6 @@ public class MetalGame : ResourceGame, IProvider<List<GameObject>>
     [Range(0f, 1f)] [SerializeField] private float MaxPercentOfEnemyMetals;
     [Space(15)]
 
-    [Header("Spawning Location Restrictions")]
-    [SerializeField] private float minMetalDistance;
-    [SerializeField] private int maxSpawnTries;
-    [SerializeField] private List<Vector2> worstCaseSpawnLocations;
-    [Space(15)]
-
     [SerializeField] private float maxTime;
 
     private List<GameObject> spawnedMetals = new();
@@ -43,27 +44,33 @@ public class MetalGame : ResourceGame, IProvider<List<GameObject>>
 
     private Vector2 preGamePlayerLocation;
 
-    private ResourceSourceInfoSO[] enemyMetalInfos;
-    private ResourceSourceInfoSO[] nonEnemyMetalInfos;
+    List<ResourceSourceInfoSO> enemyMetalResourceInfos;
+    List<ResourceSourceInfoSO> nonEnemyMetalResourceInfos;
+
+    private List<EnemySpawningInfo> enemyMetalSpawningInfos;
+    private List<SpawningInfo> nonEnemyMetalSpawningInfos;
 
     protected override void Awake()
     {
         if (isPrefabEnemy.Length != possibleResourceSources.Length)
             Debug.LogError($"{nameof(isPrefabEnemy)} and {nameof(possibleResourceSources)} must be the same length");
 
-        List<ResourceSourceInfoSO> _enemyMetalInfos = new();
-        List<ResourceSourceInfoSO> _nonEnemyMetalInfos = new();
+        enemyMetalResourceInfos = new();
+        nonEnemyMetalResourceInfos = new();
         for (int i = 0; i < isPrefabEnemy.Length; i++)
         {
             if (isPrefabEnemy[i])
-                _enemyMetalInfos.Add(possibleResourceSources[i]);
-            else _nonEnemyMetalInfos.Add(possibleResourceSources[i]);
+                enemyMetalResourceInfos.Add(possibleResourceSources[i]);
+            else nonEnemyMetalResourceInfos.Add(possibleResourceSources[i]);
         }
 
-        enemyMetalInfos = _enemyMetalInfos.ToArray();
-        nonEnemyMetalInfos = _nonEnemyMetalInfos.ToArray();
+        enemyMetalSpawningInfos = enemyMetalResourceInfos.Select
+                                  (_enemyInfo => new EnemySpawningInfo(_enemyInfo.ResourceObject, enemyMetalWeaponPrefab, _spawnChance: _enemyInfo.SpawnChance))
+                                  .ToList();
 
-        base.Awake();
+        nonEnemyMetalSpawningInfos = nonEnemyMetalResourceInfos.Select(_metalInfo => new SpawningInfo(_metalInfo.ResourceObject, _spawnChance: _metalInfo.SpawnChance))
+                                     .ToList();
+
         GameTimer = new(maxTime);
     }
 
@@ -79,14 +86,7 @@ public class MetalGame : ResourceGame, IProvider<List<GameObject>>
                 _player.position = preGamePlayerLocation;
 
             InvokeOnGameSuccessfullyComplete(droppedResources);
-
-            Game.SetActive(false);
-            mainSetting.SetActive(true);
-            
-            GameTimer.Reset();
-            spawnedMetals = new();
-            spawnedMetalEnemies = new();
-            droppedResources = new();
+            ResetGame();
 
             return;
         }
@@ -99,13 +99,7 @@ public class MetalGame : ResourceGame, IProvider<List<GameObject>>
             InvokeOnGameUnsuccessfullyComplete(droppedResources, "You ran out of time!");
 
             Game.transform.DestroyChildren(_gameObject => spawnedMetals.Contains(_gameObject));
-            Game.SetActive(false);
-            mainSetting.SetActive(true);
-
-            GameTimer.Reset();
-            spawnedMetals = new();
-            spawnedMetalEnemies = new();
-            droppedResources = new();
+            ResetGame();
 
             return;
         }
@@ -115,46 +109,52 @@ public class MetalGame : ResourceGame, IProvider<List<GameObject>>
 
     public override void StartGame()
     {
-        if (PlayerProvider.TryGetPlayer(out Transform _player))
-        {
-            InvokeOnSuccessfulStart();
+        if (!PlayerProvider.TryGetPlayer(out Transform _player))
+            return;
 
-            Game.SetActive(true);
-            mainSetting.SetActive(false);
+        InvokeOnSuccessfulStart();
 
-            preGamePlayerLocation = _player.position;
+        Game.SetActive(true);
+        gameUI.gameObject.SetActive(true);
+        mainSetting.SetActive(false);
 
-            int _numMetals = Random.Range(MinNumMetals, MaxNumMetals + 1);
-            int _numEnemyMetals = (int)(Random.Range(MinPercentOfEnemyMetals, MaxPercentOfEnemyMetals) * _numMetals);
+        preGamePlayerLocation = _player.position;
 
-            for (int i = 0; i < _numEnemyMetals; i++)
-            {
-                ResourceSourceInfoSO _resourceSourceToSpawn = GetRandomResourceSourceInfo(enemyMetalInfos);
-                GameObject _spawnedMetalEnemy = enemySpawner.SpawnEnemies
-                                                (new EnemySpawningInfo(_resourceSourceToSpawn.ResourceObject, metalWeaponPrefab), 1)
-                                                [0].gameObject;
-                _spawnedMetalEnemy.GetComponent<ResourceSourceInfo>().ResourceSource = _resourceSourceToSpawn;
+        int _numMetals = Random.Range(MinNumMetals, MaxNumMetals + 1);
+        int _numEnemyMetals = (int)(Random.Range(MinPercentOfEnemyMetals, MaxPercentOfEnemyMetals) * _numMetals);
 
-                spawnedMetals.Add(_spawnedMetalEnemy);
-                spawnedMetalEnemies.Add(_spawnedMetalEnemy);
+        ResourceSourceInfoSO _resourceSourceInfo = null;
+        enemyMetalSpawner.SpawnEnemies(enemyMetalSpawningInfos, _numEnemyMetals,
+                                        _infoChooseAction: (_info, _index) => _resourceSourceInfo = enemyMetalResourceInfos[_index],
+                                        _spawnAction: _enemy =>
+                                        {
+                                            _enemy.GetComponent<ResourceSourceInfo>().ResourceSource = _resourceSourceInfo;
 
-                IDamageable _damage = _spawnedMetalEnemy.GetComponent<IDamageable>();
-                IKillable _kill = _spawnedMetalEnemy.GetComponent<IKillable>();
+                                            spawnedMetals.Add(_enemy);
+                                            spawnedMetalEnemies.Add(_enemy);
 
-                _damage.OnDamage += DamageResource;
-                _kill.OnKill += HarvestResource;
-            }
+                                            IDamageable _damage = _enemy.GetComponent<IDamageable>();
+                                            IKillable _kill = _enemy.GetComponent<IKillable>();
 
-            for (int i = 0; i < _numMetals - _numEnemyMetals; i++)
-            {
-                ResourceSourceInfoSO _resourceSourceToSpawn = GetRandomResourceSourceInfo(nonEnemyMetalInfos);
-                // spawn enemy
-                // add to spawnedMetals list
-            }
-        }
+                                            _damage.OnDamage += DamageResourceEffects;
+                                            _kill.OnKill += HarvestResource;
+                                            _kill.OnKill += _deadEnemy => spawnedMetalEnemies.Remove(_deadEnemy); 
+                                        }, _parent: Game.transform);
+
+        metalSpawner.SpawnObjects(nonEnemyMetalSpawningInfos, _numMetals - _numEnemyMetals,
+                                    _infoChooseAction: (_info, _index) => _resourceSourceInfo = nonEnemyMetalResourceInfos[_index],
+                                    _spawnAction: _object =>
+                                    {
+                                        _object.GetComponent<ResourceSourceInfo>().ResourceSource = _resourceSourceInfo;
+                                        spawnedMetals.Add(_object);
+
+                                        IDamageable _damage = _object.GetComponent<IDamageable>();
+                                        IKillable _kill = _object.GetComponent<IKillable>();
+
+                                        _damage.OnDamage += DamageResourceEffects;
+                                        _kill.OnKill += HarvestResource;
+                                    }, _parent: Game.transform);
     }
-
-    public List<GameObject> Provide() => spawnedMetalEnemies;
 
     #region Listeners
     private void HarvestResource(GameObject _metalEnemy)
@@ -168,7 +168,7 @@ public class MetalGame : ResourceGame, IProvider<List<GameObject>>
     }
 
     // spawn particles, etc.
-    private void DamageResource(float _, GameObject __) { }
+    private void DamageResourceEffects(float _, GameObject __) { }
     #endregion
 
     private bool IsGameOverSuccessfully()
@@ -181,4 +181,17 @@ public class MetalGame : ResourceGame, IProvider<List<GameObject>>
 
         return true;
     }
+
+    private void ResetGame()
+    {
+        Game.SetActive(false);
+        mainSetting.SetActive(true);
+
+        GameTimer.Reset();
+        spawnedMetals = new();
+        spawnedMetalEnemies = new();
+        droppedResources = new();
+    }
+
+    List<GameObject> IProvider<List<GameObject>>.Provide() => spawnedMetalEnemies;
 }

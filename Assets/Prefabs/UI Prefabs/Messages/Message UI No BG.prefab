@@ -269,6 +269,7 @@ GameObject:
   - component: {fileID: 6297522804925147176}
   - component: {fileID: 4147465960043328520}
   - component: {fileID: 9200088426545220891}
+  - component: {fileID: -2781275960524279203}
   m_Layer: 5
   m_Name: Message UI No BG
   m_TagString: Untagged
@@ -324,6 +325,24 @@ MonoBehaviour:
   <MessageText>k__BackingField: {fileID: 1801229523913634705}
   <CloseButton>k__BackingField: {fileID: 4231719486895933006}
   <CanvasGroup>k__BackingField: {fileID: 4147465960043328520}
+  <Fadeable>k__BackingField: {fileID: -2781275960524279203}
+--- !u!114 &-2781275960524279203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3098857304355703876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c17f549a1c26e0949b2da23c4919ef74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeInSecs: 0.3
+  fadeOutSecs: 0.3
+  fadeInSecsInOut: 0
+  visibleSecs: 0
+  fadeOutSecsInOut: 0
 --- !u!1 &4024927980545845743
 GameObject:
   m_ObjectHideFlags: 0

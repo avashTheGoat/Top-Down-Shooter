@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ab44a1c3bd0c3141b55a99d39c0bd40, type: 3}
-  m_Name: Green Metal Source
+  m_Name: Purple Ore Enemy Source
   m_EditorClassIdentifier: 
-  <ResourceObject>k__BackingField: {fileID: 787742772800518988, guid: edfe0f941cadb7a4eb7c851ab95b2d74, type: 3}
-  <Resource>k__BackingField: {fileID: -6230983682229027591, guid: 186d6cd1ef7bbc841bf3d0df0106833b, type: 3}
-  <MinAmount>k__BackingField: 3
-  <MaxAmount>k__BackingField: 7
+  <ResourceObject>k__BackingField: {fileID: 2774555433474165890, guid: efc737188b9ccf44b82a3201cc4108dd, type: 3}
+  <ResourceDropped>k__BackingField: {fileID: -6230983682229027591, guid: 186d6cd1ef7bbc841bf3d0df0106833b, type: 3}
+  <MinAmountDropped>k__BackingField: 3
+  <MaxAmountDropped>k__BackingField: 6
   spawnChance: 50

@@ -32,7 +32,8 @@ public class EnemySpawner : MonoBehaviour
     }
 
     public List<GameObject> SpawnEnemies(List<EnemySpawningInfo> _enemies, int _numEnemies,
-        Action<EnemySpawningInfo, int> _infoChooseAction = null, Action<GameObject> _spawnAction = null)
+                                         Action<EnemySpawningInfo, int> _infoChooseAction = null,
+                                         Action<GameObject> _spawnAction = null, Transform _parent = null)
     {
         Transform _player;
         if (!PlayerProvider.TryGetPlayer(out _player))
@@ -51,24 +52,24 @@ public class EnemySpawner : MonoBehaviour
         // may move this into main for loop to speed up spawning if required
         #region Validation
         int _spawnChancesSum = 0;
-        for (int i = 0; i < _enemies.Count; i++)
+        foreach (EnemySpawningInfo _enemy in _enemies)
         {
-            if (_enemies[i].EnemyPrefab == null)
+            if (_enemy.EnemyPrefab == null)
                 throw new ArgumentNullException("One of the EnemySpawningInfo struct's EnemyPrefab " +
                     "in the given EnemySpawningInfo array was null.");
 
-            if (_enemies[i].WeaponPrefab == null)
+            if (_enemy.WeaponPrefab == null)
                 throw new ArgumentNullException("One of the EnemySpawningInfo struct's WeaponPrefab " +
                     "in the given EnemySpawningInfo array was null.");
 
-            if (!_enemies[i].WeaponPrefab.TryGetComponent(out Weapon _))
+            if (!_enemy.WeaponPrefab.TryGetComponent(out Weapon _))
                 throw new ArgumentException("One of the EnemySpawningInfo struct's WeaponPrefab " +
                     "did not have a Weapon component attached to it.");
-            if (!_enemies[i].EnemyPrefab.TryGetComponent(out EnemyStateMachine _))
+            if (!_enemy.EnemyPrefab.TryGetComponent(out EnemyStateMachine _))
                 throw new ArgumentException("One of the EnemySpawningInfo struct's EnemyPrefab " +
                     "did not have an EnemyStateMachine component attached to it, so it is likely not an enemy.");
 
-            _spawnChancesSum += _enemies[i].SpawnChance;
+            _spawnChancesSum += _enemy.SpawnChance;
         }
 
         if (_spawnChancesSum != 100)
@@ -87,11 +88,24 @@ public class EnemySpawner : MonoBehaviour
 
             _infoChooseAction?.Invoke(_spawningInfoAndIndex.Item1, _spawningInfoAndIndex.Item2);
 
-            GameObject _enemy = Instantiate(_spawningInfoAndIndex.Item1.EnemyPrefab);
-            Transform _enemyTransform = _enemy.transform;
-            _enemyTransform.position = _spawnLocation;
+            GameObject _enemy;
+            Transform _enemyTrans;
 
-            GameObject _weapon = Instantiate(_spawningInfoAndIndex.Item1.WeaponPrefab, _enemyTransform);
+            if (_parent == null)
+            {
+                 _enemy = Instantiate(_spawningInfoAndIndex.Item1.EnemyPrefab);
+                _enemyTrans = _enemy.transform;
+            }
+
+            else
+            {
+                _enemy = Instantiate(_spawningInfoAndIndex.Item1.EnemyPrefab, _parent);
+                _enemyTrans = _enemy.transform;
+            }
+
+            _enemyTrans.position = _spawnLocation;
+
+            GameObject _weapon = Instantiate(_spawningInfoAndIndex.Item1.WeaponPrefab, _enemyTrans);
             _weapon.transform.rotation = Quaternion.identity;
             _weapon.SetActive(true);
 
@@ -107,7 +121,7 @@ public class EnemySpawner : MonoBehaviour
         return _spawnedEnemies;
     }
 
-    public List<GameObject> SpawnEnemies(EnemySpawningInfo _enemyInfo, int _numEnemies, Action<GameObject> _spawnAction = null)
+    public List<GameObject> SpawnEnemies(EnemySpawningInfo _enemyInfo, int _numEnemies, Action<GameObject> _spawnAction = null, Transform _parent = null)
     {
         if (!PlayerProvider.TryGetPlayer(out Transform _player))
             return new();
@@ -136,11 +150,24 @@ public class EnemySpawner : MonoBehaviour
         {
             Vector2 _spawnLocation = GetRandomSpawnPosition(_player);
 
-            GameObject _enemy = Instantiate(_enemyInfo.EnemyPrefab);
-            Transform _enemyTransform = _enemy.transform;
-            _enemyTransform.position = _spawnLocation;
+            GameObject _enemy;
+            Transform _enemyTrans;
 
-            GameObject _weapon = Instantiate(_enemyInfo.WeaponPrefab, _enemyTransform);
+            if (_parent == null)
+            {
+                _enemy = Instantiate(_enemyInfo.EnemyPrefab);
+                _enemyTrans = _enemy.transform;
+            }
+
+            else
+            {
+                _enemy = Instantiate(_enemyInfo.EnemyPrefab, _parent);
+                _enemyTrans = _enemy.transform;
+            }
+
+            _enemyTrans.position = _spawnLocation;
+
+            GameObject _weapon = Instantiate(_enemyInfo.WeaponPrefab, _enemyTrans);
             _weapon.transform.rotation = Quaternion.identity;
             _weapon.SetActive(true);
 
@@ -189,7 +216,7 @@ public class EnemySpawner : MonoBehaviour
         EnemySpawningInfo _enemySpawningInfo = _enemies[0];
         for (; i < _enemies.Count; i++)
         {
-            if (_spawnSeed > _min && _spawnSeed < _min + _enemies[i].SpawnChance)
+            if (_spawnSeed >= _min && _spawnSeed <= _min + _enemies[i].SpawnChance)
             {
                 _enemySpawningInfo = _enemies[i];
                 break;

@@ -26,12 +26,7 @@ public class EnemyAttackChaseVisiblePlayer : EnemyAttackStateLogicBaseSO
 
     protected override void ResetValues() => agent.speed /= attackingSpeedPercent;
 
-    public override bool ShouldAttack(Weapon _weapon)
-    {
-        bool res = IsPlayerVisible();
-        MonoBehaviour.print("Should attack: " + res);
-        return res;
-    }
+    public override bool ShouldAttack(Weapon _weapon) => IsPlayerVisible();
 
     public override float GetWeaponRotationChange(Transform _weapon)
     {

@@ -11,4 +11,21 @@ public class ResourceSourceInfoSO : ScriptableObject
 
     [Range(1, 100)]
     [SerializeField] private int spawnChance;
+
+    #nullable enable
+    public void Init(GameObject? _resourceObject, Resource? _resourceDropped, int? _minAmountDropped, int? _maxAmountDropped)
+    #nullable disable
+    {
+        if (_resourceObject != null)
+            ResourceObject = _resourceObject;
+
+        if (_resourceDropped != null)
+            ResourceDropped = _resourceDropped;
+
+        if (_minAmountDropped != null)
+            MinAmountDropped = (int)_minAmountDropped;
+
+        if (_maxAmountDropped != null)
+            MaxAmountDropped = (int)_maxAmountDropped;
+    }
 }

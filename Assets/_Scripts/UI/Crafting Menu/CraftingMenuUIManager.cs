@@ -58,6 +58,7 @@ public class CraftingMenuUIManager : MonoBehaviour
         itemInfosParent.DestroyChildren();
 
         tabsManager.Clear();
+        spawnedItemInfos = new();
 
         List<CraftingRecipeSO> _chosenRecipes = craftingRecipes;
 
@@ -70,6 +71,7 @@ public class CraftingMenuUIManager : MonoBehaviour
             _itemThumbnail.SetItem(_craftingRecipe.Result);
 
             ItemCraftingUI _itemInfo = Instantiate(itemInfoUiPrefab, itemInfosParent);
+            _itemInfo.gameObject.SetActive(false);
             _itemInfo.ItemUI.SetItem(_craftingRecipe.Result);
 
             _itemInfo.RequirementsManager.SetCraftingRecipe(_craftingRecipe);
@@ -90,8 +92,11 @@ public class CraftingMenuUIManager : MonoBehaviour
 
             _itemInfo.CraftButton.onClick.AddListener(() =>
             {
-                _itemThumbnail.gameObject.SetActive(false);
-                _itemInfo.gameObject.SetActive(false);
+                tabsManager.RemoveTab(_itemThumbnail.GetComponent<Button>());
+
+                spawnedItemInfos.Remove(_itemInfo);
+                Destroy(_itemThumbnail.gameObject);
+                Destroy(_itemInfo.gameObject);
 
                 OnCraft?.Invoke(_craftingRecipe);
 
@@ -107,11 +112,6 @@ public class CraftingMenuUIManager : MonoBehaviour
     private void UpdateAllCraftingButtons()
     {
         foreach (ItemCraftingUI _spawnedItemInfo in spawnedItemInfos)
-        {
-            _spawnedItemInfo.RequirementsManager.SetButtonInteractionBasedOnCraftability
-            (
-                playerInventory.ResourceInventory, _spawnedItemInfo.CraftButton
-            );
-        }
+            _spawnedItemInfo.RequirementsManager.SetButtonInteractionBasedOnCraftability(playerInventory.ResourceInventory, _spawnedItemInfo.CraftButton);
     }
 }

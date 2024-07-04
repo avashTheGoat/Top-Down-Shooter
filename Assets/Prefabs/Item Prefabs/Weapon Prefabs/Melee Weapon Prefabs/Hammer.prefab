@@ -98,8 +98,8 @@ MonoBehaviour:
   itemName: Hammer
   description: Big hammer
   image: {fileID: 0}
-  Damage: 35
-  AttacksPerSecond: 0.7
+  damage: 35
+  attacksPerSecond: 0.7
   <AttackAOE>k__BackingField: {fileID: 4163144566376913258}
 --- !u!212 &4163144566826951536
 SpriteRenderer:
