@@ -9,8 +9,9 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     public float Health { get; private set; }
     
     [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private float initialHealth = 100f;
 
-    private void Awake() => Health = maxHealth;
+    private void Awake() => Health = initialHealth;
 
     public void Damage(float _damage)
     {

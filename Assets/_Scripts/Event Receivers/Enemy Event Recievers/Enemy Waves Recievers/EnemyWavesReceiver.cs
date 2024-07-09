@@ -6,6 +6,7 @@ public class EnemyWavesReceiver : MonoBehaviour
     [Header("Dependencies")]
     [SerializeField] private EnemyWavesSpawner enemyWaves;
     [SerializeField] private EnemyWavesManager enemyWavesManager;
+    [SerializeField] private DayCycleReceiver dayCycleReceiver;
     [Space(15)]
 
     [Header("UI Dependencies")]
@@ -24,7 +25,10 @@ public class EnemyWavesReceiver : MonoBehaviour
         enemyWaves.OnWaveStart += _waveNum =>
         {
             waveText.text = $"Wave {_waveNum}";
-            waveTextFadeable.FadeInOut(0);
+
+            if (_waveNum == 1)
+                waveTextFadeable.FadeInOut(dayCycleReceiver.GetDayTimerFadeOutTime());
+            else waveTextFadeable.FadeInOut(0);
         };
 
         enemyWaves.OnAllWavesComplete += () =>
