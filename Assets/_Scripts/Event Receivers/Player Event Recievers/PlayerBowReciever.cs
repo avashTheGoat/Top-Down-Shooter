@@ -6,7 +6,7 @@ public class PlayerBowReciever : MonoBehaviour
     [SerializeField] private PlayerWeaponsManager playerWeapons;
 
     [Header("Zoom Effect")]
-    [SerializeField] private CinemachineVirtualCamera main;
+    [SerializeField] private CinemachineVirtualCamera mainCam;
     [SerializeField] private float maxZoomOrthoSize;
     [Space(15)]
 
@@ -19,14 +19,7 @@ public class PlayerBowReciever : MonoBehaviour
 
     private float startingCameraSize;
 
-    private float startingWalkSpeed;
-
-    private void Start()
-    {
-        startingCameraSize = main.m_Lens.OrthographicSize;
-
-        startingWalkSpeed = playerMovement.WalkSpeed;
-    }
+    private void Start() => startingCameraSize = mainCam.m_Lens.OrthographicSize;
 
     private void Update()
     {
@@ -44,9 +37,9 @@ public class PlayerBowReciever : MonoBehaviour
                 _bowWeapon.OnBowCharge += (_maxCharge, _curCharge) =>
                 {
                     float _t = Mathf.Clamp(_curCharge / _maxCharge, 0f, 1f);
-                    main.m_Lens.OrthographicSize = Mathf.Lerp(startingCameraSize, maxZoomOrthoSize, _t);
+                    mainCam.m_Lens.OrthographicSize = Mathf.Lerp(startingCameraSize, maxZoomOrthoSize, _t);
 
-                    playerMovement.SetMovementSpeed(startingWalkSpeed * chargingSpeedPercent);
+                    playerMovement.SetMovementSpeed(playerMovement.GetOriginalMovementSpeed() * chargingSpeedPercent);
                 };
 
                 _bowWeapon.OnAttack += _ => DoOnAttack();
@@ -57,8 +50,7 @@ public class PlayerBowReciever : MonoBehaviour
 
     private void DoOnAttack()
     {
-        main.m_Lens.OrthographicSize = startingCameraSize;
-
-        playerMovement.SetMovementSpeed(startingWalkSpeed);
+        mainCam.m_Lens.OrthographicSize = startingCameraSize;
+        playerMovement.SetMovementSpeed(playerMovement.GetOriginalMovementSpeed());
     }
 }

@@ -17,18 +17,21 @@ public class UIEffects
 
     public void FadeIn(float _fadeInSecs, float _secsDelay = 0)
     {
+        coroutineStarter.StopAllCoroutines();
         IEnumerator _fadeCoroutine = Co_Fade(_fadeInSecs, 1f, _secsDelay);
         coroutineStarter.StartCoroutine(_fadeCoroutine);
     }
 
     public void FadeOut(float _fadeOutSecs, float _secsDelay = 0)
     {
+        coroutineStarter.StopAllCoroutines();
         IEnumerator _fadeCoroutine = Co_Fade(_fadeOutSecs, 0f, _secsDelay);
         coroutineStarter.StartCoroutine(_fadeCoroutine);
     }
 
     public void FadeInAndOut(float _fadeInSecs, float _fullyVisibleSecs, float _fadeOutSecs, float _secsDelay = 0)
     {
+        coroutineStarter.StopAllCoroutines();
         IEnumerator _fadeInOutCoroutine = Co_FadeInOut(_fadeInSecs, _fullyVisibleSecs, _fadeOutSecs, _secsDelay);
         coroutineStarter.StartCoroutine(_fadeInOutCoroutine);
     }

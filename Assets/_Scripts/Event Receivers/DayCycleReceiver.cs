@@ -19,6 +19,7 @@ public class DayCycleReceiver : MonoBehaviour
 
     [Header("Day End Fade")]
     [SerializeField] private List<Fadeable> dayEndFadeIn;
+    [SerializeField] private List<Fadeable> dayEndFadeInWaitForDayTimer;
     [SerializeField] private List<Fadeable> dayEndFadeOut;
 
     private void Awake()
@@ -35,8 +36,11 @@ public class DayCycleReceiver : MonoBehaviour
         {
             dayTimeTimerUI.FadeOut();
 
+            dayEndFadeInWaitForDayTimer.ForEach(_fadeable => _fadeable.FadeIn(dayTimeTimerUI.FadeOutSecs));
             dayEndFadeIn.ForEach(_fadeable => _fadeable.FadeIn());
             dayEndFadeOut.ForEach(_fadeable => _fadeable.FadeOut());
         };
     }
+
+    public float GetDayTimerFadeOutTime() => dayTimeTimerUI.FadeOutSecs;
 }
