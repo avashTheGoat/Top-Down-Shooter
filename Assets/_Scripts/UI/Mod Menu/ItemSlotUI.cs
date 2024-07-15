@@ -6,17 +6,9 @@ public class ItemSlotUI : MonoBehaviour
     [field: SerializeField] public ItemUI ItemUI { get; private set; }
     [field: SerializeField] public DragDropSlotUI SlotUI { get; private set; }
 
-    #nullable enable
-    public void SetItem(Item? _mod)
-    #nullable disable
+    public void SetItem(Item _mod)
     {
-        if (_mod == null)
-        {
-            ItemUI.ItemImage.sprite = null;
-            return;
-        }
-
-        ItemUI.ItemImage.sprite = _mod.Image;
+        ItemUI.ItemImage.sprite = _mod != null ? _mod.Image : null;
         Item = _mod;
     }
 }

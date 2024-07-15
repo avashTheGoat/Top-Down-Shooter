@@ -3221,52 +3221,6 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
---- !u!1 &583098578
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 583098580}
-  - component: {fileID: 583098579}
-  m_Layer: 0
-  m_Name: Test
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &583098579
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 583098578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3884c2953654b244bb2bad8f7e04e528, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  navMeshSurface: {fileID: 1244865267}
-  trans: {fileID: 1265815689}
---- !u!4 &583098580
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 583098578}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &598885648
 GameObject:
   m_ObjectHideFlags: 0
@@ -6482,37 +6436,6 @@ MonoBehaviour:
   m_BuildHeightMesh: 0
   m_HideEditorLogs: 0
   m_NavMeshData: {fileID: 23800000, guid: 34afda2b0cc48374aaebeeb3a70a47ab, type: 2}
---- !u!1 &1265815688
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1265815689}
-  m_Layer: 0
-  m_Name: Trans
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1265815689
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1265815688}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1282670696
 GameObject:
   m_ObjectHideFlags: 0
@@ -9475,16 +9398,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 434d12137bbcc63418f4130cf5c7e600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  navMeshSurface: {fileID: 109059568}
   minDistanceFromPlayerToSpawn: 3.5
-  bottomLeft: {x: 0, y: 0}
-  topRight: {x: 0, y: 0}
-  shouldUseDefinedBoundaries: 0
-  maxSpawnAttempts: 2
+  bottomLeft: {x: -9.35, y: -5}
+  topRight: {x: 8.9, y: 4.7}
+  maxSpawnAttempts: 4
   worstCaseSpawnLocations:
-  - {x: 45.6, y: 0}
-  - {x: 50.81, y: 2.1}
-  - {x: 54.9, y: -2.4}
+  - {x: -5.9, y: 0.83}
+  - {x: 6.79, y: -3.14}
+  - {x: 0.4, y: 2.86}
 --- !u!114 &1738441404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9510,16 +9431,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 767745e4d85613a40a5c7cc7eb671111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  navMeshSurface: {fileID: 109059568}
   minDistanceFromPlayerToSpawn: 3.5
-  bottomLeft: {x: 0, y: 0}
-  topRight: {x: 0, y: 0}
-  shouldUseDefinedBoundaries: 0
-  maxSpawnAttempts: 2
+  bottomLeft: {x: -9.35, y: -5}
+  topRight: {x: 8.9, y: 4.7}
+  maxSpawnAttempts: 4
   worstCaseSpawnLocations:
-  - {x: 50.81, y: 2.1}
-  - {x: 54.9, y: -2.4}
-  - {x: 45.6, y: 0}
+  - {x: -5.9, y: 0.83}
+  - {x: 6.79, y: -3.14}
+  - {x: 0.4, y: 2.86}
 --- !u!1 &1800571583
 GameObject:
   m_ObjectHideFlags: 0
@@ -11381,11 +11300,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 434d12137bbcc63418f4130cf5c7e600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  navMeshSurface: {fileID: 1244865267}
   minDistanceFromPlayerToSpawn: 12
-  bottomLeft: {x: 0, y: 0}
-  topRight: {x: 0, y: 0}
-  shouldUseDefinedBoundaries: 0
+  bottomLeft: {x: -22.2, y: -12.3}
+  topRight: {x: 18.7, y: 10.8}
   maxSpawnAttempts: 4
   worstCaseSpawnLocations:
   - {x: -20, y: -5}

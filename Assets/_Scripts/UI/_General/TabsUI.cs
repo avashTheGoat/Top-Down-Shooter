@@ -44,6 +44,7 @@ public class TabsUI : MonoBehaviour
             throw new ArgumentException("Tab button cannot be null.");
 
         _tabOpenButton.onClick.AddListener(() => SwitchTab(tabs.IndexOf(_tab)));
+        _tab.SetActive(false);
         
         tabs.Add(_tab);
         buttons.Add(_tabOpenButton);

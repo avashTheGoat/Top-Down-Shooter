@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
     
 public class ModMenuInventoryReceiver : MonoBehaviour
 {
@@ -42,44 +43,48 @@ public class ModMenuInventoryReceiver : MonoBehaviour
             if (_modsUI == null)
                 return;
 
-            foreach (ItemSlotUI _itemSlot in _modsUI.AttachedModUIs)
+            foreach (ItemSlotUI _itemSlot in _modsUI.AttachedModUIs.Where(_slot => _slot.SlotUI.CurrentItem != null && ReferenceEquals(_dragDrop, _slot.SlotUI.CurrentItem)))
             {
-                if (_itemSlot.SlotUI.CurrentItem != null && _dragDrop != null && ReferenceEquals(_dragDrop, _itemSlot.SlotUI.CurrentItem))
+                if (_dragDrop == null)
+                    break;
+
+                WeaponMod _mod = (WeaponMod)_itemSlot.Item;
+                if (_mod.IsWeaponCorrectType(_modsUI.Weapon))
                 {
-                    WeaponMod _mod = (WeaponMod)_itemSlot.Item;
-                    if (_mod.IsWeaponCorrectType(_modsUI.Weapon))
+                    _dragDrop.OnDragStart -= RemoveFromInventory;
+                    Vector2 _slotPos = _itemSlot.SlotUI.Trans.position;
+                    _slotPos = new(_slotPos.x + _dragDrop.Trans.rect.width + 5, _slotPos.y);
+                    _dragDrop.Trans.position = _slotPos;
+                    _dragDrop.Trans.SetParent(_itemSlot.SlotUI.Trans);
+                    return;
+                }
+
+                else
+                {
+                    float _initialAlpha = messagePrefab.CanvasGroup.alpha;
+                    messagePrefab.CanvasGroup.alpha = 0f;
+
+                    MessageUI _messageUI = Instantiate(messagePrefab, canvas.transform);
+                    _messageUI.transform.SetAsLastSibling();
+
+                    _messageUI.MessageText.text = $"This weapon mod cannot be attached to a {_modsUI.Weapon.Name.ToLower()}.";
+                    _messageUI.CloseButton.onClick.AddListener(() => _messageUI.Fadeable.FadeOut(0));
+
+                    _messageUI.Fadeable.FadeIn(0);
+
+                    _messageUI.Fadeable.OnFadeComplete += () =>
                     {
-                        _dragDrop.OnDragStart -= RemoveFromInventory;
-                        return;
-                    }
+                        if (_messageUI.CanvasGroup.alpha != 0f)
+                            return;
 
-                    else
-                    {
-                        float _initialAlpha = messagePrefab.CanvasGroup.alpha;
-                        messagePrefab.CanvasGroup.alpha = 0f;
+                        Destroy(_messageUI.gameObject);
+                    };
 
-                        MessageUI _messageUI = Instantiate(messagePrefab, canvas.transform);
-                        _messageUI.transform.SetAsLastSibling();
+                    _itemSlot.SlotUI.RemoveItem();
 
-                        _messageUI.MessageText.text = $"This weapon mod cannot be attached to a {_modsUI.Weapon.Name.ToLower()}.";
-                        _messageUI.CloseButton.onClick.AddListener(() => _messageUI.Fadeable.FadeOut(0));
+                    messagePrefab.CanvasGroup.alpha = _initialAlpha;
 
-                        _messageUI.Fadeable.FadeIn(0);
-
-                        _messageUI.Fadeable.OnFadeComplete += () =>
-                        {
-                            if (_messageUI.CanvasGroup.alpha != 0f)
-                                return;
-
-                            Destroy(_messageUI.gameObject);
-                        };
-
-                        _itemSlot.SlotUI.RemoveItem();
-
-                        messagePrefab.CanvasGroup.alpha = _initialAlpha;
-
-                        break;
-                    }
+                    break;
                 }
             }
 

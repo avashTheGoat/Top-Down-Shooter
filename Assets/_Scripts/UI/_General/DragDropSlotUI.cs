@@ -8,12 +8,12 @@ public class DragDropSlotUI : MonoBehaviour, IDropHandler
     public event Action<DragDropUI> OnItemRemoved;
 
     public DragDropUI CurrentItem { get; private set; } = null;
+    public RectTransform Trans { get; private set; }
 
     private DragDropUI prevCurItem = null;
 
-    private RectTransform trans;
 
-    private void Awake() => trans = GetComponent<RectTransform>();
+    private void Awake() => Trans = GetComponent<RectTransform>();
 
     public void OnDrop(PointerEventData _eventData)
     {
@@ -25,9 +25,6 @@ public class DragDropSlotUI : MonoBehaviour, IDropHandler
 
         if (_eventData.pointerDrag.TryGetComponent(out DragDropUI _dragDropUI))
         {
-            _dragDropUI.Trans.SetParent(trans);
-            _dragDropUI.Trans.localPosition = Vector3.zero;
-
             CurrentItem = _dragDropUI;
             prevCurItem = CurrentItem;
 
@@ -35,7 +32,7 @@ public class DragDropSlotUI : MonoBehaviour, IDropHandler
 
             CurrentItem.OnDrop += HandleItemMoveFromSlot;
 
-            OnItemDropped?.Invoke(CurrentItem);
+            OnItemDropped?.Invoke(_dragDropUI);
         }
     }
 
