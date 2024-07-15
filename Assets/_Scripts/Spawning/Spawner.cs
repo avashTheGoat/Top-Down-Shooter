@@ -1,33 +1,19 @@
 using UnityEngine;
-using NavMeshPlus.Components;
 using System;
 using System.Collections.Generic;
 
 public class Spawner : MonoBehaviour
 {
     [Header("Spawning Restrictions")]
-    [SerializeField] protected NavMeshSurface navMeshSurface;
     [Tooltip("The minimum distance from the player a point needs to be to be a valid spawn location")]
     [SerializeField] protected float minDistanceFromPlayerToSpawn;
-    [Space(15)]
-
-    [Header("Spawning w/ Pre-Defined Boundaries")]
     [SerializeField] protected Vector2 bottomLeft;
     [SerializeField] protected Vector2 topRight;
-    [SerializeField] protected bool shouldUseDefinedBoundaries;
     [Space(15)]
 
     [Header("Spawning Attempts")]
     [SerializeField] protected int maxSpawnAttempts;
     [SerializeField] protected Vector2[] worstCaseSpawnLocations;
-
-    protected Bounds navMeshBounds;
-
-    protected virtual void Awake()
-    {
-        navMeshBounds = navMeshSurface.navMeshData.sourceBounds;
-        navMeshBounds.RotateAroundX(270f);
-    }
 
     public List<GameObject> SpawnObjects(List<SpawningInfo> _objects, int _numObjects,
                                          Action<SpawningInfo, int> _infoChooseAction = null,
@@ -136,26 +122,25 @@ public class Spawner : MonoBehaviour
 
     private Vector2 GetRandomSpawnPosition(Transform _player)
     {
-        Vector2 _spawnLocation;
-        if (shouldUseDefinedBoundaries)
-            _spawnLocation = navMeshBounds.GetRandPointInBounds(bottomLeft, topRight);
-        else
-            _spawnLocation = navMeshBounds.GetRandPointInBounds();
+        bool _initialSetting = Physics2D.queriesHitTriggers;
+        Physics2D.queriesHitTriggers = false;
+
+        Vector2 _spawnLocation = new(UnityEngine.Random.Range(bottomLeft.x, topRight.x), UnityEngine.Random.Range(bottomLeft.y, topRight.y));
 
         int _spawnAttempts = 1;
-        while (_spawnAttempts < maxSpawnAttempts && Vector2.Distance(_player.position, _spawnLocation) < minDistanceFromPlayerToSpawn)
+        while (_spawnAttempts < maxSpawnAttempts &&
+               (Vector2.Distance(_player.position, _spawnLocation) < minDistanceFromPlayerToSpawn ||
+                Physics2D.OverlapPoint(_spawnLocation) == null))
         {
-            if (shouldUseDefinedBoundaries)
-                _spawnLocation = navMeshBounds.GetRandPointInBounds(bottomLeft, topRight);
-            else
-                _spawnLocation = navMeshBounds.GetRandPointInBounds();
-
+            _spawnLocation = new(UnityEngine.Random.Range(bottomLeft.x, topRight.x), UnityEngine.Random.Range(bottomLeft.y, topRight.y));
             _spawnAttempts++;
         }
 
         // if too close to player despite trying other spawn locations
         if (Vector2.Distance(_player.position, _spawnLocation) < minDistanceFromPlayerToSpawn)
             _spawnLocation = worstCaseSpawnLocations[UnityEngine.Random.Range(0, worstCaseSpawnLocations.Length)];
+
+        Physics2D.queriesHitTriggers = _initialSetting;
 
         return _spawnLocation;
     }

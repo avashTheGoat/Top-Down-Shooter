@@ -11,46 +11,42 @@ public class PlayerSprintUI : Fadeable
     [SerializeField] private float timeForSprintToFadeOut;
 
     private CanvasGroup sprintBarParentCanvasGroup;
-    private GameObject sprintBarParent;
 
-    private float prevStamina;
-    private Timer sprintFadeOutTimer;
+    private bool isFadingIn = false;
+    private Timer sprintBarFadeOutTimer;
 
     protected override void Awake()
     {
         base.Awake();
 
-        sprintBarParent = sprintBar.transform.parent.parent.gameObject;
-        sprintBarParentCanvasGroup = sprintBarParent.GetComponent<CanvasGroup>();
+        sprintBarParentCanvasGroup = GetComponent<CanvasGroup>();
         sprintBarParentCanvasGroup.alpha = 0f;
 
-        sprintFadeOutTimer = new(timeForSprintToFadeOut);
-        sprintFadeOutTimer.OnComplete += () => FadeOut();
+        sprintBarFadeOutTimer = new(timeForSprintToFadeOut);
+        sprintBarFadeOutTimer.OnComplete += () =>
+        {
+            FadeOut();
+            isFadingIn = false;
+            sprintBarFadeOutTimer.Reset();
+        };
+
+        sprintBar.fillAmount = Mathf.Clamp(playerSprint.Stamina / playerSprint.MaxStamina, 0f, 1f);
     }
 
     private void Start()
     {
-        sprintBar.fillAmount = Mathf.Clamp(playerSprint.Stamina / playerSprint.MaxStamina, 0f, 1f);
-        prevStamina = playerSprint.Stamina;
-    }
-
-    private void Update()
-    {
-        if (playerSprint.Stamina < prevStamina)
+        playerSprint.OnSprint += () =>
         {
-            if (!IsSprintBarVisible())
+            if (!isFadingIn)
             {
                 FadeIn();
-                sprintFadeOutTimer.Reset();
+                sprintBarFadeOutTimer.Reset();
+                isFadingIn = true;
             }
-        }
 
-        else
-            sprintFadeOutTimer.Tick(Time.deltaTime);
-
-        sprintBar.fillAmount = Mathf.Clamp(playerSprint.Stamina / playerSprint.MaxStamina, 0f, 1f);
-        prevStamina = playerSprint.Stamina;
+            sprintBar.fillAmount = Mathf.Clamp(playerSprint.Stamina / playerSprint.MaxStamina, 0f, 1f);
+        };
     }
 
-    private bool IsSprintBarVisible() => sprintBarParentCanvasGroup.alpha != 0f;
+    private void Update() => sprintBarFadeOutTimer.Tick(Time.deltaTime);
 }

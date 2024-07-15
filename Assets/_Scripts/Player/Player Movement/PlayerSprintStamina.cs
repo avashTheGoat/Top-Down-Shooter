@@ -1,8 +1,11 @@
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(PlayerMovement))]
 public class PlayerSprintStamina : MonoBehaviour
 {
+    public Action OnSprint;
+
     [field: SerializeField] public float MaxStamina { get; private set; }
     public float Stamina { get; private set; }
 
@@ -36,6 +39,7 @@ public class PlayerSprintStamina : MonoBehaviour
             if (!hasRunOutOfStaminaWhileSprinting)
             {
                 Stamina -= MaxStamina * staminaDecreasePercentPerSecond * Time.deltaTime;
+                OnSprint?.Invoke();
 
                 if (Stamina <= 0f)
                     hasRunOutOfStaminaWhileSprinting = true;
