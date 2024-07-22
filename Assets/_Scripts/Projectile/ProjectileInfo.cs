@@ -7,6 +7,7 @@ public class ProjectileInfo : MonoBehaviour
     public float Damage { get; private set; }
     public float Range { get; private set; }
     public List<string> TagsToIgnore { get; private set; }
+    public Vector2 StartPosition { get; private set; }
 
     private bool hasBeenInitialized = false;
 
@@ -28,6 +29,7 @@ public class ProjectileInfo : MonoBehaviour
         Damage = _damage;
         Range = _range;
         TagsToIgnore = _tagsToIgnore;
+        StartPosition = _startPosition;
 
         hasBeenInitialized = true;
     }
